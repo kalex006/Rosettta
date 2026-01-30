@@ -248,3 +248,42 @@ pre {
     border-radius: 4px; 
     overflow-x: auto;
 }
+/* --- COPYRIGHT FOOTER --- */
+#main-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    pointer-events: none; /* Allows clicking through it if it covers buttons */
+    z-index: 100; /* Always on top */
+    
+    /* Aesthetic Glass Look */
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+}
+
+#main-footer p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #444;
+    letter-spacing: 1px;
+    margin: 2px 0;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.footer-project {
+    font-family: 'Cinzel', serif !important;
+    color: #d4af37 !important; /* Gold */
+    font-size: 0.85rem !important;
+    letter-spacing: 3px !important;
+    opacity: 0.6;
+}
+
+/* Hover Effect: Make it clear when mouse is near */
+#main-footer:hover p, 
+#main-footer:hover .footer-project {
+    opacity: 1;
+    color: #fff;
+}
