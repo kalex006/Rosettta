@@ -1,0 +1,38 @@
+<div class="lesson-content">
+    <header class="artifact-header">
+        <h1 class="cinzel-gold">1.2 The Anatomy of a Document</h1>
+        <p class="archival-note">ARCHIVE REF: HTML-STR-02 | SUBJECT: THE DOM BOUNDARY</p>
+    </header>
+
+    <section class="deep-dive">
+        <h2 class="gold-accent">The DOCTYPE Declaration</h2>
+        <p>Every professional HTML document must begin with <code>&lt;!DOCTYPE html&gt;</code>. This is not a tag, but a <strong>Document Type Instruction</strong>. Its primary purpose is to prevent the browser from entering "Quirks Mode"—a legacy rendering state that ignores modern CSS standards.</p>
+        
+        <div class="technical-callout">
+            <h3 class="gold-accent">Architect's Insight</h3>
+            <p>In high-end architecture, omitting the DOCTYPE causes the browser to emulate Internet Explorer 5 behavior, breaking modern layouts and grid systems.</p>
+        </div>
+    </section>
+
+    
+
+    <section class="deep-dive">
+        <h2 class="gold-accent">The Metadata Container (&lt;head&gt;)</h2>
+        <p>The <code>&lt;head&gt;</code> is the processing brain of your artifact. It contains machine-readable information that is never rendered in the main view area but controls how the page behaves and appears in search engines.</p>
+        
+        <ul class="artifact-list">
+            <li><strong>Character Set:</strong> <code>&lt;meta charset="UTF-8"&gt;</code> - The universal encoding standard.</li>
+            <li><strong>Viewport Control:</strong> Essential for responsive, mobile-first design logic.</li>
+            <li><strong>Asset Linking:</strong> Where we define the relationship between the HTML skeleton and external CSS/JS logic.</li>
+        </ul>
+    </section>
+
+    <section class="deep-dive">
+        <h2 class="gold-accent">The Renderable Tree (&lt;body&gt;)</h2>
+        <p>The <code>&lt;body&gt;</code> represents the <strong>DOM (Document Object Model)</strong> that the user interacts with. In advanced development, we treat the body as a semantic map, ensuring that every element—from <code>&lt;header&gt;</code> to <code>&lt;footer&gt;</code>—carries structural meaning for both humans and AI crawlers.</p>
+    </section>
+
+    <footer class="lesson-footer">
+        <p class="gold-accent"><em>"The structure of a document is its destiny."</em></p>
+    </footer>
+</div>
