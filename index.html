@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROSETTA | The Language of Machines</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Importing Aesthetic Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- SCREEN 1: LANDING -->
+    <section id="view-landing" class="full-screen active-view">
+        <p class="subtitle fade-in">Welcome to</p>
+        <button class="rosetta-btn fade-in-delay" onclick="goToCategory()">ROSETTA</button>
+    </section>
+
+    <!-- SCREEN 2: CATEGORY -->
+    <section id="view-category" class="full-screen hidden-view">
+        <button class="category-btn" onclick="goToLanguages()">PROGRAMMING</button>
+    </section>
+
+    <!-- SCREEN 3: LANGUAGE SELECTION (The Grid) -->
+    <section id="view-languages" class="full-screen hidden-view">
+        <h2 class="select-title">Choose your Path</h2>
+        <div class="grid-container">
+            <button class="lang-card" onclick="enterCourse('html')">HTML</button>
+            <button class="lang-card" onclick="enterCourse('css')">CSS</button>
+            <button class="lang-card" onclick="enterCourse('js')">JS</button>
+            <button class="lang-card" onclick="enterCourse('python')">PYTHON</button>
+            <button class="lang-card" onclick="enterCourse('lua')">LUA</button>
+            <button class="lang-card" onclick="enterCourse('java')">JAVA</button>
+            <button class="lang-card" onclick="enterCourse('c')">C</button>
+            <button class="lang-card" onclick="enterCourse('cpp')">C++</button>
+            <button class="lang-card" onclick="enterCourse('bash')">BASH</button>
+            <button class="lang-card" onclick="enterCourse('rust')">RUST</button>
+        </div>
+    </section>
+
+    <!-- SCREEN 4: MAIN CONTENT (The Course) -->
+    <div id="view-content" class="main-layout hidden-view">
+        <nav class="navbar">
+            <h1 class="nav-logo" onclick="location.reload()">ROSETTA</h1>
+            <span id="current-lang-display">HTML</span>
+        </nav>
+
+        <div class="container">
+            <aside id="sidebar">Loading...</aside>
+            <main id="content-area">
+                <div class="welcome-box">
+                    <h2>Select a topic to decrypt.</h2>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

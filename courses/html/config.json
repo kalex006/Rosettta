@@ -1,0 +1,14 @@
+{
+  "course_id": "html",
+  "title": "HTML Master Course",
+  "base_path": "courses/html/lessons",
+  "topics": [
+    {
+      "title": "Topic 1: Basics",
+      "folder": "topic 1",
+      "files": [
+        { "title": "1.1 Introduction", "filename": "intro.html" }
+      ]
+    }
+  ]
+}
