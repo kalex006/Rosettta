@@ -24,6 +24,17 @@
         { "title": "2.4 Resource Hinting (Preload/Prefetch)", "filename": "resource-hints.html" },
         { "title": "2.5 Script Loading (Async vs Defer)", "filename": "script-loading.html" }
       ]
+    },
+    {
+      "title": "Topic 3: Semantic Topography",
+      "folder": "topic 3",
+      "files": [
+        { "title": "3.1 Sectioning Roots (Main/Body)", "filename": "roots.html" },
+        { "title": "2.2 Meta Views: Charset & Viewport", "filename": "meta-views.html" },
+        { "title": "2.3 SEO Intelligence & Open Graph", "filename": "seo-og.html" },
+        { "title": "2.4 Resource Hinting (Preload/Prefetch)", "filename": "resource-hints.html" },
+        { "title": "2.5 Script Loading (Async vs Defer)", "filename": "script-loading.html" }
+      ]
     }
   ]
 }
