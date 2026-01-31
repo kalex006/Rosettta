@@ -1,0 +1,82 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.1 Sectioning Roots: Body & Main</h1>
+    <p class="artifact-subtitle">The Canvas and the Core: Establishing the primary boundaries of the visual document.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Physical Canvas: &lt;body&gt;</h2>
+        <p>
+            The <code>&lt;body&gt;</code> element represents the content of the document. Structurally, there can be only <strong>one</strong> body element in a document.
+        </p>
+        <p>
+            It is a <strong>Sectioning Root</strong>. This means it establishes its own independent outline. Headings inside the body start the "Table of Contents" for the page.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Primary Landmark: &lt;main&gt;</h2>
+        <p>
+            Inside the body, we have headers, footers, sidebars, and ads. But the reason the user visited the page is contained within the <strong>Main Content Area</strong>.
+        </p>
+        <p>
+            The <code>&lt;main&gt;</code> element wraps this specific content. It is architecturally critical for <strong>Assistive Technology</strong> (Screen Readers). When a blind user presses a "Skip to Content" key, the browser looks for this specific element.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">document_anatomy.html</span>
+        </div>
+        <pre><code class="language-html">&lt;body&gt;
+    &lt;header&gt;Global Navigation (Not unique)&lt;/header&gt;
+
+    &lt;!-- The core reason for the page's existence --&gt;
+    &lt;main&gt;
+        &lt;h1&gt;The Article Title&lt;/h1&gt;
+        &lt;p&gt;The content...&lt;/p&gt;
+    &lt;/main&gt;
+
+    &lt;footer&gt;Copyright Info (Not unique)&lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The "Uniqueness" Constraint</h2>
+        <p>
+            A document must not have more than one <strong>visible</strong> <code>&lt;main&gt;</code> element.
+        </p>
+        <p>
+            You <em>can</em> technically have multiple main tags in the DOM (for example, if you are pre-loading the next page's view in a Single Page Application), but all except one must be hidden using the <code>hidden</code> attribute.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">spa_architecture.html</span>
+            </div>
+            <pre><code class="language-html">&lt;main id="view-home" hidden&gt;...&lt;/main&gt;
+&lt;main id="view-dashboard"&gt;Active Content&lt;/main&gt;
+&lt;main id="view-settings" hidden&gt;...&lt;/main&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Why not just use &lt;div id="main"&gt;?</h2>
+        <p>
+            Before HTML5, we used <code>&lt;div id="main"&gt;</code>. While this looks the same visually, it lacks <strong>semantic weight</strong>.
+        </p>
+        <p>
+            The <code>&lt;main&gt;</code> tag automatically maps to the <strong>ARIA role="main"</strong>. This exposes it to the Accessibility Tree without you writing extra code. Using a generic `div` requires you to manually add `role="main"`, which is redundant and error-prone.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Note:</strong> The <code>&lt;main&gt;</code> element should generally not be nested inside a <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>, or <code>&lt;nav&gt;</code>. It represents the dominant content, so it should sit at the top level of the hierarchy, usually as a direct child of <code>&lt;body&gt;</code> or a wrapper <code>&lt;div&gt;</code>.
+        </div>
+    </div>
+
+</section>
