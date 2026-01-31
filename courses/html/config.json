@@ -7,7 +7,7 @@
       "title": "Topic 1: Basics",
       "folder": "topic 1",
       "files": [
-        { "title": "1.1 Introduction", "filename": "intro.html" },
+        { "title": "1.1 The Web Standard & Doctypes", "filename": "standards.html" },
         { "title": "1.2 The Anatomy of a Document", "filename": "anatomy.html" }
       ]
     }
