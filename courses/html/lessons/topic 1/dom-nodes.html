@@ -1,16 +1,69 @@
-<div id="lesson-fragment" class="artifact-root">
-    <header class="artifact-header">
-        <h1 class="cinzel-gold">1.2 The Anatomy of a Document</h1>
-        <p class="archival-note">ARCHIVE REF: HTML-STR-02</p>
-    </header>
+<header class="lesson-header">
+    <h1 class="artifact-title">1.2 The DOM Tree & Nodes</h1>
+    <p class="artifact-subtitle">The Invisible Skeleton: How raw text transforms into a traversable object graph.</p>
+</header>
 
-    <section class="deep-dive">
-        <h2 class="gold-accent">The DOCTYPE Declaration</h2>
-        <p>Every HTML artifact begins with <code>&lt;!DOCTYPE html&gt;</code>. It is the instruction that forces the browser into <strong>Standards Mode</strong>.</p>
-    </section>
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Parsing Pipeline</h2>
+        <p>
+            When the browser requests your HTML file, it does not simply "paint" the text. It performs a complex transmutation known as the <strong>Critical Rendering Path</strong>.
+        </p>
+        <p>
+            The engine reads raw bytes, converts them to characters, tokenizes the tags, and constructs a tree structure in memory called the <strong>DOM (Document Object Model)</strong>.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">Process</span>
+                <span class="file-name">rendering_pipeline</span>
+            </div>
+            <pre><code class="language-bash">Bytes → Characters → Tokens → Nodes → DOM Tree</code></pre>
+        </div>
+    </div>
 
-    <section class="deep-dive">
-        <h2 class="gold-accent">The Metadata Brain (&lt;head&gt;)</h2>
-        <p>The head contains the <strong>Character Set</strong> and <strong>Viewport</strong> settings required for the Rosetta engine to render globally.</p>
-    </section>
-</div>
+    <div class="content-block">
+        <h2>Everything is a Node</h2>
+        <p>
+            In the DOM, every single piece of data is a <strong>Node</strong>. While developers often focus on Elements, the tree actually contains several distinct node types:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Element Node (Type 1):</strong> The tags themselves (e.g., <code>&lt;div&gt;</code>, <code>&lt;body&gt;</code>).</li>
+            <li><strong>Text Node (Type 3):</strong> The actual content inside the tags.</li>
+            <li><strong>Comment Node (Type 8):</strong> Code comments, which remain in the DOM but are not rendered.</li>
+            <li><strong>Document Node (Type 9):</strong> The root entry point (<code>window.document</code>).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>The Whitespace Phenomenon</h2>
+        <p>
+            A common architectural pitfall involves <strong>Whitespace Text Nodes</strong>. If you format your code with indentation (tabs or spaces) and newlines for readability, the parser treats that whitespace as actual content.
+        </p>
+        <p>
+            Consequently, a <code>&lt;ul&gt;</code> with 5 <code>&lt;li&gt;</code> children might actually have 11 children in the DOM (5 elements + 6 text nodes representing the newlines between them).
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Note:</strong> This is why `element.childNodes` often returns more items than `element.children`. The former includes text nodes; the latter only includes element nodes.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The Tree Genealogy</h2>
+        <p>
+            The DOM allows programmatic access (via JavaScript) through familial relationships.
+        </p>
+        <ul>
+            <li><strong>Parent:</strong> The node directly above.</li>
+            <li><strong>Child:</strong> A node directly contained within.</li>
+            <li><strong>Sibling:</strong> Nodes that share the same parent.</li>
+        </ul>
+        <p>
+            This structure enables the fundamental logic of the web: <strong>Traversal</strong>. Scripts can "walk" the tree to modify content dynamically without reloading the page.
+        </p>
+    </div>
+
+</section>
