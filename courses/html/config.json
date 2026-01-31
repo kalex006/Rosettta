@@ -4,7 +4,7 @@
   "base_path": "courses/html/lessons",
   "topics": [
     {
-      "title": "Topic 1: Basics",
+      "title": "Topic 1:Core Architecture",
       "folder": "topic 1",
       "files": [
         { "title": "1.1 The Web Standard & Doctypes", "filename": "standards.html" },
