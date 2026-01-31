@@ -21,7 +21,7 @@
         { "title": "2.1 The Document Head Architecture", "filename": "head-arch.html" },
         { "title": "2.2 Meta Views: Charset & Viewport", "filename": "meta-views.html" },
         { "title": "2.3 SEO Intelligence & Open Graph", "filename": "seo-og.html" },
-        { "title": "1.4 Content Categories (Flow/Phrasing)", "filename": "categories.html" },
+        { "title": "2.4 Resource Hinting (Preload/Prefetch)", "filename": "resource-hints.html" },
         { "title": "1.5 Whitespace & Parsing Logic", "filename": "parsing.html" }
       ]
     }

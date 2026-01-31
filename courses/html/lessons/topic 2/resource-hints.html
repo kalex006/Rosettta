@@ -1,0 +1,91 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.4 Resource Hinting</h1>
+    <p class="artifact-subtitle">The Time Machine: Predicting user behavior and pre-loading the future.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Network Latency Gap</h2>
+        <p>
+            Normally, the browser is reactive. It finds a <code>&lt;link&gt;</code> or <code>&lt;script&gt;</code> tag, pauses, performs a DNS lookup, establishes a TCP handshake, negotiates TLS, and finally downloads the file.
+        </p>
+        <p>
+            <strong>Resource Hints</strong> allow the Architect to be proactive. We can tell the browser to perform these expensive network operations in the background while the main HTML is still parsing.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. DNS Prefetch & Preconnect</h2>
+        <p>
+            Before a file can be downloaded, the browser must find the server's IP address. This "DNS Lookup" can take 20-120ms.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>dns-prefetch:</strong> Resolves the domain name to an IP address. Low cost.</li>
+            <li><strong>preconnect:</strong> Resolves DNS + TCP Handshake + TLS Negotiation. Higher cost, but ready for immediate data transfer.</li>
+        </ul>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">connection_hints.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- Use for 3rd party domains (e.g., Google Fonts, Analytics) --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="dns-prefetch" href="https://www.google-analytics.com"&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Preload (High Priority)</h2>
+        <p>
+            <code>rel="preload"</code> is a command, not a hint. It tells the browser: "You absolutely need this resource for the <strong>current page</strong>. Download it now, even if you haven't seen the tag for it yet."
+        </p>
+        <p>
+            This is critical for <strong>LCP (Largest Contentful Paint)</strong> assets, such as the Hero Image or the main Font file, which are often buried deep in CSS files.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">critical_assets.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- Load the font immediately so text doesn't flash --&gt;
+&lt;link rel="preload" href="/fonts/cinzel.woff2" as="font" type="font/woff2" crossorigin&gt;
+
+&lt;!-- Load the hero image early --&gt;
+&lt;link rel="preload" href="/images/hero-banner.jpg" as="image"&gt;</code></pre>
+        </div>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Warning:</strong> Do not preload everything. If you preload a resource but do not use it within 3 seconds, the browser will log a warning in the console. It wastes bandwidth and blocks the main thread.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Prefetch (Low Priority)</h2>
+        <p>
+            <code>rel="prefetch"</code> is used for the <strong>next navigation</strong>. It tells the browser: "If you are idle and have bandwidth, download this resource because the user might visit this page next."
+        </p>
+        <p>
+            In a multi-page documentation site like ROSETTA, you might prefetch the "Next Chapter" HTML file while the user is reading the current one.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">future_loading.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- User is on Chapter 1. The likely next step is Chapter 2. --&gt;
+&lt;link rel="prefetch" href="/courses/html/lessons/topic-02/2-5-script-loading.html"&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The "Crossorigin" Nuance</h2>
+        <p>
+            When preloading fonts, you <strong>must</strong> add the <code>crossorigin</code> attribute, even if the font is hosted on your own domain. This is a quirk of how browsers fetch font resources (they use anonymous mode). Without it, the browser will download the font twice.
+        </p>
+    </div>
+
+</section>
