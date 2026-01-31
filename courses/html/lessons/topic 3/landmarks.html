@@ -1,0 +1,100 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.2 Landmark Elements</h1>
+    <p class="artifact-subtitle">The Cardinal Points: Navigating the topographical regions of the interface.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Concept of Landmarks</h2>
+        <p>
+            Landmarks are specific regions of a page that screen readers use to "teleport" users around. Instead of tabbing through 50 links, a user can ask to "Go to Navigation" or "Go to Footer."
+        </p>
+        <p>
+            We define these primarily using <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, and <code>&lt;footer&gt;</code>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Scoped Header</h2>
+        <p>
+            A common misconception is that a page can only have one <code>&lt;header&gt;</code>. In reality, the Header element is <strong>contextual</strong>.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Global Header:</strong> Inside <code>&lt;body&gt;</code>. Contains the logo and main navigation.</li>
+            <li><strong>Section Header:</strong> Inside <code>&lt;article&gt;</code> or <code>&lt;section&gt;</code>. Contains the title of that specific piece of content and its author byline.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">header_scoping.html</span>
+        </div>
+        <pre><code class="language-html">&lt;body&gt;
+    &lt;!-- The Site Header --&gt;
+    &lt;header&gt;
+        &lt;h1&gt;ROSETTA&lt;/h1&gt;
+    &lt;/header&gt;
+
+    &lt;article&gt;
+        &lt;!-- The Article Header --&gt;
+        &lt;header&gt;
+            &lt;h2&gt;Deep Dive into DOM&lt;/h2&gt;
+            &lt;p&gt;By Kalex&lt;/p&gt;
+        &lt;/header&gt;
+        &lt;p&gt;Content...&lt;/p&gt;
+    &lt;/article&gt;
+&lt;/body&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Navigation &lt;nav&gt;</h2>
+        <p>
+            The <code>&lt;nav&gt;</code> element is reserved for <strong>major blocks</strong> of navigation links.
+        </p>
+        <p>
+            Do not wrap every list of links in a nav tag. A list of social icons in the footer or a list of "related posts" usually does not qualify. Overusing landmarks creates "noise" for assistive technology users.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Footer & Ancestry</h2>
+        <p>
+            Like the header, the <code>&lt;footer&gt;</code> is scoped to its nearest <strong>Sectioning Root</strong> or <strong>Sectioning Content</strong>.
+        </p>
+        <p>
+            A footer inside an <code>&lt;article&gt;</code> typically contains the publication date, tags, and bio of the author. A footer inside the <code>&lt;body&gt;</code> contains the copyright notice and contact info for the entire site.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The &lt;address&gt; Anomaly</h2>
+        <p>
+            The <code>&lt;address&gt;</code> element is often misunderstood. It is <strong>not</strong> for arbitrary postal addresses. It is specifically for the <strong>contact information of the document owner</strong>.
+        </p>
+        <p>
+            It should generally be placed inside the <code>&lt;footer&gt;</code>.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">contact_info.html</span>
+            </div>
+            <pre><code class="language-html">&lt;footer&gt;
+    &lt;p&gt;© 2026 Project Rosetta&lt;/p&gt;
+    &lt;address&gt;
+        Contact the architect at &lt;a href="mailto:arch@rosetta.dev"&gt;arch@rosetta.dev&lt;/a&gt;
+    &lt;/address&gt;
+&lt;/footer&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> Avoid putting <code>&lt;header&gt;</code> or <code>&lt;footer&gt;</code> inside another <code>&lt;header&gt;</code> or <code>&lt;footer&gt;</code>. While the parser might accept it, it breaks the semantic model.
+        </div>
+    </div>
+
+</section>
