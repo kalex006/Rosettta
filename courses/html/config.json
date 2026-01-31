@@ -32,7 +32,7 @@
         { "title": "3.1 Sectioning Roots (Main/Body)", "filename": "roots.html" },
         { "title": "3.2 Landmark Elements (Nav/Header/Footer)", "filename": "landmarks.html" },
         { "title": "3.3 Article vs Section vs Div", "filename": "sectioning.html" },
-        { "title": "2.4 Resource Hinting (Preload/Prefetch)", "filename": "resource-hints.html" },
+        { "title": "3.4 The Document Outline Algorithm", "filename": "outlines.html" },
         { "title": "2.5 Script Loading (Async vs Defer)", "filename": "script-loading.html" }
       ]
     }

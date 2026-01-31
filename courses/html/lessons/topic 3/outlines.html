@@ -1,0 +1,104 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.4 The Document Outline Algorithm</h1>
+    <p class="artifact-subtitle">The Failed Dream: Understanding why the H1-H6 hierarchy still rules the web.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The HTML5 Theoretical Outline</h2>
+        <p>
+            When HTML5 was first drafted, it proposed a revolutionary idea: <strong>The Outline Algorithm</strong>. The concept was that every time you opened a new <code>&lt;section&gt;</code> or <code>&lt;article&gt;</code>, the heading level would reset logically.
+        </p>
+        <p>
+            In theory, this meant you could use <code>&lt;h1&gt;</code> everywhere, and the browser would automatically calculate that an <code>&lt;h1&gt;</code> inside a nested section should effectively act like an <code>&lt;h2&gt;</code>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">theoretical_spec.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- ❌ THEORETICAL (DO NOT USE) --&gt;
+&lt;body&gt;
+    &lt;h1&gt;Page Title (Level 1)&lt;/h1&gt;
+    &lt;section&gt;
+        &lt;h1&gt;Section Title (Theoretically Level 2)&lt;/h1&gt;
+        &lt;article&gt;
+             &lt;h1&gt;Article Title (Theoretically Level 3)&lt;/h1&gt;
+        &lt;/article&gt;
+    &lt;/section&gt;
+&lt;/body&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Hard Reality</h2>
+        <p>
+            <strong>Browsers and Screen Readers never implemented this algorithm.</strong>
+        </p>
+        <p>
+            To an assistive technology user, the code above looks like three top-level headings of equal importance. This creates a confusing navigation experience where the "Article Title" sounds just as important as the "Page Title."
+        </p>
+        <p>
+            As Architects, we must enforce a strict <strong>Hard Hierarchy</strong> using the numbered tags: <code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Rules of Rank</h2>
+        <ul class="artifact-list">
+            <li><strong>The H1:</strong> There should generally be only <strong>one</strong> <code>&lt;h1&gt;</code> per page. It represents the main topic of the document.</li>
+            <li><strong>No Skipping:</strong> Do not jump from <code>&lt;h2&gt;</code> to <code>&lt;h4&gt;</code> just because you like the font size of the h4 better. Use CSS to change the size; use HTML to define the rank.</li>
+            <li><strong>Depth Limit:</strong> While valid, if you find yourself using <code>&lt;h6&gt;</code>, your content structure is likely too complex and should be refactored into separate pages.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">practical_structure.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- ✅ PRACTICAL (DO THIS) --&gt;
+&lt;body&gt;
+    &lt;h1&gt;Project ROSETTA&lt;/h1&gt;
+    
+    &lt;section&gt;
+        &lt;h2&gt;Course Syllabus&lt;/h2&gt;
+        
+        &lt;article&gt;
+            &lt;h3&gt;Module 1: Architecture&lt;/h3&gt;
+            &lt;p&gt;Content...&lt;/p&gt;
+        &lt;/article&gt;
+    &lt;/section&gt;
+&lt;/body&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Hgroup Resurrection</h2>
+        <p>
+            Sometimes a heading has a subtitle or a tagline. Historically, developers wrapped both in a `div`. Recently, the standard brought back the <code>&lt;hgroup&gt;</code> element.
+        </p>
+        <p>
+            It allows you to group a heading with a paragraph that acts as a subtitle/tagline, ensuring the subtitle doesn't clutter the document outline navigation.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">hgroup_syntax.html</span>
+            </div>
+            <pre><code class="language-html">&lt;hgroup&gt;
+    &lt;h1&gt;Project ROSETTA&lt;/h1&gt;
+    &lt;p&gt;A Zero-Backend Architecture&lt;/p&gt;
+&lt;/hgroup&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> Most accessibility audit tools (like Lighthouse or Axe) will flag "Skipped Heading Levels" as an error. Always maintain the strict integer sequence of levels.
+        </div>
+    </div>
+
+</section>
