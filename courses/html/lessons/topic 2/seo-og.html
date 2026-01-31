@@ -1,0 +1,83 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.3 SEO Intelligence & Open Graph</h1>
+    <p class="artifact-subtitle">The Social Logic: Controlling link unfurling and search engine snippets.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Search Snippet</h2>
+        <p>
+            When Google indexes a page, it needs a summary to display in the SERP (Search Engine Results Page). This is controlled by the <code>description</code> meta tag.
+        </p>
+        <p>
+            While Google has confirmed that the description is <em>not</em> a direct ranking factor, it is a massive <strong>CTR (Click-Through Rate)</strong> factor. A well-engineered description acts as ad copy, enticing users to choose your link over a competitor's.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">seo_basic.html</span>
+            </div>
+            <pre><code class="language-html">&lt;meta name="description" content="Master advanced HTML5 architecture with ROSETTA. A zero-backend, dark-themed documentation platform for serious engineers."&gt;
+&lt;meta name="keywords" content="HTML, DOM, Architecture"&gt; &lt;!-- Mostly ignored by modern Google --&gt;
+&lt;meta name="author" content="Kalex"&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The Open Graph Protocol (OG)</h2>
+        <p>
+            In the early web, sharing a link just pasted the blue underlined text. Today, platforms like Facebook, Discord, and LinkedIn "unfurl" links into rich cards with images and titles.
+        </p>
+        <p>
+            This is powered by the <strong>Open Graph Protocol</strong>, originally created by Facebook. It effectively turns your web page into a rich object within the social graph. Without these tags, the social crawler will guess (poorly) which image and text to display.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">social_graph.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Essential OG Tags --&gt;
+&lt;meta property="og:type" content="website"&gt;
+&lt;meta property="og:url" content="https://rosetta.com/courses/html"&gt;
+&lt;meta property="og:title" content="Advanced HTML Architecture"&gt;
+&lt;meta property="og:description" content="A deep dive into the DOM and Rendering Engine."&gt;
+&lt;meta property="og:image" content="https://rosetta.com/assets/og-banner.jpg"&gt;
+
+&lt;!-- Twitter/X Specifics --&gt;
+&lt;meta name="twitter:card" content="summary_large_image"&gt;
+&lt;meta name="twitter:creator" content="@kalex_dev"&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The "Unfurling" Mechanics</h2>
+        <p>
+            When a user pastes a link into Discord:
+        </p>
+        <ol class="artifact-list">
+            <li>The Discord Bot (User-Agent: `Discordbot`) makes a GET request to your URL.</li>
+            <li>It downloads just the HTML (it usually does not execute JavaScript).</li>
+            <li>It parses the <code>&lt;head&gt;</code> looking for `og:*` properties.</li>
+            <li>It constructs the card UI based on the metadata found.</li>
+        </ol>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Tip:</strong> Social bots rarely execute JavaScript. If you are building a Single Page App (SPA) like ROSETTA, these meta tags must exist in the raw HTML file on the server. Injecting them via JS usually fails unless you use Server-Side Rendering (SSR).
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The 1200x630 Standard</h2>
+        <p>
+            For the `og:image`, consistency is key. The industry standard resolution is <strong>1200px by 630px</strong> (an aspect ratio of 1.91:1).
+        </p>
+        <p>
+            If your image is too small, platforms will render a tiny thumbnail instead of the "Large Image" card, significantly reducing engagement.
+        </p>
+    </div>
+
+</section>
