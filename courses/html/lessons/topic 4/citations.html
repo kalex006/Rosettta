@@ -1,0 +1,92 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.2 Citations & Edits</h1>
+    <p class="artifact-subtitle">The Audit Trail: Marking provenance, modifications, and intellectual debt.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Architecture of Quotation</h2>
+        <p>
+            Quoting external content is a fundamental part of the web. HTML provides two distinct mechanisms for this, depending on the volume of the text.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Blockquote:</strong> For lengthy, block-level quotations that break the flow of the text. By default, browsers indent this content.</li>
+            <li><strong>Q (Quote):</strong> For short, inline quotations. Modern browsers automatically surround this element with quotation marks (" ") based on the document's language.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">quotation_logic.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Block Level --&gt;
+&lt;blockquote cite="https://w3.org/spec"&gt;
+    &lt;p&gt;The HTML specification is a living standard.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;!-- Inline Level --&gt;
+&lt;p&gt;
+    As the architect said, &lt;q&gt;Semantics is the foundation.&lt;/q&gt;
+&lt;/p&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The &lt;cite&gt; Misconception</h2>
+        <p>
+            The <code>&lt;cite&gt;</code> element is one of the most misused tags in HTML.
+        </p>
+        <p>
+            <strong>Correct Usage:</strong> It represents the <strong>Title of a Work</strong> (e.g., a book title, a movie name, a research paper title).
+        </p>
+        <p>
+            <strong>Incorrect Usage:</strong> It is <em>not</em> used for the author's name.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">citation_standard.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- ✅ CORRECT --&gt;
+&lt;p&gt;More info in &lt;cite&gt;The Art of Computer Programming&lt;/cite&gt; by Knuth.&lt;/p&gt;
+
+&lt;!-- ❌ WRONG --&gt;
+&lt;p&gt;Written by &lt;cite&gt;Donald Knuth&lt;/cite&gt;&lt;/p&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Tracking Revisions: &lt;ins&gt; and &lt;del&gt;</h2>
+        <p>
+            HTML has built-in support for "Track Changes" or diffs. This is incredibly useful for legal documents, collaborative editing apps, or changelogs.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>&lt;del&gt;:</strong> Content that has been removed. Usually rendered with a strikethrough.</li>
+            <li><strong>&lt;ins&gt;:</strong> Content that has been added. Usually rendered with an underline.</li>
+        </ul>
+        <p>
+            Both elements support the <code>datetime</code> attribute to record exactly when the edit happened, and the <code>cite</code> attribute to link to an explanation of the edit.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">version_control.html</span>
+        </div>
+        <pre><code class="language-html">&lt;p&gt;
+    Project ROSETTA will launch in 
+    &lt;del datetime="2025-01-01"&gt;2025&lt;/del&gt; 
+    &lt;ins datetime="2026-02-15"&gt;2026&lt;/ins&gt;.
+&lt;/p&gt;</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> Do not use <code>&lt;del&gt;</code> just to create a strikethrough visual effect (like a "discounted price"). For pure visuals, use the <code>&lt;s&gt;</code> tag. Use <code>&lt;del&gt;</code> only when the data is actually <em>retracted</em> or <em>obsolete</em>.
+        </div>
+    </div>
+
+</section>
