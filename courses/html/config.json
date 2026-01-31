@@ -43,7 +43,7 @@
         { "title": "4.1 Importance vs Emphasis", "filename": "emphasis.html" },
         { "title": "4.2 Citations & Edits (Blockquote/Ins/Del)", "filename": "citations.html" },
         { "title": "4.3 Code, Preformatting & Variables", "filename": "code-vars.html" },
-        { "title": "3.4 The Document Outline Algorithm", "filename": "outlines.html" },
+        { "title": "4.4 Time, Data & Address", "filename": "data-time.html" },
         { "title": "3.5 Aside & Complementary Content", "filename": "aside.html" }
       ]
     }

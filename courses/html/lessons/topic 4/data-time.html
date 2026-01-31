@@ -1,0 +1,86 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.4 Time, Data & Address</h1>
+    <p class="artifact-subtitle">Temporal Semantics: Translating human ambiguity into machine precision.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Temporal Anchor: &lt;time&gt;</h2>
+        <p>
+            Humans write dates loosely ("Jan 21st", "Yesterday", "Two weeks ago"). Machines cannot index relative time efficiently.
+        </p>
+        <p>
+            The <code>&lt;time&gt;</code> element resolves this by accepting a machine-readable <code>datetime</code> attribute (following the ISO-8601 standard) while displaying a human-readable string to the user.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">iso_standards.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Specific Date --&gt;
+&lt;p&gt;
+    The project launched on 
+    &lt;time datetime="2026-01-15"&gt;January 15th&lt;/time&gt;.
+&lt;/p&gt;
+
+&lt;!-- Date and Time (T Separator + Timezone Offset) --&gt;
+&lt;p&gt;
+    Meeting starts at 
+    &lt;time datetime="2026-05-20T14:30:00+05:30"&gt;2:30 PM (IST)&lt;/time&gt;.
+&lt;/p&gt;
+
+&lt;!-- Duration (P = Period, 2H = 2 Hours) --&gt;
+&lt;p&gt;
+    The exam lasts 
+    &lt;time datetime="PT2H30M"&gt;2 hours and 30 minutes&lt;/time&gt;.
+&lt;/p&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Value Binder: &lt;data&gt;</h2>
+        <p>
+            The <code>&lt;data&gt;</code> element is the generic version of <code>&lt;time&gt;</code>. It binds a machine-readable value to a piece of content.
+        </p>
+        <p>
+            This is extremely useful for E-commerce (Product SKUs) or Library Systems (ISBNs), where the user sees a name, but the script needs an ID number.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">inventory_logic.html</span>
+            </div>
+            <pre><code class="language-html">&lt;ul&gt;
+    &lt;li&gt;
+        &lt;data value="SKU-998877"&gt;Dark Mode Mechanical Keyboard&lt;/data&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+        &lt;data value="ISBN-9780321751041"&gt;The Art of Computer Programming&lt;/data&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The Contact Context: &lt;address&gt;</h2>
+        <p>
+            We touched on this in Module 3, but it bears repeating in the context of text semantics. The <code>&lt;address&gt;</code> tag is <strong>not</strong> for arbitrary postal addresses (like a shipping address form).
+        </p>
+        <p>
+            It specifically defines the <strong>Contact Information for the Author/Owner</strong> of the surrounding <code>&lt;article&gt;</code> or <code>&lt;body&gt;</code>.
+        </p>
+        <p>
+            By default, browsers often render this in italics, implying it is "meta-data" about the document itself.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> Search Engines love the <code>&lt;time&gt;</code> tag. If you are building a blog, wrapping your publish date in a valid time element helps Google display the date correctly in search results snippets.
+        </div>
+    </div>
+
+</section>
