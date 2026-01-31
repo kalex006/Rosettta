@@ -1,0 +1,92 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.3 Elements, Tags & Attributes</h1>
+    <p class="artifact-subtitle">The Trinity of Syntax: Defining the distinction between the blueprint and the building.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Ontological Distinction</h2>
+        <p>
+            In the rendering engine, there is a distinct separation between what you type and what exists in memory.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Tags:</strong> The syntactic markers in the text file (e.g., <code>&lt;p&gt;</code>).</li>
+            <li><strong>Elements:</strong> The actual nodes created in the DOM tree (e.g., <code>HTMLParagraphElement</code>).</li>
+        </ul>
+        <p>
+            Think of the <em>Tag</em> as the architectural blueprint, and the <em>Element</em> as the physical room constructed from it.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">syntax_anatomy.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- This is the Start Tag --&gt;
+&lt;p class="intro"&gt;
+
+    &lt;!-- This is the Content (Text Node) --&gt;
+    The browser reads this text and creates a HTMLParagraphElement.
+
+&lt;!-- This is the End Tag --&gt;
+&lt;/p&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Void Elements</h2>
+        <p>
+            Not all elements require a closing sequence. <strong>Void elements</strong> are elements that, by definition, cannot contain child nodes (neither text nor other elements). Because they have no content, they require no end tag.
+        </p>
+        <p>
+            Common void elements include <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;input&gt;</code>, and <code>&lt;meta&gt;</code>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Note:</strong> In HTML5, the trailing slash in void elements (e.g., <code>&lt;br /&gt;</code>) is purely cosmetic. The browser parser ignores the slash entirely. However, many modern frameworks prefer it for consistency.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Attribute Architecture</h2>
+        <p>
+            Attributes provide additional information about an element or configure its behavior. They exist in three states:
+        </p>
+        <ul>
+            <li><strong>Key-Value Pair:</strong> <code>class="container"</code> (The standard configuration).</li>
+            <li><strong>Boolean:</strong> <code>disabled</code> or <code>checked</code>. Their presence implies <code>true</code>.</li>
+            <li><strong>Empty:</strong> <code>alt=""</code>. Used when a value is structurally required but semantically empty.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">attribute_syntax.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- 1. Standard Quoted (Recommended) --&gt;
+&lt;input type="text" name="username"&gt;
+
+&lt;!-- 2. Unquoted (Valid in HTML5, but dangerous) --&gt;
+&lt;input type=text value=yes&gt;
+
+&lt;!-- 3. Boolean Attribute (No value needed) --&gt;
+&lt;input type="checkbox" checked disabled&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Case Sensitivity Rules</h2>
+        <p>
+            The HTML parser is remarkably forgiving, but strictness ensures longevity.
+        </p>
+        <ul>
+            <li><strong>Tags:</strong> Case-insensitive (`&lt;DIV&gt;` is the same as `&lt;div&gt;`). Standard practice is strictly <strong>lowercase</strong>.</li>
+            <li><strong>Attributes Names:</strong> Case-insensitive (`HREF` vs `href`). Lowercase is standard.</li>
+            <li><strong>Attribute Values:</strong> Case-sensitive depending on context (e.g., IDs and Classes are strictly case-sensitive).</li>
+        </ul>
+    </div>
+
+</section>
