@@ -1,0 +1,83 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.2 Meta Views: Charset & Viewport</h1>
+    <p class="artifact-subtitle">The Lens and the Dictionary: Defining global character support and mobile geometry.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Universal Dictionary: UTF-8</h2>
+        <p>
+            Computers do not understand text; they only understand numbers (bytes). <strong>Character Encoding</strong> is the map that translates bytes into characters on the screen.
+        </p>
+        <p>
+            In the early web, we had fragmented standards (ASCII, ISO-8859-1, Windows-1252). Today, we strictly use <strong>UTF-8</strong>. It is a variable-width encoding capable of representing every character in the Unicode standard—from English letters to Japanese Kanji to Emojis (✨).
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">charset_declaration.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- 
+  If this is missing, browsers may guess incorrectly, 
+  turning "café" into "cafÃ©". 
+--&gt;
+&lt;meta charset="UTF-8"&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The Viewport History</h2>
+        <p>
+            Before the smartphone era, websites were designed for desktop monitors (usually 980px wide). When the iPhone launched, it needed a way to display these large sites on a small screen.
+        </p>
+        <p>
+            Apple introduced the concept of the <strong>Virtual Viewport</strong>. Without instruction, a mobile browser pretends to be a desktop monitor (980px wide) and zooms out to fit everything, making text unreadably small.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Controlling the Geometry</h2>
+        <p>
+            To tell the browser "this site is optimized for mobile," we must override the default virtual viewport using the <code>meta viewport</code> tag.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">viewport_standard.html</span>
+        </div>
+        <pre><code class="language-html">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Anatomy of the Directives</h2>
+        <ul class="artifact-list">
+            <li><strong>width=device-width:</strong> This sets the width of the page to follow the screen-width of the device. It aligns <em>CSS pixels</em> with <em>Device Independent Pixels</em>.</li>
+            <li><strong>initial-scale=1.0:</strong> Sets the initial zoom level when the page is first loaded.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>The Accessibility "Anti-Pattern"</h2>
+        <p>
+            You may encounter legacy code that disables user zooming to make a web app feel like a native app.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">Bad Practice</span>
+                <span class="file-name">do_not_use.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- ❌ NEVER DO THIS --&gt;
+&lt;meta name="viewport" content="..., user-scalable=no, maximum-scale=1.0"&gt;</code></pre>
+        </div>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Accessibility Violation:</strong> Preventing zoom (`user-scalable=no`) is a violation of WCAG (Web Content Accessibility Guidelines). It effectively blocks visually impaired users from magnifying text to read your content. Modern browsers (like iOS Safari) now ignore this tag entirely to protect users.
+            </div>
+        </div>
+    </div>
+
+</section>
