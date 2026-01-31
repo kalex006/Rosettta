@@ -1,0 +1,97 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.5 Whitespace & Parsing Logic</h1>
+    <p class="artifact-subtitle">The Phantom Characters: How the rendering engine condenses the void.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Collapsing Algorithm</h2>
+        <p>
+            One of the most disorienting behaviors for newcomers is HTML's treatment of empty space. The parser follows a strict rule: **Whitespace Collapsing**.
+        </p>
+        <p>
+            Any sequence of whitespace characters (spaces, tabs, newlines) is collapsed into a <strong>single space character</strong> (U+0020) in the rendered output. This allows developers to indent their code for readability without breaking the visual layout.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">whitespace_test.html</span>
+        </div>
+        <pre><code class="language-html">&lt;p&gt;
+    This      sentence      has
+    many      line      breaks
+    and       spaces.
+&lt;/p&gt;
+
+&lt;!-- RENDERED OUTPUT: --&gt;
+&lt;!-- "This sentence has many line breaks and spaces." --&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The "Inline-Block" Gap</h2>
+        <p>
+            The most infamous side effect of whitespace collapsing occurs with `inline` or `inline-block` elements.
+        </p>
+        <p>
+            If you place two images on separate lines in your code, the "newline" character acts as a space. This creates a mysterious 4px gap between the images that no amount of margin removal can fix.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Fix:</strong> To remove this gap, modern architects use <code>display: flex</code> on the parent container, which ignores text nodes between flex items. Alternatively, you can comment out the whitespace: <code>&lt;/div&gt;&lt;!-- --&gt;&lt;div&gt;</code>.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Preserving the Void: &lt;pre&gt;</h2>
+        <p>
+            To strictly preserve whitespace formatting (for code snippets or poetry), we use the <strong>Preformatted Text</strong> element: <code>&lt;pre&gt;</code>.
+        </p>
+        <p>
+            By default, this element sets the CSS property <code>white-space: pre</code> and uses a monospace font. It renders every tab, space, and newline exactly as it appears in the source file.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Entities: The Non-Breaking Space</h2>
+        <p>
+            Sometimes, you need a space that acts like glue. The <strong>&amp;nbsp;</strong> (Non-Breaking Space) entity creates a space that prevents a line break from occurring at that position.
+        </p>
+        <p>
+            <em>Usage:</em> "10&amp;nbsp;kg". This ensures "10" and "kg" always stay on the same line.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Parser Error Handling (Hoisting)</h2>
+        <p>
+            The HTML parser is designed to never crash. If you write invalid code, it attempts to "fix" it using specific recovery logic.
+        </p>
+        <p>
+            A classic example is <strong>Text Hoisting</strong>. If you type text directly inside a <code>&lt;table&gt;</code> (outside of a cell), the parser detects it as illegal. Instead of deleting it, it "hoists" the text out and places it <em>before</em> the table in the DOM.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">hoisting_demo.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- SOURCE CODE --&gt;
+&lt;table&gt;
+    I am lost text
+    &lt;tr&gt;...&lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;!-- BROWSER DOM RESULT --&gt;
+"I am lost text"
+&lt;table&gt;
+    &lt;tr&gt;...&lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+    </div>
+
+</section>
