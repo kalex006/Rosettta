@@ -1,0 +1,78 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.1 The Document Head Architecture</h1>
+    <p class="artifact-subtitle">The Silent Commander: Configuring the browser environment before rendering begins.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Metadata Control Room</h2>
+        <p>
+            The <code>&lt;head&gt;</code> element is unique. With the exception of the <code>&lt;title&gt;</code> (which appears in the browser tab), nothing inside the Head is visually rendered to the user's viewport.
+        </p>
+        <p>
+            Instead, it serves as the <strong>API to the Browser Engine</strong>. It dictates how to decode text, how to scale the layout for mobile screens, and how to index content for search engines.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Implicit vs. Explicit Creation</h2>
+        <p>
+            The HTML5 specification is extremely fault-tolerant. If you omit the <code>&lt;head&gt;</code> tag entirely, the browser will automatically generate it in the DOM as soon as it encounters an element that belongs there (like <code>&lt;title&gt;</code>).
+        </p>
+        <p>
+            However, relying on implicit creation is architecturally unsound. It makes the document structure unpredictable for scripts and external parsers.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">head_anatomy.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;!-- 1. Encoding (MUST BE FIRST) --&gt;
+    &lt;meta charset="UTF-8"&gt;
+
+    &lt;!-- 2. Viewport (Critical for Mobile) --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+
+    &lt;!-- 3. Title (SEO & Tab Name) --&gt;
+    &lt;title&gt;Project ROSETTA&lt;/title&gt;
+
+    &lt;!-- 4. Resources (CSS/JS) --&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The "First 1024 Bytes" Rule</h2>
+        <p>
+            The order of elements in the Head is not arbitrary; it is a matter of performance. The <strong>Character Set</strong> (<code>&lt;meta charset="UTF-8"&gt;</code>) should always be the very first line after the opening head tag.
+        </p>
+        <p>
+            <strong>Why?</strong> Browsers scan the first 1024 bytes of a document to determine encoding. If the charset definition is found <em>after</em> non-ASCII characters appear, the browser may have to trigger a "Restart" of the parsing process, causing a performance penalty and a potential flash of unstyled text.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Title Element</h2>
+        <p>
+            The <code>&lt;title&gt;</code> is required for validity. It serves three critical functions:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>UI:</strong> It is the text displayed in the browser tab.</li>
+            <li><strong>Bookmarks:</strong> It is the default name when a user saves the page.</li>
+            <li><strong>SEO:</strong> It is the primary signal to search engines regarding the page's topic.</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Note:</strong> Never use the title for internal navigation (e.g., "Home"). Use descriptive, keyword-rich titles like "Advanced HTML5 Documentation | ROSETTA".
+            </div>
+        </div>
+    </div>
+
+</section>
