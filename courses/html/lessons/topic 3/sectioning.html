@@ -1,0 +1,97 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.3 Article vs Section vs Div</h1>
+    <p class="artifact-subtitle">The Hierarchy of Meaning: A decision matrix for structural semantics.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Decision Matrix</h2>
+        <p>
+            When an Architect builds a layout, they must ask specific questions to determine which container to use. It is not about how it looks (CSS handles that); it is about what it represents to the machine.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Independent Entity: &lt;article&gt;</h2>
+        <p>
+            The <code>&lt;article&gt;</code> element represents a self-contained composition.
+        </p>
+        <p>
+            <strong>The Litmus Test:</strong> "Could this block of content be distributed independently via an RSS feed?"
+        </p>
+        <p>
+            If you ripped this element out of the page and pasted it onto another website or sent it in an email, would it still make sense? If yes, it is an Article.
+        </p>
+        <ul class="artifact-list">
+            <li>A blog post.</li>
+            <li>A user comment (yes, comments are articles).</li>
+            <li>A weather widget.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Thematic Grouping: &lt;section&gt;</h2>
+        <p>
+            The <code>&lt;section&gt;</code> element represents a generic section of a document or application. A section, in this context, is a thematic grouping of content.
+        </p>
+        <p>
+            <strong>The Litmus Test:</strong> "Does this grouping naturally have a heading?"
+        </p>
+        <p>
+            According to the W3C spec, a section typically has a title. If you are grouping elements just to put a border around them, it is probably not a section.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Generic Container: &lt;div&gt;</h2>
+        <p>
+            The <code>&lt;div&gt;</code> has no semantic meaning. It conveys nothing to the accessibility tree.
+        </p>
+        <p>
+            <strong>Usage:</strong> Use it strictly for layout purposes. If you need a wrapper for a CSS Grid, a Flexbox container, or a styling hook for a background color, use a Div.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">nesting_logic.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- A News Feed --&gt;
+&lt;section class="news-feed"&gt;
+    &lt;h2&gt;Latest Tech News&lt;/h2&gt; &lt;!-- Section has a heading --&gt;
+
+    &lt;!-- A Self-Contained Story --&gt;
+    &lt;article class="news-item"&gt;
+        &lt;h3&gt;New Chip Architecture Released&lt;/h3&gt;
+        &lt;p&gt;Intel has announced...&lt;/p&gt;
+        
+        &lt;!-- Generic wrapper for layout styling --&gt;
+        &lt;div class="share-buttons"&gt;
+            &lt;button&gt;Share&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/article&gt;
+
+&lt;/section&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Recursive Nesting</h2>
+        <p>
+            It is perfectly valid to nest these elements recursively.
+        </p>
+        <ul>
+            <li>An <code>&lt;article&gt;</code> can contain multiple <code>&lt;section&gt;</code> elements (e.g., Introduction, Methodology, Conclusion chapters).</li>
+            <li>A <code>&lt;section&gt;</code> can contain multiple <code>&lt;article&gt;</code> elements (e.g., a "Comments" section containing individual comment articles).</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> Never use <code>&lt;section&gt;</code> as a wrapper just because "it sounds better than div." If the content doesn't have a semantic theme (and ideally a heading), using <code>&lt;section&gt;</code> creates noise in the Document Outline, confusing screen reader users who navigate by region.
+        </div>
+    </div>
+
+</section>
