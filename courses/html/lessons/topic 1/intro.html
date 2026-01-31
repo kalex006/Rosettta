@@ -1,32 +1,69 @@
-<div class="lesson-content">
-    <header class="artifact-header">
-        <h1 class="cinzel-gold">1.1 The History of SGML & HTML</h1>
-        <p class="archival-note">ARCHIVE REF: 1986-1991 | SUBJECT: HYPERTEXT ORIGINS</p>
-    </header>
+<header class="lesson-header">
+    <h1 class="artifact-title">1.1 The Web Standard & Doctypes</h1>
+    <p class="artifact-subtitle">The Protocol of the Web: From SGML roots to the Living Standard.</p>
+</header>
 
-    <section class="deep-dive">
-        <h2 class="gold-accent">The SGML Metalanguage</h2>
-        <p>Before HTML existed, the world relied on <strong>SGML (Standard Generalized Markup Language)</strong>. SGML is not a language itself, but a <em>metalanguage</em>—a system used to define other markup languages. It established the concept of the <strong>DTD (Document Type Definition)</strong>, which dictates the rules of a document's structure.</p>
-        
-        <div class="technical-callout">
-            <h3 class="gold-accent">Architect's Insight</h3>
-            <p>HTML was originally just an SGML application. This is why early HTML required a <code>&lt;!DOCTYPE&gt;</code> declaration; it was the pointer telling the browser which SGML rules to follow to parse the document.</p>
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Living Standard</h2>
+        <p>
+            HTML is no longer a versioned language like Python or C++. Since 2019, the <strong>WHATWG (Web Hypertext Application Technology Working Group)</strong> has declared HTML a "Living Standard."
+        </p>
+        <p>
+            This means there will never be an "HTML6." Instead, the browser vendors (Chrome, Firefox, Safari, Edge) continuously merge new features into the engine. As architects, we do not write for a version; we write for the <strong>platform</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Doctype Declaration</h2>
+        <p>
+            The very first line of any professional HTML document is the DOCTYPE. It is crucial to understand that <strong>this is not an HTML tag</strong>. It is a preamble instructions for the browser's parser.
+        </p>
+        <p>
+            Historically, HTML was based on SGML (Standard Generalized Markup Language), which required a reference to a DTD (Document Type Definition). Modern HTML is its own thing, but the Doctype remains for a specific architectural reason: <strong>Rendering Modes</strong>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">index.html</span>
         </div>
-    </section>
+        <pre><code class="language-html">&lt;!-- 
+  The Modern Declaration.
+  Case-insensitive, but uppercase is conventional.
+  Triggers "Standards Mode" in all browsers.
+--&gt;
+&lt;!DOCTYPE html&gt;
 
-    <section class="deep-dive">
-        <h2 class="gold-accent">The Berners-Lee Synthesis</h2>
-        <p>In 1991, Tim Berners-Lee released "HTML Tags," a simplified subset of SGML designed for research sharing. While SGML was incredibly complex and rigorous, HTML was designed to be <strong>resilient</strong>—allowing the web to scale even if developers made small syntax errors.</p>
-        
+&lt;html lang="en"&gt;
+...
+&lt;/html&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Quirks vs. Standards Mode</h2>
+        <p>
+            When a browser loads a page, it decides which layout engine to use based on the presence of the Doctype.
+        </p>
         <ul class="artifact-list">
-            <li><strong>1991:</strong> HTML Tags (The birth).</li>
-            <li><strong>1995:</strong> HTML 2.0 (The first formal standard).</li>
-            <li><strong>1999:</strong> HTML 4.01 (The gold standard for a decade).</li>
-            <li><strong>2014:</strong> HTML5 (The shift to a "Living Standard").</li>
+            <li><strong>Standards Mode:</strong> Triggered by `&lt;!DOCTYPE html&gt;`. The browser renders the page according to modern CSS and HTML specifications.</li>
+            <li><strong>Quirks Mode:</strong> Triggered if the Doctype is missing or malformed. The browser mimics the behavior of Navigator 4 and IE5 to support ancient websites.</li>
         </ul>
-    </section>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Critical Warning:</strong> Never omit the Doctype. Running in Quirks Mode will cause your CSS box model calculations to fail unpredictably across different devices.
+            </div>
+        </div>
+    </div>
 
-    <footer class="lesson-footer">
-        <p class="gold-accent"><em>“The power of the Web is in its universality.”</em> — Sir Tim Berners-Lee</p>
-    </footer>
-</div>
+    <div class="content-block">
+        <h2>The Root Element</h2>
+        <p>
+            Immediately following the declaration is the root element: <code>&lt;html&gt;</code>. All other elements are descendants of this node. It is best practice to always include the <code>lang</code> attribute (e.g., <code>lang="en"</code>). This is not just for semantics; it is vital for accessibility tools (screen readers) and search engine logic.
+        </p>
+    </div>
+
+</section>
