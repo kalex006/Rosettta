@@ -1,0 +1,95 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.1 Importance vs Emphasis</h1>
+    <p class="artifact-subtitle">The Voice of the Document: Controlling semantic inflection and urgency.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Visuals vs. Semantics</h2>
+        <p>
+            In the early days of the web, we used tags purely for visual styling: <code>&lt;b&gt;</code> for bold and <code>&lt;i&gt;</code> for italics.
+        </p>
+        <p>
+            Modern HTML5 separates <strong>Presentation</strong> (CSS) from <strong>Meaning</strong> (HTML). As Architects, we choose tags based on the <em>inflection</em> we want the browser or screen reader to apply, not the font style.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Stress Emphasis: &lt;em&gt;</h2>
+        <p>
+            The <code>&lt;em&gt;</code> element represents stress emphasis. It changes the nuance of a sentence. Ideally, a screen reader will verbally stress this word.
+        </p>
+        <p>
+            Consider the sentence "I love coding." Shifting the emphasis changes the meaning entirely:
+        </p>
+        <ul class="artifact-list">
+            <li>"<em>I</em> love coding" (Me, not you).</li>
+            <li>"I <em>love</em> coding" (A strong feeling).</li>
+            <li>"I love <em>coding</em>" (As opposed to designing).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>The Strong Importance: &lt;strong&gt;</h2>
+        <p>
+            The <code>&lt;strong&gt;</code> element implies <strong>strong importance</strong>, seriousness, or urgency. It is not just "bold text." It is a warning or a key keyword that must not be skipped.
+        </p>
+        <p>
+            Nesting strong elements increases their relative importance.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Survival of &lt;b&gt; and &lt;i&gt;</h2>
+        <p>
+            Are <code>&lt;b&gt;</code> and <code>&lt;i&gt;</code> dead? <strong>No.</strong> HTML5 redefined them for utilitarian purposes where no extra semantic importance is implied.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Tag</th>
+                    <th>Old Usage</th>
+                    <th>New HTML5 Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>&lt;b&gt;</code></td>
+                    <td>Bold text</td>
+                    <td>Keywords, product names, or stylistic offsets without importance.</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;i&gt;</code></td>
+                    <td>Italic text</td>
+                    <td>Taxonomic designations, technical terms, idiomatic phrases (e.g., <i>de facto</i>), or icons.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">semantic_nuance.html</span>
+        </div>
+        <pre><code class="language-html">&lt;p&gt;
+    &lt;!-- Strong Importance (Warning) --&gt;
+    &lt;strong&gt;Warning:&lt;/strong&gt; Do not unplug the server.
+
+    &lt;!-- Stress Emphasis (Inflection) --&gt;
+    I &lt;em&gt;really&lt;/em&gt; need that data.
+
+    &lt;!-- Stylistic Offset (Taxonomy/Names) --&gt;
+    The &lt;i&gt;Felis catus&lt;/i&gt; (house cat) is common.
+&lt;/p&gt;</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Rule:</strong> Never use <code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code> inside a paragraph to make text big. Use <code>&lt;strong&gt;</code> or a CSS class. Headings break the paragraph structure; Strong elements flow within it.
+        </div>
+    </div>
+
+</section>

@@ -35,6 +35,17 @@
         { "title": "3.4 The Document Outline Algorithm", "filename": "outlines.html" },
         { "title": "3.5 Aside & Complementary Content", "filename": "aside.html" }
       ]
+    },
+    {
+      "title": "Topic 4: Text-Level Semantics",
+      "folder": "topic 4",
+      "files": [
+        { "title": "4.1 Importance vs Emphasis", "filename": "emphasis.html" },
+        { "title": "3.2 Landmark Elements (Nav/Header/Footer)", "filename": "landmarks.html" },
+        { "title": "3.3 Article vs Section vs Div", "filename": "sectioning.html" },
+        { "title": "3.4 The Document Outline Algorithm", "filename": "outlines.html" },
+        { "title": "3.5 Aside & Complementary Content", "filename": "aside.html" }
+      ]
     }
   ]
 }
