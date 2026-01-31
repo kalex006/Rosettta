@@ -8,7 +8,7 @@
       "folder": "topic 1",
       "files": [
         { "title": "1.1 The Web Standard & Doctypes", "filename": "standards.html" },
-        { "title": "1.2 The Anatomy of a Document", "filename": "anatomy.html" }
+        { "title": "1.2 The DOM Tree & Nodes", "filename": "dom-nodes.html" }
       ]
     }
   ]
