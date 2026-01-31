@@ -1,0 +1,99 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.3 Code, Preformatting & Variables</h1>
+    <p class="artifact-subtitle">The Syntax of Syntax: Semantics for displaying technical data and computer interaction.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Fragment: &lt;code&gt;</h2>
+        <p>
+            The <code>&lt;code&gt;</code> element represents a fragment of computer code. By default, browsers render this in a <strong>monospace font</strong> (like Courier or Consolas).
+        </p>
+        <p>
+            However, <code>&lt;code&gt;</code> is an <em>inline</em> element. It does not preserve whitespace. If you put multiple lines of code inside it, the browser will collapse them into a single line.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Block: &lt;pre&gt; + &lt;code&gt;</h2>
+        <p>
+            To display a block of code while preserving indentation, line breaks, and tabs, we must combine two elements.
+        </p>
+        <ol class="artifact-list">
+            <li><strong>&lt;pre&gt; (Preformatted Text):</strong> Preserves whitespace and prevents text wrapping.</li>
+            <li><strong>&lt;code&gt;:</strong> Semantically defines the content as code.</li>
+        </ol>
+        <p>
+            Standard practice for syntax highlighters (like Prism.js or Highlight.js) is to add a class to the code tag, such as <code>class="language-css"</code>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">block_syntax.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- The Industry Standard Pattern --&gt;
+&lt;pre&gt;
+    &lt;code class="language-javascript"&gt;
+function init() {
+    console.log("Hello World");
+}
+    &lt;/code&gt;
+&lt;/pre&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>User Input: &lt;kbd&gt;</h2>
+        <p>
+            The <code>&lt;kbd&gt;</code> element represents user input, typically keyboard entry or voice commands.
+        </p>
+        <p>
+            It is often styled to look like a physical key. Architects frequently nest <code>&lt;kbd&gt;</code> tags to represent key combinations.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">shortcuts.html</span>
+            </div>
+            <pre><code class="language-html">&lt;p&gt;
+    To save the file, press 
+    &lt;kbd&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;S&lt;/kbd&gt;&lt;/kbd&gt;
+&lt;/p&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>System Output & Variables</h2>
+        <p>
+            Two lesser-known but semantically vital tags:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>&lt;samp&gt; (Sample Output):</strong> Represents output from a computer program (e.g., "File not found" or terminal logs).</li>
+            <li><strong>&lt;var&gt; (Variable):</strong> Represents a mathematical variable (x, y) or a programming variable placeholder. Usually rendered in italics.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">terminal_simulation.html</span>
+        </div>
+        <pre><code class="language-html">&lt;p&gt;
+    The computer calculated that &lt;var&gt;x&lt;/var&gt; = 5.
+    Then it printed: &lt;samp&gt;Process Complete.&lt;/samp&gt;
+&lt;/p&gt;</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Critical: Escaping Entities</strong><br>
+            If you write <code>&lt;div&gt;</code> inside your HTML code block, the browser will try to render a real div. You <strong>must</strong> escape special characters:<br>
+            Replace <code>&lt;</code> with <code>&amp;lt;</code><br>
+            Replace <code>&gt;</code> with <code>&amp;gt;</code>
+        </div>
+    </div>
+
+</section>
