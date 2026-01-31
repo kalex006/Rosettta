@@ -1,0 +1,88 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.4 Content Categories</h1>
+    <p class="artifact-subtitle">Beyond Block and Inline: Understanding the strict content models that govern validity.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Paradigm Shift</h2>
+        <p>
+            Historically, HTML elements were categorized as either <strong>Block</strong> (takes full width) or <strong>Inline</strong> (sits within text). In modern architecture, these terms define <em>CSS Display</em> modes, not HTML validity.
+        </p>
+        <p>
+            HTML5 introduced a more nuanced <strong>Content Model</strong> to define exactly which elements can dwell inside others.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Flow Content</h2>
+        <p>
+            This is the broadest category. It includes almost every element that can be used in the body of a document. If an element accepts "Flow Content," it is structurally very permissive.
+        </p>
+        <p>
+            <em>Examples:</em> <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;table&gt;</code>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Phrasing Content</h2>
+        <p>
+            Phrasing content is the text of the document and the elements that mark up that text at the intra-paragraph level. This roughly correlates to the old "inline" concept.
+        </p>
+        <p>
+            <em>Examples:</em> <code>&lt;span&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;img&gt;</code>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>The Golden Rule:</strong> Phrasing content cannot contain Flow content. You cannot put a <code>&lt;div&gt;</code> inside a <code>&lt;span&gt;</code> without violating semantic rules (even if CSS makes it look correct).
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The Paragraph Predicament</h2>
+        <p>
+            The <code>&lt;p&gt;</code> element is unique. It can only contain <strong>Phrasing Content</strong>. If you attempt to place a <strong>Flow Content</strong> element (like a <code>&lt;div&gt;</code>) inside a paragraph, the browser's parser will aggressively intervene.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">parser_behavior.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- WHAT YOU WRITE --&gt;
+&lt;p&gt;
+    Hello World
+    &lt;div&gt;I am an illegal block&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;!-- WHAT THE BROWSER RENDERS (DOM) --&gt;
+&lt;p&gt;Hello World&lt;/p&gt; &lt;!-- Auto-closed here --&gt;
+&lt;div&gt;I am an illegal block&lt;/div&gt;
+&lt;p&gt;&lt;/p&gt; &lt;!-- Stray closing tag creates an empty p --&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Transparent Content Models</h2>
+        <p>
+            Some elements, most notably the Anchor <code>&lt;a&gt;</code>, have a <strong>Transparent</strong> model. They adopt the content model of their parent.
+        </p>
+        <p>
+            This means you <em>can</em> wrap an entire card (divs, images, headings) inside a single link tag in HTML5—a practice that was illegal in HTML4.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Interactive Content</h2>
+        <p>
+            Elements specifically designed for user interaction (buttons, links, inputs). The architectural constraint here is strict: <strong>Interactive content cannot be nested.</strong>
+        </p>
+        <p>
+            You generally cannot place a <code>&lt;button&gt;</code> inside an <code>&lt;a&gt;</code> tag, as the browser cannot decide which interaction takes precedence.
+        </p>
+    </div>
+
+</section>
