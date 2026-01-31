@@ -1,0 +1,90 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.5 Aside & Complementary Content</h1>
+    <p class="artifact-subtitle">Tangential Relevance: Managing content that exists outside the direct flow.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Definition of "Tangential"</h2>
+        <p>
+            The <code>&lt;aside&gt;</code> element represents a portion of a document whose content is only <strong>indirectly related</strong> to the document's main content.
+        </p>
+        <p>
+            <strong>The Litmus Test:</strong> If you remove this element, does the main article still make perfect sense?
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Yes:</strong> It is likely an <code>&lt;aside&gt;</code> (e.g., an advertisement, a "related posts" widget, a pull quote).</li>
+            <li><strong>No:</strong> If removing it breaks the understanding of the text, it should be part of the main flow (e.g., a critical diagram or definition).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>Contextual Scoping</h2>
+        <p>
+            Like headers and footers, the meaning of an Aside changes based on where it lives in the DOM hierarchy.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">scoping_logic.html</span>
+        </div>
+        <pre><code class="language-html">&lt;body&gt;
+    &lt;!-- 1. GLOBAL ASIDE (Site-level) --&gt;
+    &lt;aside class="sidebar"&gt;
+        &lt;h3&gt;About the Author&lt;/h3&gt;
+        &lt;h3&gt;Advertising&lt;/h3&gt;
+    &lt;/aside&gt;
+
+    &lt;article&gt;
+        &lt;h1&gt;The History of CSS&lt;/h1&gt;
+        &lt;p&gt;CSS was proposed by Håkon Wium Lie...&lt;/p&gt;
+
+        &lt;!-- 2. LOCAL ASIDE (Article-level) --&gt;
+        &lt;aside class="glossary-term"&gt;
+            &lt;h4&gt;Did you know?&lt;/h4&gt;
+            &lt;p&gt;Before CSS, tags like &lt;font&gt; were used for styling.&lt;/p&gt;
+        &lt;/aside&gt;
+    &lt;/article&gt;
+&lt;/body&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Accessibility Mapping</h2>
+        <p>
+            Browsers map the <code>&lt;aside&gt;</code> element to the <strong>Complementary</strong> role in the accessibility API.
+        </p>
+        <p>
+            This allows screen reader users to jump directly to it if they are interested in extra info, or skip it entirely if they just want to read the main story. This is why you should never put critical information (like the "Buy Now" button) inside an aside.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Pull Quotes</h2>
+        <p>
+            A common aesthetic pattern is the "Pull Quote"—a sentence from the text repeated in large font for visual interest.
+        </p>
+        <p>
+            If the quote is simply decorative repetition, use <code>&lt;aside&gt;</code> combined with <code>aria-hidden="true"</code> so screen readers do not read the same sentence twice.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">pull_quote.html</span>
+            </div>
+            <pre><code class="language-html">&lt;aside class="pull-quote" aria-hidden="true"&gt;
+    "The aside element is about relationship, not position."
+&lt;/aside&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> Do not use <code>&lt;aside&gt;</code> for parentheses content inside a paragraph `(like this)`. For that, use the <code>&lt;small&gt;</code> tag or simple text. The Aside element is a block-level container, not an inline modifier.
+        </div>
+    </div>
+
+</section>

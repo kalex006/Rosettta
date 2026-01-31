@@ -33,7 +33,7 @@
         { "title": "3.2 Landmark Elements (Nav/Header/Footer)", "filename": "landmarks.html" },
         { "title": "3.3 Article vs Section vs Div", "filename": "sectioning.html" },
         { "title": "3.4 The Document Outline Algorithm", "filename": "outlines.html" },
-        { "title": "2.5 Script Loading (Async vs Defer)", "filename": "script-loading.html" }
+        { "title": "3.5 Aside & Complementary Content", "filename": "aside.html" }
       ]
     }
   ]
