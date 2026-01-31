@@ -8,7 +8,7 @@
       "folder": "topic 1",
       "files": [
         { "title": "1.1 Introduction", "filename": "intro.html" },
-        { "title": "1.2 The Anatomy of a Document", "filename": "document-anatomy.html" }
+        { "title": "1.2 The Anatomy of a Document", "filename": "anatomy.html" }
       ]
     }
   ]

@@ -75,26 +75,37 @@ async function loadLesson(path) {
     const content = document.getElementById('content-area');
     content.innerHTML = "<h3 style='color:#666'>Unrolling Scroll...</h3>";
 
+    // 1. CLEAN THE PATH: Remove any accidental double slashes
+    // This ensures 'lessons//topic-1' becomes 'lessons/topic-1'
+    const cleanPath = path.replace(/\/+/g, '/');
+
     try {
-        // FIX: Cache busting added here to solve your "file not updating" issue
-        const cleanPath = `${path}?v=${new Date().getTime()}`;
-        const resp = await fetch(cleanPath);
+        // 2. FETCH with Cache Buster
+        const fetchUrl = `${cleanPath}?v=${new Date().getTime()}`;
+        console.log("Fetching from:", fetchUrl); // Check this in F12 Console!
+
+        const resp = await fetch(fetchUrl);
         
-        if(!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
+        if (!resp.ok) {
+            throw new Error(`Server responded with ${resp.status}: ${resp.statusText}`);
+        }
         
         const html = await resp.text();
+
+        // 3. VALIDATION: Ensure we didn't just get a 404 page text
+        if (html.includes("<!DOCTYPE html>") && html.includes("404")) {
+             throw new Error("File not found (GitHub 404 page returned)");
+        }
+
         content.innerHTML = html;
-        
-        // Optional: Scroll to top of content
-        content.scrollTop = 0;
 
     } catch (error) {
-        console.error("Lesson Load Error:", error);
+        console.error("Critical Load Error:", error);
         content.innerHTML = `
-            <div style="padding: 20px; border: 1px dashed #d4af37;">
-                <p style='color:red; font-family: "Cinzel"'>FRAGMENT MISSING</p>
-                <small style="color:#666">Path: ${path}</small><br>
-                <small style="color:#444">Check if filename matches config.json exactly.</small>
+            <div style="padding: 20px; border: 1px dashed #d4af37; color: #ff4d4d;">
+                <h3 style="font-family: 'Cinzel'">Fragment Missing</h3>
+                <p style="font-size: 0.8rem; color: #888;">The path provided was invalid or the file does not exist on the server.</p>
+                <code style="background: #1a1a1a; padding: 5px; display: block;">${cleanPath}</code>
             </div>
         `;
     }
