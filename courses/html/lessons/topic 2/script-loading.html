@@ -1,0 +1,96 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.5 Script Loading Strategy</h1>
+    <p class="artifact-subtitle">The Non-Blocking Future: Async, Defer, and the modern Module system.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The "Parser Blocking" Problem</h2>
+        <p>
+            By default, JavaScript is <strong>Synchronous</strong> and <strong>Blocking</strong>. When the HTML parser encounters a <code>&lt;script&gt;</code> tag, it completely stops building the DOM. It downloads the file, executes the JavaScript, and only then resumes parsing the rest of the HTML.
+        </p>
+        <p>
+            In the past, to prevent the user from staring at a white screen, developers placed scripts at the very bottom of the <code>&lt;body&gt;</code> tag. In the modern era, we have better tools.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Modern Attributes</h2>
+        <p>
+            We can now place scripts in the <code>&lt;head&gt;</code> without blocking the UI by using specific attributes:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Defer (Recommended):</strong> Downloads the file in parallel (background) while the HTML parses. It waits to <em>execute</em> until the HTML is fully parsed. It also respects the order of scripts.</li>
+            <li><strong>Async:</strong> Downloads in parallel. However, it executes <em>immediately</em> upon download completion, pausing the HTML parser. It does <strong>not</strong> respect order (a small file might run before a large dependency).</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">loading_strategies.html</span>
+        </div>
+        <pre><code class="language-html">&lt;head&gt;
+    &lt;!-- 1. DEFER (Best for App Logic) --&gt;
+    &lt;!-- Order is guaranteed. Runs after DOM is ready. --&gt;
+    &lt;script src="main.js" defer&gt;&lt;/script&gt;
+
+    &lt;!-- 2. ASYNC (Best for Independent 3rd Party) --&gt;
+    &lt;!-- Order chaotic. Runs as soon as downloaded. --&gt;
+    &lt;script src="https://analytics.com/tracker.js" async&gt;&lt;/script&gt;
+
+    &lt;!-- 3. MODULE (Modern Standard) --&gt;
+    &lt;!-- Automatically "defer" by default. strict mode enabled. --&gt;
+    &lt;script type="module" src="app.js"&gt;&lt;/script&gt;
+&lt;/head&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Module System</h2>
+        <p>
+            Modern JavaScript (ES6+) uses the <strong>Module</strong> system. When you use <code>type="module"</code>:
+        </p>
+        <ol class="artifact-list">
+            <li>The script is automatically treated as <code>defer</code>.</li>
+            <li>You can use <code>import</code> and <code>export</code> keywords.</li>
+            <li>Scope is isolated (variables don't leak to the global window object).</li>
+            <li>Strict mode is enabled automatically.</li>
+        </ol>
+    </div>
+
+    <div class="content-block">
+        <h2>Decision Matrix</h2>
+        <p>As a Senior Architect, use this logic to decide:</p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Scenario</th>
+                    <th>Strategy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Core Application Logic</td>
+                    <td><code>&lt;script type="module"&gt;</code></td>
+                </tr>
+                <tr>
+                    <td>Legacy Dependencies (jQuery)</td>
+                    <td><code>&lt;script defer&gt;</code></td>
+                </tr>
+                <tr>
+                    <td>Independent Analytics/Ads</td>
+                    <td><code>&lt;script async&gt;</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Legacy Warning:</strong> Never use <code>document.write()</code>. It wipes the entire document if executed after the page load and blocks the parser aggressively during load. It is deprecated for good reason.
+        </div>
+    </div>
+
+</section>
