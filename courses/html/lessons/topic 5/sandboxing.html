@@ -1,0 +1,130 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.5 Sandboxing & Embed Policies</h1>
+    <p class="artifact-subtitle">Digital Containment: Enforcing the principle of least privilege on nested contexts.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Security Risk of Inclusion</h2>
+        <p>
+            When you embed an <code>&lt;iframe&gt;</code>, you are essentially letting another developer run code on your website. If that external site is compromised, it could attempt to:
+        </p>
+        <ul class="artifact-list">
+            <li>Trigger automatic downloads.</li>
+            <li>Open malicious popups.</li>
+            <li>Redirect the parent window to a phishing site.</li>
+            <li>Steal session cookies.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>The Sandbox Attribute</h2>
+        <p>
+            The <code>sandbox</code> attribute enables an extra set of restrictions for the content in the iframe. When present but empty, it applies the <strong>maximum restrictions</strong> possible:
+        </p>
+        <ul class="artifact-list">
+            <li>Scripts are disabled.</li>
+            <li>Forms are disabled.</li>
+            <li>Popups are blocked.</li>
+            <li>The content is treated as being from a unique, different origin.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">maximum_security.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- This frame is effectively a static image; no logic can run --&gt;
+&lt;iframe sandbox src="https://untrusted-source.com"&gt;&lt;/iframe&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Granular Permissions (The Flags)</h2>
+        <p>
+            Architects rarely use an empty sandbox. Instead, we "whitelist" specific behaviors using flags.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Flag</th>
+                    <th>Permission Granted</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>allow-scripts</code></td>
+                    <td>Allows the iframe to run JavaScript.</td>
+                </tr>
+                <tr>
+                    <td><code>allow-same-origin</code></td>
+                    <td>Allows the content to maintain its origin (access its own cookies/storage).</td>
+                </tr>
+                <tr>
+                    <td><code>allow-forms</code></td>
+                    <td>Allows the iframe to submit web forms.</td>
+                </tr>
+                <tr>
+                    <td><code>allow-popups</code></td>
+                    <td>Allows the iframe to open new windows or tabs.</td>
+                </tr>
+                <tr>
+                    <td><code>allow-top-navigation</code></td>
+                    <td>Allows the iframe to change the URL of the main parent page.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">balanced_sandbox.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- A typical configuration for an embedded video or widget --&gt;
+&lt;iframe 
+    sandbox="allow-scripts allow-popups allow-forms"
+    src="https://media-provider.com/embed/123"&gt;
+&lt;/iframe&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Dangerous Combo</h2>
+        <p>
+            There is one specific combination of flags that an Architect must almost always avoid: using <code>allow-scripts</code> and <code>allow-same-origin</code> together on a file from your <strong>own</strong> domain.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Security Protocol:</strong> If you use both flags on your own domain, the code inside the iframe can programmatically remove the <code>sandbox</code> attribute from itself and gain full control over your site. Use one or the other, but rarely both.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Permissions Policy (The 'allow' attribute)</h2>
+        <p>
+            While <code>sandbox</code> restricts *what* the code can do, the <code>allow</code> attribute (Feature Policy) restricts access to *hardware* and browser APIs.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">feature_control.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- Specifically allowing camera but blocking microphone --&gt;
+&lt;iframe 
+    src="https://video-chat.com"
+    allow="camera; microphone 'none'; geolocation 'none'"&gt;
+&lt;/iframe&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Clickjacking Protection</h2>
+        <p>
+            As a side note, to prevent *other* people from putting **your** ROSETTA site in an iframe (to trick users into clicking buttons), we use the <code>X-Frame-Options</code> header or <code>Content-Security-Policy: frame-ancestors</code>. This is set at the server level (or via GitHub Pages configuration).
+        </p>
+    </div>
+
+</section>
