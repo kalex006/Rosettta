@@ -1,0 +1,117 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.3 ARIA Roles & The Accessibility Tree</h1>
+    <p class="artifact-subtitle">The Parallel Reality: Engineering the semantic layer for assistive technology and machine consumption.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Accessibility Tree</h2>
+        <p>
+            When a browser parses the ROSETTA documentation, it doesn't just build the DOM and the CSSOM. It constructs a third, invisible structure: <strong>The Accessibility Tree</strong>.
+        </p>
+        <p>
+            This tree is a simplified version of the DOM, containing only the information that matters to Screen Readers and Braille displays. As an Architect, your goal is to ensure this tree is just as well-structured as your visual layout.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The First Rule of ARIA</h2>
+        <p>
+            Before applying ARIA, an architect must adhere to the <strong>First Rule of ARIA</strong>: <em>"If you can use a native HTML element or attribute with the semantics and behavior you require already built-in, then do so."</em>
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Creed:</strong> ARIA is a supplement, not a replacement. Use <code>&lt;button&gt;</code> instead of <code>&lt;div role="button"&gt;</code>. Native elements are always more robust, especially regarding keyboard focus and mobile behavior.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. ARIA Roles (What it is)</h2>
+        <p>
+            Roles define what an element <strong>is</strong>. Once a role is set, it cannot be changed. Roles tell the browser how to categorize an element in the Accessibility Tree.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Landmark Roles:</strong> <code>banner</code>, <code>main</code>, <code>navigation</code>, <code>contentinfo</code>.</li>
+            <li><strong>Widget Roles:</strong> <code>dialog</code>, <code>tabpanel</code>, <code>tooltip</code>, <code>progressbar</code>.</li>
+            <li><strong>Live Regions:</strong> <code>alert</code>, <code>status</code>, <code>log</code>.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">role_assignment.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Defining a custom search container that behaves like a landmark --&gt;
+&lt;div class="custom-search" role="search"&gt;
+    &lt;input type="text" aria-label="Search Artifacts"&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. States and Properties (The Context)</h2>
+        <p>
+            While Roles are static, <strong>States</strong> and <strong>Properties</strong> are dynamic. They describe how an element currently relates to the user.
+        </p>
+        <ul class="artifact-list">
+            <li><code>aria-expanded</code>: Tells the user if a section (like our 10.1 details) is currently open.</li>
+            <li><code>aria-hidden</code>: Hides decorative elements from the Accessibility Tree that would otherwise cause noise.</li>
+            <li><code>aria-controls</code>: Establishes a logical link between a trigger and the element it modifies.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">dynamic_semantics.html</span>
+        </div>
+        <pre><code class="language-html">&lt;button 
+    aria-expanded="false" 
+    aria-controls="artifact-details-pane"
+    onclick="togglePane()"&gt;
+    Expand Metadata
+&lt;/button&gt;
+
+&lt;div id="artifact-details-pane" hidden&gt;
+    &lt;!-- Content injected here --&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. ARIA-Live: Communicating Change</h2>
+        <p>
+            In a <strong>Zero-Backend SPA</strong> like ROSETTA, we often inject content dynamically. Screen readers do not always notice these changes unless we use <code>aria-live</code>.
+        </p>
+        <ul class="artifact-list">
+            <li><code>aria-live="polite"</code>: Wait for the user to stop interacting, then announce the change.</li>
+            <li><code>aria-live="assertive"</code>: Interrupt the user immediately (use only for critical errors).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>5. The Hidden Label: aria-label</h2>
+        <p>
+            If a button only has an icon (SVG) and no text, it has no "Accessible Name." We use <code>aria-label</code> to provide a name that is only visible to the Accessibility Tree.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">icon_accessibility.html</span>
+            </div>
+            <pre><code class="language-html">&lt;button aria-label="Download Blueprint"&gt;
+    &lt;svg aria-hidden="true"&gt;...&lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Verification:</strong> Do not guess accessibility. Use the "Accessibility" tab in Chrome/Edge DevTools to inspect the Accessibility Tree directly. If you don't see your element's name and role there, the screen reader won't either.
+        </div>
+    </div>
+
+</section>
