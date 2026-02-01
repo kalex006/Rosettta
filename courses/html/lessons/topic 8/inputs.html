@@ -1,0 +1,105 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.2 Input Types & Virtual Keyboards</h1>
+    <p class="artifact-subtitle">Device-Aware Interaction: Optimizing user interfaces through semantic data-types and keyboard hints.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Evolution of &lt;input&gt;</h2>
+        <p>
+            In the early web, almost everything was <code>type="text"</code>. Modern HTML5 has shifted this paradigm. An input type is no longer just a visual box; it is a <strong>Metadata Hint</strong> to the browser. 
+        </p>
+        <p>
+            When an architect chooses a specific type, they are instructing the operating system (iOS, Android, Windows) to prepare the most efficient interface for that specific data.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Semantic Text Variants</h2>
+        <p>
+            These types look like standard text boxes on desktop but change the <strong>Virtual Keyboard</strong> layout on mobile devices:
+        </p>
+        <ul class="artifact-list">
+            <li><code>email</code>: Brings up the <code>@</code> and <code>.com</code> keys.</li>
+            <li><code>tel</code>: Brings up the numeric telephone keypad.</li>
+            <li><code>url</code>: Brings up the <code>/</code> and <code>.com</code> keys.</li>
+            <li><code>search</code>: Adds a "search" icon and often a "clear" (X) button in the field.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">mobile_optimization.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Triggers the '@' key on iOS/Android --&gt;
+&lt;input type="email" placeholder="arch@rosetta.dev"&gt;
+
+&lt;!-- Triggers the Number Pad on mobile --&gt;
+&lt;input type="tel" placeholder="+1..."&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The inputmode Attribute</h2>
+        <p>
+            Sometimes, <code>type="number"</code> is undesirable because it adds "spinner" buttons (up/down arrows) that ruin the UI aesthetic. To get a numeric keyboard <em>without</em> the spinner buttons, architects use the <code>inputmode</code> attribute.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Secret:</strong> For Credit Card numbers or OTP codes, use <code>type="text" inputmode="numeric"</code>. This gives the user a numeric pad but prevents the browser from trying to "increment" the credit card number like a standard digit.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Range and Number</h2>
+        <p>
+            Precision vs. Fluidity:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Number:</strong> Used for precise values. Supports <code>min</code>, <code>max</code>, and <code>step</code>.</li>
+            <li><strong>Range:</strong> Used for "fuzzy" values where the exact number is less important than the relative magnitude (e.g., Volume, Brightness). Renders as a slider.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">numeric_controls.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Increments by 0.5 --&gt;
+&lt;input type="number" min="0" max="10" step="0.5"&gt;
+
+&lt;!-- Visual Slider --&gt;
+&lt;input type="range" min="0" max="100"&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Temporal and Visual Types</h2>
+        <p>
+            Modern browsers provide native, high-end widgets for dates and colors, eliminating the need for heavy JavaScript libraries.
+        </p>
+        <ul class="artifact-list">
+            <li><code>date</code> / <code>time</code> / <code>datetime-local</code>: Opens the OS-native calendar or clock picker.</li>
+            <li><code>color</code>: Opens the system color palette.</li>
+            <li><code>file</code>: Opens the file explorer. Supports the <code>accept</code> attribute to filter by extension (e.g., <code>accept=".jpg, .pdf"</code>).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>The Hidden Utility</h2>
+        <p>
+            The <code>type="hidden"</code> input is invisible to the user. It is used to store "state" or "IDs" that the architect needs to send to the server (or JavaScript) without cluttering the interface.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Styling Warning:</strong> Native pickers (like the <code>date</code> or <code>color</code> inputs) are famously difficult to style with CSS because they live in the browser's <strong>User Agent Shadow DOM</strong>. For Project ROSETTA, we often prefer to style the wrapper and use the input as a hidden functional layer.
+        </div>
+    </div>
+
+</section>
