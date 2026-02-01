@@ -1,0 +1,114 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.4 Native Validation & Regex</h1>
+    <p class="artifact-subtitle">Client-Side Integrity: Orchestrating the browser's native constraint validation engine.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Constraint Validation Engine</h2>
+        <p>
+            In high-end frontend architecture, validation starts at the markup layer. Modern browsers possess a built-in <strong>Constraint Validation API</strong> that checks user input against a set of rules before a single line of JavaScript is executed.
+        </p>
+        <p>
+            While client-side validation is <strong>not</strong> a substitute for server-side security, it is critical for User Experience (UX), providing immediate feedback and reducing unnecessary server round-trips.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Declarative Constraints</h2>
+        <p>
+            The browser enforces rules based on specific boolean and value-based attributes:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>required:</strong> Prevents submission if the field is empty.</li>
+            <li><strong>minlength / maxlength:</strong> Enforces character counts for text-based inputs.</li>
+            <li><strong>min / max / step:</strong> Enforces numerical or temporal boundaries.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">declarative_validation.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Enforcing a 4-8 character username and mandatory entry --&gt;
+&lt;input type="text" id="username" required minlength="4" maxlength="8"&gt;
+
+&lt;!-- Enforcing a numeric range between 1 and 10 --&gt;
+&lt;input type="number" min="1" max="10"&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The pattern Attribute (Regex)</h2>
+        <p>
+            The <code>pattern</code> attribute is the most powerful tool in the architect's validation arsenal. It accepts a <strong>Regular Expression (Regex)</strong> that the input's value must match for the form to be considered valid.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Tip:</strong> When using the <code>pattern</code> attribute, always include the <code>title</code> attribute. Browsers display the text inside the <code>title</code> as the error message (tooltip) when the Regex fails to match.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML/Regex</span>
+            <span class="file-name">artifact_id_validation.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- 
+  Requirement: Must start with 'ARV-', followed by 4 digits.
+  Regex: ^ARV-[0-9]{4}$
+--&gt;
+&lt;label for="id-code"&gt;Artifact Designation&lt;/label&gt;
+&lt;input 
+    type="text" 
+    id="id-code" 
+    pattern="ARV-[0-9]{4}" 
+    title="Format must be ARV- followed by 4 digits (e.g., ARV-1024)"
+    required&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. CSS Validation Hooks</h2>
+        <p>
+            An Architect uses CSS pseudo-classes to provide visual feedback based on the validation state. This allows the ROSETTA interface to "glow" gold when data is correct or dim when it is invalid.
+        </p>
+        <ul class="artifact-list">
+            <li><code>:valid</code>: Matches an element whose value validates successfully.</li>
+            <li><code>:invalid</code>: Matches an element with failed validation.</li>
+            <li><code>:placeholder-shown</code>: Matches if the user hasn't started typing yet.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">validation_feedback.css</span>
+        </div>
+        <pre><code class="language-css">/* High-end feedback logic */
+input:not(:placeholder-shown):invalid {
+    border-color: #ff4d4d; /* Red warning */
+}
+
+input:not(:placeholder-shown):valid {
+    border-color: #d4af37; /* Ancient Gold success */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Preventing Default: novalidate</h2>
+        <p>
+            There are times when an Architect wants to handle all validation manually via JavaScript (for example, to show custom modal alerts). In this case, apply the <code>novalidate</code> attribute to the <code>&lt;form&gt;</code> tag. This stops the browser from showing its native "Please fill out this field" bubbles.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Security Warning:</strong> Client-side validation is purely a "User Convenience" layer. Any user can open the DevTools and delete your <code>required</code> or <code>pattern</code> attributes. **Always** re-validate all data on the server (or via secure logic) before processing.
+        </div>
+    </div>
+
+</section>
