@@ -1,0 +1,107 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.5 Table Accessibility</h1>
+    <p class="artifact-subtitle">Data Lineage: Establishing explicit relational headers for non-linear data structures.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Relational Challenge</h2>
+        <p>
+            When a sighted user looks at a table, they can scan vertically and horizontally to find context. A Screen Reader, however, moves through a table linearly—one cell at a time. Without perfect architectural associations, the data in cell (C, 4) becomes a "orphaned" number with no meaning.
+        </p>
+        <p>
+            For simple tables, the <code>scope</code> attribute is sufficient. For <strong>Irregular Tables</strong> (tables with nested headers or complex spanning), we must use the <strong>ID/Headers Pattern</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The ID/Headers Pattern</h2>
+        <p>
+            This is the most robust method of table accessibility. You assign a unique <code>id</code> to every header cell (<code>&lt;th&gt;</code>), and then you link every data cell (<code>&lt;td&gt;</code>) to its corresponding headers using the <code>headers</code> attribute.
+        </p>
+        <p>
+            The <code>headers</code> attribute accepts a space-separated list of IDs, allowing a single data point to be associated with multiple levels of hierarchy.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">complex_association.html</span>
+        </div>
+        <pre><code class="language-html">&lt;table class="artifact-table"&gt;
+    &lt;caption&gt;Server Performance Artifacts (Q1 - 2026)&lt;/caption&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th id="server-id"&gt;Server&lt;/th&gt;
+            &lt;th id="loc-eu" colspan="2"&gt;European Sector&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th&gt;&lt;!-- Empty --&gt;&lt;/th&gt;
+            &lt;th id="cpu-load"&gt;CPU&lt;/th&gt;
+            &lt;th id="mem-load"&gt;Memory&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;th id="node-01"&gt;Node Alpha&lt;/th&gt;
+            &lt;!-- Linked to 3 headers: Node, Location, and Metric --&gt;
+            &lt;td headers="node-01 loc-eu cpu-load"&gt;12%&lt;/td&gt;
+            &lt;td headers="node-01 loc-eu mem-load"&gt;4GB&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Table Summary</h2>
+        <p>
+            A <code>&lt;caption&gt;</code> provides a title, but sometimes an Architect needs to provide a <strong>summary</strong> of how the table is organized (e.g., "Rows represent language artifacts, columns represent security scores").
+        </p>
+        <p>
+            In modern HTML, we do not use the deprecated <code>summary</code> attribute. Instead, we use a paragraph with an ID and link it to the table using <code>aria-describedby</code>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">table_summary.html</span>
+        </div>
+        <pre><code class="language-html">&lt;p id="table-desc" class="visually-hidden"&gt;
+    This table lists programming languages in the first column, 
+    with their respective memory management models in the second.
+&lt;/p&gt;
+
+&lt;table aria-describedby="table-desc"&gt;
+    ...
+&lt;/table&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Layout Table Ban</h2>
+        <p>
+            If you encounter legacy code using a table for layout, you must add <code>role="presentation"</code> to the table tag. This tells the browser to strip the semantic meaning from the table so the screen reader doesn't announce "Table with 2 columns and 4 rows" when it's just a sidebar layout.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Verdict:</strong> In 2026, there is no excuse for a layout table. Use <strong>CSS Grid</strong> or <strong>Flexbox</strong>. Use <code>&lt;table&gt;</code> only for data.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Testing Your Architecture</h2>
+        <p>
+            To verify your table's accessibility, an Architect should perform a "Tab-Test."
+        </p>
+        <ol class="artifact-list">
+            <li>Open your browser's accessibility inspector.</li>
+            <li>Ensure every <code>&lt;td&gt;</code> shows an <strong>Accessible Name</strong> derived from its headers.</li>
+            <li>Verify that the <code>caption</code> is the first item announced when the table gains focus.</li>
+        </ol>
+    </div>
+
+</section>
