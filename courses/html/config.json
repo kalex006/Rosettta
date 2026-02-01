@@ -81,7 +81,7 @@
       ]
     },
     {
-      "titile": "topic 8: forms & user inputs",
+      "title": "topic 8: forms & user inputs",
       "folder": "topic 8",
       "files": [
         { "title": "8.1 Form Methods & Encodings", "filename": "forms.html" },
