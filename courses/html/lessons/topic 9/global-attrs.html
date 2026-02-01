@@ -1,0 +1,105 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.5 Global Attributes & Native Utilities</h1>
+    <p class="artifact-subtitle">Universal Properties: Exploiting global attributes to modify fundamental element behavior and accessibility.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Universal Layer</h2>
+        <p>
+            While most attributes are specific to certain elements (like <code>src</code> for images), <strong>Global Attributes</strong> can be applied to every HTML element in the specification. 
+        </p>
+        <p>
+            In the ROSETTA architecture, we use these attributes to refine the user experience, manage complex accessibility flows, and trigger native browser features like "Direct Editing" and "Drag-and-Drop" without needing large external libraries.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Visibility Logic: hidden</h2>
+        <p>
+            The <code>hidden</code> attribute is the modern semantic way to remove an element from view. It is superior to <code>display: none</code> in CSS because it communicates the state to the browser's engine even if the CSS fails to load.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Advanced Tip:</strong> A new value, <code>hidden="until-found"</code>, allows content to be hidden but still searchable by the browser’s "Find in Page" (Ctrl+F) feature. If the text is found, the browser automatically removes the attribute to reveal the element.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Focus Management: tabindex</h2>
+        <p>
+            The <code>tabindex</code> attribute controls the order in which elements receive focus when the user presses the <strong>Tab</strong> key.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>tabindex="0":</strong> Makes a non-interactive element (like a <code>&lt;div&gt;</code>) focusable in the natural document order.</li>
+            <li><strong>tabindex="-1":</strong> Removes an element from the Tab order but allows it to be focused programmatically via JavaScript (using <code>.focus()</code>).</li>
+            <li><strong>Positive values (1, 2, 3):</strong> <strong>Strictly avoided.</strong> This is an anti-pattern that creates a confusing experience for keyboard users.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">focus_architecture.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Making a custom 'Artifact Card' keyboard-accessible --&gt;
+&lt;div class="artifact-card" tabindex="0" role="button"&gt;
+    Interact with Knowledge
+&lt;/div&gt;
+
+&lt;!-- A hidden section that we want to focus after a JS event --&gt;
+&lt;section id="secret-room" tabindex="-1" hidden&gt;
+    &lt;h2&gt;Decrypted Content&lt;/h2&gt;
+&lt;/section&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Native Interaction: contenteditable</h2>
+        <p>
+            The <code>contenteditable</code> attribute transforms any element into a rich-text or plain-text editor. 
+        </p>
+        <p>
+            <strong>Use Case:</strong> In ROSETTA, we use this for "Live Sandbox" areas where users can edit code snippets or labels directly on the page to see how they look in our "Ancient Gold" theme.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">live_editor.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- Allowing the user to rename an artifact directly --&gt;
+&lt;h2 contenteditable="plaintext-only" spellcheck="false"&gt;
+    Untitled Artifact
+&lt;/h2&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Drag-and-Drop Trigger: draggable</h2>
+        <p>
+            The <code>draggable</code> attribute is a hint to the browser that an element can be picked up and moved. 
+        </p>
+        <ul class="artifact-list">
+            <li>It is an enumerated attribute: <code>"true"</code> or <code>"false"</code> (not a boolean).</li>
+            <li>Images and links are draggable by default; other elements require this attribute to be set to "true".</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Metadata Control: spellcheck & title</h2>
+        <ul class="artifact-list">
+            <li><strong>spellcheck:</strong> Used on editable elements to enable/disable the browser's red underline for typos. Essential for code editors where "code" isn't found in a standard dictionary.</li>
+            <li><strong>title:</strong> Provides a native tooltip. While common, an architect uses this sparingly as it is not accessible to mobile (touch) or keyboard users. We prefer custom tooltips using the Popover API (Lesson 9.3).</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architecture Decision:</strong> Use <code>contenteditable</code> with caution. It can lead to "div-soup" if not managed correctly, as the browser will often inject <code>&lt;div&gt;</code> or <code>&lt;br&gt;</code> tags when the user hits Enter. Always sanitize the output before saving.
+        </div>
+    </div>
+
+</section>
