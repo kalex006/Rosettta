@@ -1,0 +1,104 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.3 Art Direction (The Picture Element)</h1>
+    <p class="artifact-subtitle">Content Adaptation: Manipulating the visual narrative through the Picture element's source selection algorithm.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Art Direction Problem</h2>
+        <p>
+            Sometimes, simply shrinking an image isn't enough. A wide landscape photo of an "Ancient Artifact" might look beautiful on a 27-inch monitor, but on a vertical smartphone, the artifact becomes too small to see. 
+        </p>
+        <p>
+            <strong>Art Direction</strong> is the practice of serving a <em>differently cropped</em> or <em>composed</em> image based on the viewport's aspect ratio. This is where the <code>&lt;picture&gt;</code> element succeeds where <code>srcset</code> fails.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Anatomy of &lt;picture&gt;</h2>
+        <p>
+            The <code>&lt;picture&gt;</code> element is a wrapper that contains zero or more <code>&lt;source&gt;</code> elements and one <code>&lt;img&gt;</code> element. The browser looks at the sources from top to bottom and picks the first one that matches the media condition.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">art_direction.html</span>
+        </div>
+        <pre><code class="language-html">&lt;picture&gt;
+  &lt;!-- For vertical screens: Use a tight, square crop --&gt;
+  &lt;source media="(max-width: 600px)" srcset="artifact-square.jpg"&gt;
+  
+  &lt;!-- For tablets/desktop: Use the wide landscape shot --&gt;
+  &lt;source media="(min-width: 601px)" srcset="artifact-landscape.jpg"&gt;
+
+  &lt;!-- Mandatory Fallback --&gt;
+  &lt;img src="artifact-landscape.jpg" alt="Ancient Stone Tablet"&gt;
+&lt;/picture&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Format Fallbacks: The "Type" Attribute</h2>
+        <p>
+            In Lesson 6.1, we discussed WebP and AVIF. The <code>&lt;picture&gt;</code> element is the architect's primary tool for serving these next-gen formats while maintaining 100% compatibility with older browsers.
+        </p>
+        <p>
+            By using the <code>type</code> attribute, you can tell the browser: "If you support AVIF, use this. If not, try WebP. If you support neither, use the standard JPEG."
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">format_stack.html</span>
+        </div>
+        <pre><code class="language-html">&lt;picture&gt;
+  &lt;!-- Tier 1: AVIF (Smallest & Best) --&gt;
+  &lt;source srcset="hero.avif" type="image/avif"&gt;
+  
+  &lt;!-- Tier 2: WebP (Efficient & Common) --&gt;
+  &lt;source srcset="hero.webp" type="image/webp"&gt;
+
+  &lt;!-- Tier 3: JPEG (Legacy Fallback) --&gt;
+  &lt;img src="hero.jpg" alt="Rosetta Entrance"&gt;
+&lt;/picture&gt;</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Critical Logic:</strong> The <code>&lt;img&gt;</code> tag must always be the <strong>last</strong> child of <code>&lt;picture&gt;</code>. Without it, the image will not render. The <code>&lt;img&gt;</code> is also what holds the <code>alt</code> text and styling; the <code>&lt;picture&gt;</code> and <code>&lt;source&gt;</code> tags themselves are invisible.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>When to use Picture vs. Srcset?</h2>
+        <p>
+            Choosing the wrong tool increases code complexity unnecessarily. Follow this architectural rule of thumb:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Use Srcset:</strong> When you want the browser to pick a file based on <em>Screen Density</em> or <em>Size</em> (Resolution Switching).</li>
+            <li><strong>Use Picture:</strong> When you need to change the <em>Aspect Ratio/Crop</em> (Art Direction) or provide <em>Format Fallbacks</em> (Type Switching).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>Dark Mode Optimization</h2>
+        <p>
+            For a high-end project like ROSETTA, you can even use <code>&lt;picture&gt;</code> to swap images based on the user's OS theme (Dark vs. Light mode).
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">theme_aware_assets.html</span>
+            </div>
+            <pre><code class="language-html">&lt;picture&gt;
+  &lt;source media="(prefers-color-scheme: dark)" srcset="dark-artifact.png"&gt;
+  &lt;img src="light-artifact.png" alt="Artifact Illustration"&gt;
+&lt;/picture&gt;</code></pre>
+        </div>
+    </div>
+
+</section>
