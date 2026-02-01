@@ -1,0 +1,109 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.1 Web Components: Templates & Slots</h1>
+    <p class="artifact-subtitle">Component Blueprints: Mastering the infrastructure of reusable, declarative content fragments.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Framework-less Component</h2>
+        <p>
+            In high-end "Zero-Backend" architecture, we aim to achieve the modularity of frameworks like React or Vue using only native browser APIs. This is made possible through <strong>Web Components</strong>.
+        </p>
+        <p>
+            The first pillar of this system is the <code>&lt;template&gt;</code> element. It is a mechanism for holding HTML that is not to be rendered immediately, but can be instantiated subsequently during runtime using JavaScript.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Power of Inertness</h2>
+        <p>
+            The <code>&lt;template&gt;</code> is unique because its content is <strong>inert</strong>. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>No Resource Loading:</strong> Images inside a template do not download until the template is cloned.</li>
+            <li><strong>No Script Execution:</strong> <code>&lt;script&gt;</code> tags inside do not run.</li>
+            <li><strong>Invisible to the DOM:</strong> <code>document.querySelector</code> cannot see elements inside a template unless you specifically target the template's <code>.content</code> property.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">component_blueprint.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Defining the 'Artifact Card' blueprint --&gt;
+&lt;template id="artifact-template"&gt;
+    &lt;div class="card"&gt;
+        &lt;h2 class="title"&gt;&lt;/h2&gt;
+        &lt;p class="description"&gt;&lt;/p&gt;
+        &lt;slot name="metadata"&gt;&lt;/slot&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;!-- The container where we will inject the clones --&gt;
+&lt;div id="gallery"&gt;&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Cloning the Fragment</h2>
+        <p>
+            To use a template, an Architect must "activate" it using JavaScript. We use <code>importNode</code> or <code>cloneNode(true)</code> to create a deep copy of the template's content.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JavaScript</span>
+            <span class="file-name">instantiation_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">const template = document.getElementById('artifact-template');
+const gallery = document.getElementById('gallery');
+
+// Create a new instance of the blueprint
+const instance = template.content.cloneNode(true);
+
+// Populate the clone with data
+instance.querySelector('.title').textContent = "C++ Core";
+instance.querySelector('.description').textContent = "Memory Management.";
+
+// Inject into the visible DOM
+gallery.appendChild(instance);</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Slot Mechanism</h2>
+        <p>
+            The <code>&lt;slot&gt;</code> element is a placeholder inside a Web Component that you can fill with your own markup. This allows for <strong>Composition</strong>. 
+        </p>
+        <p>
+            While slots are most powerful when used with the Shadow DOM (Lesson 10.2), their architectural purpose is to allow a generic component (like a "Modal" or "Card") to accept custom, specific content from the outside.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Note:</strong> In the ROSETTA project, templates allow us to define our "Lesson View" once and then dynamically swap the text, images, and code snippets based on the JSON data, ensuring a 100% dry (Don't Repeat Yourself) codebase.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Performance Benefits</h2>
+        <p>
+            Using <code>&lt;template&gt;</code> is significantly more performant than using <code>innerHTML</code> strings in JavaScript. 
+        </p>
+        <ol class="artifact-list">
+            <li>The browser parses the HTML inside the template only <strong>once</strong> when the page loads.</li>
+            <li>Cloning a pre-parsed fragment is much faster than forcing the browser to parse a new string every time you add an element.</li>
+        </ol>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Security Warning:</strong> Even when using templates, always use <code>textContent</code> for data injection instead of <code>innerHTML</code> to prevent Cross-Site Scripting (XSS) attacks.
+        </div>
+    </div>
+
+</section>
