@@ -1,0 +1,111 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.3 Table Anatomy</h1>
+    <p class="artifact-subtitle">Data Serialization: Implementing the tripartite structural model for complex tabular data.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Semantic Table</h2>
+        <p>
+            In modern frontend architecture, tables have a singular purpose: <strong>The display of multi-dimensional, tabular data.</strong> 
+        </p>
+        <p>
+            Historically, tables were abused to create page layouts. Today, that practice is strictly prohibited. A table is a data-structure visualization. To ensure that browsers and assistive technologies can navigate these structures, we must use the explicit semantic grouping elements: <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, and <code>&lt;tfoot&gt;</code>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Table Head (&lt;thead&gt;)</h2>
+        <p>
+            The <code>&lt;thead&gt;</code> defines the labels for the columns. It must contain rows (<code>&lt;tr&gt;</code>) which in turn contain header cells (<code>&lt;th&gt;</code>).
+        </p>
+        <p>
+            <strong>Architectural Benefit:</strong> When printing long tables, modern browsers will repeat the <code>&lt;thead&gt;</code> at the top of every new physical page automatically.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Table Body (&lt;tbody&gt;)</h2>
+        <p>
+            The <code>&lt;tbody&gt;</code> encapsulates the primary data of the table. A single table can actually contain <strong>multiple</strong> <code>&lt;tbody&gt;</code> elements to represent different sections or "chapters" of data within the same header structure.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Table Foot (&lt;tfoot&gt;)</h2>
+        <p>
+            The <code>&lt;tfoot&gt;</code> contains summary information, such as totals, averages, or concluding signatures.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Legacy Note:</strong> In older versions of HTML, the <code>&lt;tfoot&gt;</code> had to be placed <em>before</em> the <code>&lt;tbody&gt;</code> so the browser could render the footer before downloading potentially thousands of rows. In HTML5, it should be placed at the end, after the body.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">semantic_table.html</span>
+        </div>
+        <pre><code class="language-html">&lt;table class="artifact-table"&gt;
+    &lt;caption&gt;Language Performance Metrics&lt;/caption&gt;
+    
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th scope="col"&gt;Artifact ID&lt;/th&gt;
+            &lt;th scope="col"&gt;Language&lt;/th&gt;
+            &lt;th scope="col"&gt;Entropy Score&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;th scope="row"&gt;ARV-01&lt;/th&gt;
+            &lt;td&gt;Rust&lt;/td&gt;
+            &lt;td&gt;0.98&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th scope="row"&gt;ARV-02&lt;/th&gt;
+            &lt;td&gt;C++&lt;/td&gt;
+            &lt;td&gt;0.94&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+    
+    &lt;tfoot&gt;
+        &lt;tr&gt;
+            &lt;td colspan="2"&gt;System Average&lt;/td&gt;
+            &lt;td&gt;0.96&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tfoot&gt;
+&lt;/table&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Header Scope & Accessibility</h2>
+        <p>
+            Simply using the <code>&lt;th&gt;</code> (Table Header) tag is not enough for high-end architecture. We must use the <code>scope</code> attribute to tell the browser's accessibility tree whether the header applies to the <strong>column</strong> or the <strong>row</strong>.
+        </p>
+        <ul class="artifact-list">
+            <li><code>scope="col"</code>: The header for the vertical column.</li>
+            <li><code>scope="row"</code>: The header for the horizontal row (often used for the first cell of each row).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>The Caption Element</h2>
+        <p>
+            The <code>&lt;caption&gt;</code> element provides a title for the table. It must be the <strong>first</strong> child of the <code>&lt;table&gt;</code>. Like the <code>&lt;figcaption&gt;</code> for images, it links a human-readable description to the data structure.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Design Tip:</strong> Tables are notoriously difficult to make responsive. In the ROSETTA project, we recommend wrapping the <code>&lt;table&gt;</code> in a <code>&lt;div style="overflow-x: auto"&gt;</code> to ensure that on mobile devices, the user can swipe the data artifact horizontally without breaking the page layout.
+        </div>
+    </div>
+
+</section>
