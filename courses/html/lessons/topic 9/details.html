@@ -1,0 +1,119 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.1 Details & Summary Disclosure</h1>
+    <p class="artifact-subtitle">Native State Management: Implementing the disclosure pattern for hierarchical information density.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Disclosure Widget</h2>
+        <p>
+            The <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> elements provide a native way to create "Accordions" or "Collapsible" regions. Historically, this required jQuery or complex Vanilla JS state-toggling. 
+        </p>
+        <p>
+            In the ROSETTA architecture, we use these to manage <strong>Information Density</strong>—hiding advanced technical specifications until the user explicitly requests them, thereby keeping the primary "Artifact" interface clean and focused.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Structural Anatomy</h2>
+        <ul class="artifact-list">
+            <li><code>&lt;details&gt;</code>: The wrapper that manages the open/closed state.</li>
+            <li><code>&lt;summary&gt;</code>: The visible "Label" or "Trigger." Clicking this toggles the visibility of the rest of the content inside the details tag.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">disclosure_pattern.html</span>
+        </div>
+        <pre><code class="language-html">&lt;details&gt;
+    &lt;summary&gt;View Encrypted Metadata&lt;/summary&gt;
+    &lt;div class="artifact-data"&gt;
+        &lt;p&gt;Origin: Northern Sector&lt;/p&gt;
+        &lt;p&gt;Timestamp: 2026-02-01&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/details&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The 'open' Attribute</h2>
+        <p>
+            The state of the widget is reflected in the DOM via the <code>open</code> boolean attribute. 
+        </p>
+        <p>
+            <strong>Architectural Benefit:</strong> Because the state is in the HTML, you can use CSS selectors to style the element based on whether it is expanded. This is the foundation of "Pure CSS" interactive UI.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">state_styling.css</span>
+        </div>
+        <pre><code class="language-css">/* Style changes when the artifact is 'unlocked' (opened) */
+details[open] {
+    border-color: #d4af37; /* Ancient Gold */
+    background: rgba(212, 175, 55, 0.05);
+}
+
+details[open] summary {
+    margin-bottom: 20px;
+    font-weight: 700;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Styling the Marker</h2>
+        <p>
+            By default, browsers show a small triangle (arrow) next to the summary. As an Architect, you can customize or remove this to fit the high-end aesthetic.
+        </p>
+        <ul class="artifact-list">
+            <li>Use the <code>::marker</code> pseudo-element for standard styling.</li>
+            <li>Use <code>summary::-webkit-details-marker</code> for older WebKit browsers.</li>
+            <li>To hide it entirely, set <code>display: none</code> or <code>list-style: none</code> on the summary.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Accessibility & Searchability</h2>
+        <p>
+            Unlike JavaScript accordions that often use <code>display: none</code>, content inside a <code>&lt;details&gt;</code> tag is <strong>"Find-in-Page" friendly</strong>. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Native Search:</strong> If a user uses <code>Ctrl+F</code> to search for a word that is hidden inside a closed details widget, most modern browsers will <strong>automatically open</strong> the widget and scroll to the text. This is a massive SEO and UX advantage over custom JS solutions.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The Exclusive Accordion (New Feature)</h2>
+        <p>
+            A recent addition to the HTML spec allows you to give multiple <code>&lt;details&gt;</code> elements the same <code>name</code> attribute. This creates an "Exclusive Accordion" where opening one automatically closes the others in the group.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">exclusive_group.html</span>
+            </div>
+            <pre><code class="language-html">&lt;details name="rosetta-group"&gt;
+    &lt;summary&gt;Section I&lt;/summary&gt; ...
+&lt;/details&gt;
+
+&lt;details name="rosetta-group"&gt;
+    &lt;summary&gt;Section II&lt;/summary&gt; ...
+&lt;/details&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Limit:</strong> Do not use <code>&lt;details&gt;</code> for mission-critical information that must be seen immediately. It is for <em>progressive disclosure</em>—secondary information that supports the primary narrative.
+        </div>
+    </div>
+
+</section>
