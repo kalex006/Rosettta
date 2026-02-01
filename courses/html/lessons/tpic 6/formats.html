@@ -1,0 +1,103 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.1 Modern Formats: WebP & AVIF</h1>
+    <p class="artifact-subtitle">The Compression Frontier: Evaluating next-generation encoding for the visual web.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Evolution of the Pixel</h2>
+        <p>
+            For decades, the web relied on JPEG (for photos) and PNG (for graphics). While these formats are universal, they are inefficient by modern standards. 
+        </p>
+        <p>
+            The current architectural standard requires <strong>Next-Gen Formats</strong>. These formats use advanced predictive coding—calculating what pixels should look like based on neighboring pixels—to reduce file size by up to 90% without visible quality loss.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. WebP: The Versatile Successor</h2>
+        <p>
+            Developed by Google, <strong>WebP</strong> is the current industry workhorse. It is a "super-format" that replaces JPEG, PNG, and GIF simultaneously.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Lossy Compression:</strong> 25-34% smaller than comparable JPEG images.</li>
+            <li><strong>Lossless Compression:</strong> 26% smaller than PNGs.</li>
+            <li><strong>Transparency:</strong> Supports alpha channels (like PNG).</li>
+            <li><strong>Animation:</strong> Supports animated sequences (like GIF), but with much better compression.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. AVIF: The High-Efficiency King</h2>
+        <p>
+            <strong>AVIF</strong> (AV1 Image File Format) is the most advanced format currently available. It is derived from the AV1 video codec and offers significantly better compression than WebP.
+        </p>
+        <p>
+            An AVIF file can often be 50% smaller than a JPEG of the same visual quality. It also supports 10-bit and 12-bit color depth, preventing "color banding" in gradients—a common issue in the dark, aesthetic backgrounds of the ROSETTA project.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">format_comparison.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Legacy Format (Large Footprint) --&gt;
+&lt;img src="artifact-stone.jpg" alt="Ancient Stone"&gt; &lt;!-- 450 KB --&gt;
+
+&lt;!-- Modern Format (Optimized) --&gt;
+&lt;img src="artifact-stone.webp" alt="Ancient Stone"&gt; &lt;!-- 120 KB --&gt;
+
+&lt;!-- Next-Gen Format (Elite Performance) --&gt;
+&lt;img src="artifact-stone.avif" alt="Ancient Stone"&gt; &lt;!-- 45 KB --&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Lossy vs. Lossless Decision Matrix</h2>
+        <p>
+            As a Senior Architect, you must choose your compression strategy based on the artifact's purpose:
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Requirement</th>
+                    <th>Strategy</th>
+                    <th>Recommended Format</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Photographic detail</td>
+                    <td>Lossy</td>
+                    <td>AVIF or WebP</td>
+                </tr>
+                <tr>
+                    <td>Sharp edges / Text</td>
+                    <td>Lossless</td>
+                    <td>WebP or PNG</td>
+                </tr>
+                <tr>
+                    <td>Transparent UI Icons</td>
+                    <td>Alpha Lossless</td>
+                    <td>WebP or SVG</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> While AVIF and WebP have excellent browser support (95%+), you should never use them as a single `<img>` tag without a fallback. In the next chapter, we will learn how to use the <code>&lt;picture&gt;</code> tag to serve AVIF to modern browsers and JPEG to legacy ones automatically.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Encoding Tools</h2>
+        <p>
+            High-end development involves automated pipelines to convert images. Tools like <strong>Squoosh.app</strong> (manual) or <strong>Sharp</strong> (Node.js/Automated) are essential for preparing assets for the ROSETTA documentation.
+        </p>
+    </div>
+
+</section>
