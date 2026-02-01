@@ -1,0 +1,96 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.4 Iframes & Browsing Contexts</h1>
+    <p class="artifact-subtitle">Recursive Windows: Managing independent document environments within a single viewport.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Nested Browsing Context</h2>
+        <p>
+            The <code>&lt;iframe&gt;</code> (Inline Frame) element represents a <strong>Nested Browsing Context</strong>. This means the content inside the iframe has its own <code>window</code> object, its own <code>document</code>, and its own session history, separate from the parent page.
+        </p>
+        <p>
+            In the ROSETTA architecture, iframes are the primary method for embedding third-party tools, code playgrounds, or isolated components without letting their CSS or JavaScript "pollute" our main "Artifact" aesthetic.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">basic_iframe.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Embedding an external resource with fixed dimensions --&gt;
+&lt;iframe 
+    src="https://maps.google.com/..." 
+    width="600" 
+    height="450" 
+    loading="lazy"
+    title="Interactive Map"&gt;
+&lt;/iframe&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The title Attribute (Accessibility)</h2>
+        <p>
+            Because an iframe contains a whole new document, screen readers need to know what is inside it without entering it first. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Requirement:</strong> Every <code>&lt;iframe&gt;</code> must have a <code>title</code> attribute. This allows visually impaired users to skip the iframe if the content is not relevant to them.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>srcdoc: Embedding Raw Markup</h2>
+        <p>
+            A powerful, modern feature of the iframe is the <code>srcdoc</code> attribute. Instead of pointing to a URL, you can provide the actual HTML code to be rendered inside the frame as a string.
+        </p>
+        <p>
+            This is how code editors (like CodePen) display your code results safely. It overrides the <code>src</code> attribute if both are present.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">srcdoc_usage.html</span>
+        </div>
+        <pre><code class="language-html">&lt;iframe 
+    srcdoc="&lt;h1&gt;Fragment Rendered&lt;/h1&gt;&lt;p&gt;This is isolated HTML.&lt;/p&gt;"&gt;
+&lt;/iframe&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Lazy Loading for Performance</h2>
+        <p>
+            Iframes are "expensive" for the browser to render. By using <code>loading="lazy"</code>, the browser will wait to download and render the iframe's content until the user scrolls near it. This significantly improves the initial load time of the main page.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Communication: postMessage</h2>
+        <p>
+            By default, a parent page cannot see inside an iframe if it comes from a different domain (Cross-Origin). To communicate between the "Artifact" shell and an iframe safely, we use the <code>window.postMessage()</code> API.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JavaScript</span>
+                <span class="file-name">cross_window_comm.js</span>
+            </div>
+            <pre><code class="language-javascript">// Sending data to the iframe
+const frame = document.querySelector('iframe');
+frame.contentWindow.postMessage('Unlock Artifact', 'https://trusted-source.com');</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Design Note:</strong> Iframes traditionally have a default border. In the ROSETTA project, we typically remove this via CSS (<code>border: none;</code>) and apply our own Ancient Gold borders to the container instead.
+        </div>
+    </div>
+
+</section>
