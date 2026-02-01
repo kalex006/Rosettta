@@ -1,0 +1,103 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.2 Relative vs Absolute Pathing</h1>
+    <p class="artifact-subtitle">Navigational Geometry: Mapping the relationship between resources and the document root.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Pathing Paradox</h2>
+        <p>
+            In a "Zero-Backend" architecture like ROSETTA, understanding how files find each other is the most important technical skill. A path is not just a string of text; it is a directional instruction to the browser's fetch engine.
+        </p>
+        <p>
+            There are three primary methods for defining the location of an artifact: <strong>Absolute</strong>, <strong>Relative</strong>, and <strong>Root-Relative</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Absolute Paths (The Global Address)</h2>
+        <p>
+            An absolute path provides the full URL, including the protocol (http/https) and the domain name. 
+        </p>
+        <p>
+            <strong>Usage:</strong> Use these only when linking to external websites or CDNs. Avoid using them for your own internal files, as it makes your project hard to test locally.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">absolute_example.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- Points to a specific location on the internet --&gt;
+&lt;a href="https://github.com/kalex/rosetta"&gt;View Source&lt;/a&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Relative Paths (The Local Relationship)</h2>
+        <p>
+            Relative paths describe the location of a file <strong>relative to the current document</strong>. This is the most portable way to build a website.
+        </p>
+        <ul class="artifact-list">
+            <li><code>filename.html</code> : Look in the same folder.</li>
+            <li><code>images/logo.png</code> : Look in a subfolder named 'images'.</li>
+            <li><code>../style.css</code> : Go up one level, then look for the file.</li>
+            <li><code>../../index.html</code> : Go up two levels.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">relative_logic.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- If we are in topic-05/5-2.html, we go up two levels to find style.css --&gt;
+&lt;link rel="stylesheet" href="../../style.css"&gt;
+
+&lt;!-- To find 5-1.html in the same folder --&gt;
+&lt;a href="5-1-anchors.html"&gt;Previous Lesson&lt;/a&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Root-Relative Paths (The Core Reference)</h2>
+        <p>
+            A path starting with a forward slash (<code>/</code>) tells the browser to start looking from the <strong>Domain Root</strong>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Warning:</strong> On GitHub Pages, your project is often hosted in a subfolder (e.g., <code>username.github.io/rosetta/</code>). A root-relative path like <code>/style.css</code> will look for the file at the domain root, skipping your project folder entirely and resulting in a 404 error. <strong>Stick to Relative Paths for GitHub Pages compatibility.</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The "Base" Element</h2>
+        <p>
+            If you find yourself writing <code>../../</code> too often, you can use the <code>&lt;base&gt;</code> element in the <code>&lt;head&gt;</code>. This sets a "starting point" for all relative URLs on the page.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">base_tag.html</span>
+            </div>
+            <pre><code class="language-html">&lt;head&gt;
+    &lt;!-- All relative links now start from this directory --&gt;
+    &lt;base href="https://kalex.github.io/rosetta/"&gt;
+&lt;/head&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Best Practices for ROSETTA</h2>
+        <p>
+            To ensure ROSETTA stays "Zero-Backend" and portable:
+        </p>
+        <ul>
+            <li>Use <strong>Relative Paths</strong> for all internal documentation links.</li>
+            <li>Always use <strong>lowercase</strong> for file and folder names (some servers are case-sensitive, others are not).</li>
+            <li>Avoid spaces in filenames; use hyphens (<code>-</code>) instead.</li>
+        </ul>
+    </div>
+
+</section>

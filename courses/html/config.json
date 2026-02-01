@@ -52,7 +52,7 @@
       "folder": "topic 5",
       "files": [
         { "title": "5.1 Anchor Mechanics & Link Types", "filename": "anchors.html" },
-        { "title": "4.2 Citations & Edits (Blockquote/Ins/Del)", "filename": "citations.html" },
+        { "title": "5.2 Relative vs Absolute Pathing", "filename": "paths.html" },
         { "title": "4.3 Code, Preformatting & Variables", "filename": "code-vars.html" },
         { "title": "4.4 Time, Data & Address", "filename": "data-time.html" },
         { "title": "4.5 Ruby & Bidirectional Text", "filename": "ruby-bidi.html" }
