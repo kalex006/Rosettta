@@ -1,0 +1,116 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.2 The Dialog Element & Modals</h1>
+    <p class="artifact-subtitle">Topological Superiority: Orchestrating native overlays and focus-trapped browsing contexts.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Z-Index Prison</h2>
+        <p>
+            For decades, creating a modal (popup) required complex CSS and JavaScript to prevent "background bleeding" and to ensure the modal appeared above everything else. This often led to an unsustainable <code>z-index: 999999</code> battle.
+        </p>
+        <p>
+            The <code>&lt;dialog&gt;</code> element introduces a native solution that uses the browser's <strong>Top Layer</strong>. When a dialog is opened as a modal, it is rendered in a special layer above all other elements, regardless of their z-index values in the CSS.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Modal vs. Non-Modal</h2>
+        <p>
+            The Architect distinguishes between two states of the dialog:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Modeless (show()):</strong> The dialog appears, but the user can still interact with the content behind it.</li>
+            <li><strong>Modal (showModal()):</strong> The browser "traps" the focus inside the dialog. Interaction with the background is blocked, and the <strong>Escape</strong> key is automatically mapped to close the window.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">dialog_structure.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- The Artifact Vault Modal --&gt;
+&lt;dialog id="artifact-vault"&gt;
+    &lt;h2&gt;Security Clearance Required&lt;/h2&gt;
+    &lt;p&gt;This data fragment is encrypted.&lt;/p&gt;
+    &lt;button id="close-vault"&gt;Return&lt;/button&gt;
+&lt;/dialog&gt;
+
+&lt;button id="open-vault"&gt;Decrypt Artifact&lt;/button&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Activation Logic</h2>
+        <p>
+            In the ROSETTA project, we use the specific JavaScript methods to trigger the native browser behavior. Using the <code>open</code> attribute directly in HTML is generally avoided for modals, as it renders the dialog in a modeless state.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JavaScript</span>
+                <span class="file-name">modal_control.js</span>
+            </div>
+            <pre><code class="language-javascript">const vault = document.getElementById('artifact-vault');
+
+// Triggers the 'Top Layer' and focus trapping
+document.getElementById('open-vault').onclick = () => vault.showModal();
+
+// Native close logic
+document.getElementById('close-vault').onclick = () => vault.close();</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Styling the ::backdrop</h2>
+        <p>
+            When using <code>showModal()</code>, the browser provides a pseudo-element called <code>::backdrop</code>. This allows us to dim or blur the background content to maintain the "Artifact" focus.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">artifact_theme.css</span>
+            </div>
+            <pre><code class="language-css">/* High-end cinematic backdrop for ROSETTA */
+#artifact-vault::backdrop {
+    background: rgba(5, 5, 5, 0.9);
+    backdrop-filter: blur(5px);
+}
+
+#artifact-vault {
+    border: 1px solid #d4af37;
+    background: #050505;
+    color: #fff;
+    padding: 2rem;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Form Integration (method="dialog")</h2>
+        <p>
+            A powerful feature for the Zero-Backend model is <code>method="dialog"</code>. When a form inside a dialog has this method, clicking the submit button <strong>automatically closes the dialog</strong> and sets the <code>returnValue</code> of the dialog to the value of the button clicked.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">auto_close_form.html</span>
+            </div>
+            <pre><code class="language-html">&lt;dialog id="confirm-delete"&gt;
+    &lt;form method="dialog"&gt;
+        &lt;p&gt;Purge this artifact?&lt;/p&gt;
+        &lt;button value="cancel"&gt;No&lt;/button&gt;
+        &lt;button value="confirm"&gt;Yes, Purge&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/dialog&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Note:</strong> The <code>&lt;dialog&gt;</code> element is superior to custom-built modals because it manages <strong>Focus Trapping</strong> natively. This means a user navigating with a keyboard cannot accidentally tab "behind" the modal into the main page, which is a major accessibility requirement.
+        </div>
+    </div>
+
+</section>
