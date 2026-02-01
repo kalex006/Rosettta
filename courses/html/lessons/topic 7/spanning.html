@@ -1,0 +1,108 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.4 Spanning & Column Groups</h1>
+    <p class="artifact-subtitle">Geometric Manipulation: Mastering cell merging and structural column definitions.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Cell Merging: The Spanning Logic</h2>
+        <p>
+            In complex data artifacts, not all data points fit into a perfect 1x1 grid. We use <strong>Spanning</strong> to allow cells to occupy the space of multiple rows or columns. This is governed by two key integer-based attributes:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>colspan:</strong> Expands a cell horizontally across multiple columns.</li>
+            <li><strong>rowspan:</strong> Expands a cell vertically across multiple rows.</li>
+        </ul>
+        <p>
+            <strong>Architect's Warning:</strong> When a cell spans into a new coordinate, it "displaces" the cells that would have occupied that space. You must reduce the number of <code>&lt;td&gt;</code> elements in the subsequent rows/columns to maintain the integrity of the table's geometry.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">spanning_geometry.html</span>
+        </div>
+        <pre><code class="language-html">&lt;table class="artifact-table"&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Category&lt;/th&gt;
+        &lt;th colspan="2"&gt;Language Systems&lt;/th&gt; &lt;!-- Spans 2 columns --&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td rowspan="2"&gt;High-Level&lt;/td&gt; &lt;!-- Spans 2 rows --&gt;
+        &lt;td&gt;Python&lt;/td&gt;
+        &lt;td&gt;JavaScript&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;!-- First cell is occupied by the rowspan above --&gt;
+        &lt;td&gt;Lua&lt;/td&gt;
+        &lt;td&gt;Ruby&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Column Architecture: &lt;colgroup&gt;</h2>
+        <p>
+            Standard HTML tables are row-oriented (we define <code>&lt;tr&gt;</code> tags). However, CSS styling is often column-oriented. Adding a <code>class="highlight"</code> to 500 individual <code>&lt;td&gt;</code> elements in a column is a failure of architecture.
+        </p>
+        <p>
+            The <code>&lt;colgroup&gt;</code> and <code>&lt;col&gt;</code> elements allow you to define the structure of columns at the start of the table.
+        </p>
+        <ul class="artifact-list">
+            <li>It resides immediately after the <code>&lt;caption&gt;</code> and before the <code>&lt;thead&gt;</code>.</li>
+            <li>It allows the browser to calculate the table layout much faster.</li>
+            <li>It enables "Column-Level" styling for specific properties like <code>width</code>, <code>background</code>, and <code>border</code>.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">colgroup_efficiency.html</span>
+        </div>
+        <pre><code class="language-html">&lt;table class="artifact-table"&gt;
+    &lt;!-- Define column properties globally --&gt;
+    &lt;colgroup&gt;
+        &lt;col class="id-column" style="width: 50px;"&gt;
+        &lt;col class="data-column"&gt;
+        &lt;col class="highlight-column" style="background: rgba(212, 175, 55, 0.1);"&gt;
+    &lt;/colgroup&gt;
+    
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;ID&lt;/th&gt;
+            &lt;th&gt;Name&lt;/th&gt;
+            &lt;th&gt;Score&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;!-- Rows follow... --&gt;
+&lt;/table&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Spanning Attribute on Columns</h2>
+        <p>
+            The <code>&lt;col&gt;</code> tag itself supports a <code>span</code> attribute. This allows a single column definition to apply to multiple consecutive columns. 
+        </p>
+        <p>
+            <em>Example:</em> <code>&lt;col span="3" class="metrics"&gt;</code> applies the "metrics" class to the next three columns in the data set.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Accessibility Trap:</strong> Complex tables with high amounts of <code>rowspan</code> and <code>colspan</code> are extremely difficult for screen readers to navigate. For these "Irregular Tables," you should use the <code>headers</code> attribute on <code>&lt;td&gt;</code> cells to explicitly link them to their corresponding <code>&lt;th&gt;</code> ID.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Zero-Backend Performance</h2>
+        <p>
+            In the ROSETTA project, because we fetch large JSON files and generate tables dynamically via JavaScript, using <code>&lt;colgroup&gt;</code> is essential. It prevents "Layout Thrashing" because the browser knows the widths of all columns before the first row of data is even injected into the DOM.
+        </p>
+    </div>
+
+</section>
