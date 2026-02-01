@@ -63,7 +63,7 @@
       "folder": "topic 6",
       "files": [
         { "title": "6.1 Modern Formats (WebP/AVIF)", "filename": "formats.html" },
-        { "title": "5.2 Relative vs Absolute Pathing", "filename": "paths.html" },
+        { "title": "6.2 Resolution Switching (Srcset)", "filename": "srcset.html" },
         { "title": "5.3 Security Attributes (Noopener/Noreferrer)", "filename": "security.html" },
         { "title": "5.4 Iframes & Browsing Contexts", "filename": "iframes.html" },
         { "title": "5.5 Sandboxing & Embed Policies", "filename": "sandboxing.html" }

@@ -1,0 +1,98 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.2 Resolution Switching (Srcset)</h1>
+    <p class="artifact-subtitle">Elastic Assets: Orchestrating the delivery of pixel-perfect density across devices.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Wasteful Web</h2>
+        <p>
+            In the early web, we served one image size to everyone. On a 4K monitor, it looked blurry; on a mobile phone, it wasted 90% of the user's data and slowed down the page. 
+        </p>
+        <p>
+            Modern architecture demands <strong>Resolution Switching</strong>. We provide the browser with a list of identical images in different sizes, and the browser decides which one to download based on the device's screen width and pixel density.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The srcset Attribute</h2>
+        <p>
+            The <code>srcset</code> attribute defines a set of images. We don't use <code>px</code> here; we use the <strong>w descriptor</strong> (width in pixels) to tell the browser the actual width of each source file.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">srcset_implementation.html</span>
+        </div>
+        <pre><code class="language-html">&lt;img 
+  src="artifact-large.jpg" 
+  alt="Stone Tablet"
+  srcset="artifact-small.jpg 400w,
+          artifact-medium.jpg 800w,
+          artifact-large.jpg 1200w"
+  sizes="(max-width: 600px) 400px,
+         800px"
+&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The sizes Attribute: The Contract</h2>
+        <p>
+            The browser needs to know how wide the image will be <em>on the screen</em> before it even downloads the CSS. The <code>sizes</code> attribute provides this information.
+        </p>
+        <p>
+            It consists of a series of media conditions. In the example above:
+        </p>
+        <ul class="artifact-list">
+            <li>If the viewport is 600px or less, the image will take up 400px of space.</li>
+            <li>Otherwise, the image will take up 800px of space.</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Note:</strong> The browser uses the <code>sizes</code> info to calculate which <code>srcset</code> image to grab. If your <code>sizes</code> attribute is incorrect, the browser will download the wrong file, ruining your performance optimizations.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Device Pixel Ratio (The 'x' Descriptor)</h2>
+        <p>
+            For simple icons or fixed-width images where the width never changes but the "Retina" density does, we use the <strong>x descriptor</strong>.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">density_switching.html</span>
+            </div>
+            <pre><code class="language-html">&lt;img 
+  src="logo-1x.png" 
+  srcset="logo-1x.png 1x, 
+          logo-2x.png 2x, 
+          logo-3x.png 3x" 
+  alt="Rosetta Logo"
+&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The Browser is Smarter Than You</h2>
+        <p>
+            The beauty of <code>srcset</code> is that you aren't forcing a choice. If a user is on a high-end iPhone but has "Data Saver" mode turned on, or is on a very slow 3G connection, the browser may choose to ignore the 3x image and download the 1x image to save time. This is <strong>Adaptive Loading</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Summary of Workflow</h2>
+        <ol class="artifact-list">
+            <li>Generate 3-5 versions of your image (e.g., 400px, 800px, 1200px, 1600px wide).</li>
+            <li>List them in <code>srcset</code> with their <code>w</code> values.</li>
+            <li>Define the layout width in <code>sizes</code>.</li>
+            <li>Provide a fallback <code>src</code> for browsers that don't support srcset (like IE11).</li>
+        </ol>
+    </div>
+
+</section>
