@@ -82,7 +82,7 @@
     },
     {
       "titile": "topic 8: forms & user inputs",
-      "folder": "topic 8",
+      "folder": "Topic 8",
       "files": [
         { "title": "8.1 Form Methods & Encodings", "filename": "forms.html" },
         { "title": "8.2 Input Types & Virtual Keyboards", "filename": "inputs.html" },
