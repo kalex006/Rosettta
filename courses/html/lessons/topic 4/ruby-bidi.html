@@ -1,0 +1,85 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.5 Ruby & Bidirectional Text</h1>
+    <p class="artifact-subtitle">Global Typography: Mastering phonetic annotations and directional flow.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Ruby Annotation System</h2>
+        <p>
+            The <code>&lt;ruby&gt;</code> element is used to present "annotations" or "glosses" next to base text. This is primarily used in East Asian typography (Japanese, Chinese, Korean) to provide pronunciation guides (Furigana) or translations above complex characters.
+        </p>
+        <p>
+            <strong>The Trinity of Ruby:</strong>
+        </p>
+        <ul class="artifact-list">
+            <li><code>&lt;ruby&gt;</code>: The container for the entire annotation.</li>
+            <li><code>&lt;rt&gt;</code> (Ruby Text): The small annotation text that appears above the base.</li>
+            <li><code>&lt;rp&gt;</code> (Ruby Parenthesis): Fallback characters (usually brackets) for browsers that do not support ruby rendering.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">ruby_syntax.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Pronunciation for 'Tokyo' in Japanese --&gt;
+&lt;ruby&gt;
+  東京 &lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;とうきょう&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;
+&lt;/ruby&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Bidirectional Logic (Bidi)</h2>
+        <p>
+            Most languages are Left-To-Right (LTR), but many significant global languages like Arabic, Hebrew, and Persian are Right-To-Left (RTL). When these text types mix, the browser's <strong>Bidi Algorithm</strong> usually handles it, but sometimes it fails.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Isolationist: &lt;bdi&gt;</h2>
+        <p>
+            The <code>&lt;bdi&gt;</code> (Bi-directional Isolation) element is architecturally critical for dynamic content. It tells the browser: "I don't know what language this text is, so isolate its directionality from the surrounding text."
+        </p>
+        <p>
+            <strong>Use Case:</strong> Displaying usernames from a database. If a user named محمد (RTL) joins an LTR list, without <code>&lt;bdi&gt;</code>, the RTL name might "leak" and flip the order of the entire line.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">bdi_protection.html</span>
+        </div>
+        <pre><code class="language-html">&lt;ul&gt;
+  &lt;li&gt;User: &lt;bdi&gt;John88&lt;/bdi&gt; - 50 points&lt;/li&gt;
+  &lt;li&gt;User: &lt;bdi&gt;محمد&lt;/bdi&gt; - 80 points&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Override: &lt;bdo&gt;</h2>
+        <p>
+            The <code>&lt;bdo&gt;</code> (Bi-directional Override) element is a blunt instrument. It forces the text inside to flow in a specific direction, regardless of the characters used. It <strong>requires</strong> the <code>dir</code> attribute.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">bdo_override.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- This will render the text backwards visually --&gt;
+&lt;bdo dir="rtl"&gt;This text will be flipped.&lt;/bdo&gt;</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> In 99% of cases, you should use <code>&lt;bdi&gt;</code> instead of <code>&lt;bdo&gt;</code>. <code>&lt;bdi&gt;</code> is safer because it prevents layout corruption when dealing with user-generated content from different regions.
+        </div>
+    </div>
+
+</section>

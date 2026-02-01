@@ -44,7 +44,7 @@
         { "title": "4.2 Citations & Edits (Blockquote/Ins/Del)", "filename": "citations.html" },
         { "title": "4.3 Code, Preformatting & Variables", "filename": "code-vars.html" },
         { "title": "4.4 Time, Data & Address", "filename": "data-time.html" },
-        { "title": "3.5 Aside & Complementary Content", "filename": "aside.html" }
+        { "title": "4.5 Ruby & Bidirectional Text", "filename": "ruby-bidi.html" }
       ]
     }
   ]
