@@ -1,0 +1,108 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.3 Labels, Fieldsets & Legends</h1>
+    <p class="artifact-subtitle">The Semantic Bond: Establishing logical relationships and structural grouping in complex forms.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Identity of an Input</h2>
+        <p>
+            An <code>&lt;input&gt;</code> without a <strong>Label</strong> is a ghost in the DOM. While it may appear visually correct, it lacks a programmatic identity. The <code>&lt;label&gt;</code> element is the architect's primary tool for binding human-readable text to machine-readable data controls.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Explicit vs. Implicit Labeling</h2>
+        <p>
+            There are two primary methods for associating a label with its control. For the ROSETTA project, the <strong>Explicit</strong> method is preferred for its strictness and reliability across legacy assistive technologies.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Explicit:</strong> The label uses the <code>for</code> attribute to reference the <code>id</code> of the input.</li>
+            <li><strong>Implicit:</strong> The input is nested directly inside the label tag.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">label_association.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Explicit Method (Recommended) --&gt;
+&lt;label for="artifact-id"&gt;Artifact Designation&lt;/label&gt;
+&lt;input type="text" id="artifact-id" name="designation"&gt;
+
+&lt;!-- Implicit Method --&gt;
+&lt;label&gt;
+    Search Registry
+    &lt;input type="search" name="q"&gt;
+&lt;/label&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Fitts' Law & UX Performance</h2>
+        <p>
+            A label is not just for Screen Readers. In the browser, clicking a label automatically moves the focus to the associated input. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Note:</strong> This is critical for <strong>Checkboxes</strong> and <strong>Radio Buttons</strong>. These controls are tiny and difficult to click on mobile. By using a proper label, you turn the entire text string into a "hit target," making the UI significantly more ergonomic.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Logical Grouping: &lt;fieldset&gt;</h2>
+        <p>
+            When a form contains multiple themes—such as "User Profile" and "Security Settings"—we use the <code>&lt;fieldset&gt;</code> element. This creates a semantic container that informs the browser that the inputs inside are related.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Legend: &lt;legend&gt;</h2>
+        <p>
+            The <code>&lt;legend&gt;</code> is the caption for the fieldset. It must be the <strong>first child</strong> of the fieldset.
+        </p>
+        <p>
+            <strong>Screen Reader Behavior:</strong> When a user tabs into a fieldset, the screen reader will announce the Legend <em>before</em> the individual input label. (e.g., "Encryption Settings, Master Key, entry field").
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">structural_grouping.html</span>
+        </div>
+        <pre><code class="language-html">&lt;form&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;Cryptographic Identity&lt;/legend&gt;
+        
+        &lt;div class="input-group"&gt;
+            &lt;label for="u-name"&gt;Username&lt;/label&gt;
+            &lt;input type="text" id="u-name" name="user"&gt;
+        &lt;/div&gt;
+
+        &lt;div class="input-group"&gt;
+            &lt;label for="u-key"&gt;Passkey&lt;/label&gt;
+            &lt;input type="password" id="u-key" name="pass"&gt;
+        &lt;/div&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The disabled Attribute on Fieldsets</h2>
+        <p>
+            A powerful architectural feature of the <code>&lt;fieldset&gt;</code> is that applying the <code>disabled</code> attribute to it will automatically disable <strong>all</strong> interactive controls within it. This is highly efficient for toggling sections of a form via JavaScript.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Styling Conflict:</strong> The <code>&lt;legend&gt;</code> is notoriously difficult to style because it has a unique rendering behavior in the browser's engine. In the ROSETTA project, we often use <code>appearance: none;</code> or custom positioning to integrate it into our Ancient Gold aesthetic.
+        </div>
+    </div>
+
+</section>
