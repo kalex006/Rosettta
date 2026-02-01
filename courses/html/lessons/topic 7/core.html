@@ -1,0 +1,98 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.1 SVG Namespace & Structure</h1>
+    <p class="artifact-subtitle">Mathematical Imagery: Mastering the XML-based vector coordinate system.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Vector Paradigm</h2>
+        <p>
+            Unlike Raster images (JPEG/PNG) which are grids of colored pixels, <strong>SVG (Scalable Vector Graphics)</strong> is a text-based description of geometric shapes. 
+        </p>
+        <p>
+            Because it is defined by mathematics rather than a pixel grid, an SVG artifact can be scaled to the size of a skyscraper or shrunk to the size of a grain of sand without losing a single degree of sharpness. In the ROSETTA architecture, SVGs are the preferred medium for icons, diagrams, and complex decorative flourishes.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The Namespace: xmlns</h2>
+        <p>
+            SVG is a dialect of <strong>XML</strong>. Historically, browsers needed to be told explicitly which "dictionary" to use to translate the tags. This is done via the <code>xmlns</code> (XML Namespace) attribute.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Note:</strong> When you paste an SVG <em>inline</em> inside an HTML5 document, the <code>xmlns</code> attribute is optional because the HTML5 parser is smart enough to recognize the <code>&lt;svg&gt;</code> tag. However, if the SVG is a standalone file (e.g., <code>icon.svg</code>), the namespace is <strong>mandatory</strong>.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">XML/SVG</span>
+            <span class="file-name">standalone_artifact.svg</span>
+        </div>
+        <pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- The namespace is required for standalone files --&gt;
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"&gt;
+    &lt;circle cx="50" cy="50" r="40" fill="#d4af37" /&gt;
+&lt;/svg&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Coordinate System</h2>
+        <p>
+            The SVG world starts at the <strong>Top-Left Corner (0,0)</strong>. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>X-axis:</strong> Increases to the right.</li>
+            <li><strong>Y-axis:</strong> Increases <strong>downward</strong> (this is the opposite of many mathematical Cartesian systems).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>Mastering the ViewBox</h2>
+        <p>
+            The <code>viewBox</code> is the most critical attribute in SVG architecture. It defines the "internal aspect ratio" and the "visible window" of the coordinate system.
+        </p>
+        <p>
+            The value <code>viewBox="min-x min-y width height"</code> acts like a camera lens. It tells the browser: "Map this internal 100x100 unit coordinate system to whatever size the container actually is."
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML/SVG</span>
+            <span class="file-name">viewbox_mapping.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- 
+  Internal units: 0 to 100. 
+  External CSS size: 500px.
+  The browser calculates that 1 SVG unit = 5px.
+--&gt;
+&lt;svg viewBox="0 0 100 100" style="width: 500px;"&gt;
+    &lt;rect x="10" y="10" width="80" height="80" fill="currentColor" /&gt;
+&lt;/svg&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Core Structural Elements</h2>
+        <p>
+            Every complex SVG is built from these basic primitives:
+        </p>
+        <ul class="artifact-list">
+            <li><code>&lt;g&gt;</code>: The <strong>Group</strong> tag. Used to apply styles (like colors or transforms) to multiple elements at once.</li>
+            <li><code>&lt;defs&gt;</code>: The <strong>Definitions</strong> area. Used to store reusable elements (like gradients or patterns) that aren't rendered immediately.</li>
+            <li><code>&lt;use&gt;</code>: Clones an element from <code>&lt;defs&gt;</code> and places it elsewhere in the document.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>The "DOM-Nature" of SVG</h2>
+        <p>
+            Unlike a <code>&lt;canvas&gt;</code> (which is just a "bucket of pixels"), every element inside an <code>&lt;svg&gt;</code> is a real DOM node. This means you can select a <code>&lt;circle&gt;</code> using JavaScript (<code>document.querySelector</code>) and add event listeners to it, making SVGs perfect for interactive maps and charts.
+        </p>
+    </div>
+
+</section>

@@ -68,6 +68,50 @@
         { "title": "6.4 Audio/Video Containers & Codecs", "filename": "codecs.html" },
         { "title": "6.5 Tracks, Captions & VTT", "filename": "vtt.html" }
       ]
+    },
+    {
+      "title": "topic 7: Vector & Data Graphics",
+      "folder": "Topic 7",
+      "files": [
+        { "title": "7.1 SVG Namespace & Structure", "filename": "core.html" },
+        { "title": "7.2 Inline SVG vs Object vs Img", "filename": "implementation.html" },
+        { "title": "7.3 Table Anatomy (Thead/Tbody)", "filename": "tables.html" },
+        { "title": "7.4 Spanning & Column Groups", "filename": "spanning.html" },
+        { "title": "7.5 Table Accessibility (Scope/Headers)", "filename": "table-a11y.html" }
+      ]
+    },
+    {
+      "titile": "topic 8: forms & user inputs",
+      "folder": "Topic 8",
+      "files": [
+        { "title": "8.1 Form Methods & Encodings", "filename": "forms.html" },
+        { "title": "8.2 Input Types & Virtual Keyboards", "filename": "inputs.html" },
+        { "title": "8.3 Labels, Fieldsets & Legends", "filename": "labels.html" },
+        { "title": "8.4 Native Validation & Regex", "filename": "validation.html" },
+        { "title": "8.5 Complex Controls (Select/Datalist)", "filename": "complex-controls.html" }
+      ]
+    },
+    {
+      "title": "topic 9: modern Interaction",
+      "folder": "Topic 9",
+      "files": [
+        { "title": "9.1 Details & Summary Disclosure", "filename": "details.html" },
+        { "title": "9.2 The Dialog Element & Modals", "filename": "dialog.html" },
+        { "title": "9.3 Popover API Basics", "filename": "popover.html" },
+        { "title": "9.4 The Data-* Attribute API", "filename": "dataset.html" },
+        { "title": "9.5 Global Attributes (Draggable/Hidden)", "filename": "global-attrs.html" }
+      ]
+    },
+    {
+      "title": "Topic 10: Advanced Architecture",
+      "folder": "topic 10",
+      "files": [
+        { "title": "10.1 Web Components: Templates & Slots", "filename": "templates.html" },
+        { "title": "10.2 Shadow DOM Encapsulation", "filename": "shadow-dom.html" },
+        { "title": "10.3 ARIA Roles & The A11y Tree", "filename": "aria.html" },
+        { "title": "10.4 Content Security Policy (CSP)", "filename": "csp.html" },
+        { "title": "10.5 The Critical Rendering Path", "filename": "rendering.html" }
+      ]
     }
   ]
 }
