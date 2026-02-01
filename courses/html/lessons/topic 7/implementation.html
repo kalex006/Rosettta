@@ -1,0 +1,133 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.2 Inline SVG vs. Object vs. Img</h1>
+    <p class="artifact-subtitle">Deployment Strategies: Evaluating the three pillars of vector integration.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Integration Dilemma</h2>
+        <p>
+            In the ROSETTA architecture, SVGs are everywhere—from the language logos on the landing page to the small icons in the sidebar. However, how you "inject" these vectors into the document significantly impacts both performance and flexibility.
+        </p>
+        <p>
+            There is no "perfect" method; there is only the <strong>correct method for the specific context</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Image Tag (&lt;img&gt;)</h2>
+        <p>
+            The simplest method. You treat the SVG like a standard JPEG or PNG.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Pros:</strong> Excellent caching (browser saves the file), keeps HTML clean, supports alt text.</li>
+            <li><strong>Cons:</strong> <strong>Zero interaction.</strong> You cannot change the color of the SVG via CSS, and you cannot select internal elements with JavaScript.</li>
+        </ul>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">static_vector.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- Use for static icons that don't need hover effects or color changes --&gt;
+&lt;img src="assets/icons/rust-logo.svg" alt="Rust Programming Language"&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Inline Method (&lt;svg&gt;)</h2>
+        <p>
+            Pasting the raw <code>&lt;svg&gt;</code> code directly into your HTML document.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Pros:</strong> <strong>Total control.</strong> You can style every path with CSS and animate them with JS. It also reduces HTTP requests (no extra file download).</li>
+            <li><strong>Cons:</strong> Bloats the HTML file, prevents caching, and can make the source code difficult to read.</li>
+        </ul>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML/CSS</span>
+                <span class="file-name">interactive_vector.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- Use for UI elements with complex hover states --&gt;
+&lt;svg class="artifact-icon" viewBox="0 0 100 100"&gt;
+    &lt;circle cx="50" cy="50" r="40" /&gt;
+&lt;/svg&gt;
+
+&lt;style&gt;
+    .artifact-icon:hover circle {
+        fill: #d4af37; /* The "Ancient Gold" shift */
+        transition: fill 0.5s ease;
+    }
+&lt;/style&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The External Object (&lt;object&gt;)</h2>
+        <p>
+            The <code>&lt;object&gt;</code> element embeds an SVG as its own document, similar to an iframe, but specifically for media.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Pros:</strong> Maintains caching while allowing some level of external CSS/JS interaction (via the contentDocument API).</li>
+            <li><strong>Cons:</strong> More complex to code; requires scripts to "reach into" the object to manipulate it.</li>
+        </ul>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">object_integration.html</span>
+            </div>
+            <pre><code class="language-html">&lt;object type="image/svg+xml" data="map.svg" class="interactive-map"&gt;
+    &lt;!-- Fallback content --&gt;
+    &lt;img src="map.png" alt="Static Map"&gt;
+&lt;/object&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Architectural Comparison</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>&lt;img&gt;</th>
+                    <th>Inline &lt;svg&gt;</th>
+                    <th>&lt;object&gt;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Caching</td>
+                    <td>Yes (Excellent)</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>CSS Styling</td>
+                    <td>None</td>
+                    <td>Full (External CSS)</td>
+                    <td>Limited (Internal only)</td>
+                </tr>
+                <tr>
+                    <td>JS Interaction</td>
+                    <td>None</td>
+                    <td>Full (DOM access)</td>
+                    <td>Moderate</td>
+                </tr>
+                <tr>
+                    <td>Accessibility</td>
+                    <td>via <code>alt</code></td>
+                    <td>via <code>&lt;title&gt;</code></td>
+                    <td>via <code>aria-label</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The "currentColor" Trick:</strong> If you use Inline SVGs, set the <code>fill</code> or <code>stroke</code> of your paths to <code>currentColor</code> in the SVG code. This allows the icon to automatically inherit the text color of its parent container, making theme management (Light/Dark) effortless.
+        </div>
+    </div>
+
+</section>
