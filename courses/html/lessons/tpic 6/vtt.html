@@ -1,0 +1,104 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.5 Tracks, Captions & VTT</h1>
+    <p class="artifact-subtitle">Temporal Text: Synchronizing data layers with the media timeline for global accessibility.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Layered Timeline</h2>
+        <p>
+            An Architect views video not just as a stream of pixels, but as a multi-layered container. The <code>&lt;track&gt;</code> element allows us to overlay timed text data onto a <code>&lt;video&gt;</code> without burning that text into the video file itself.
+        </p>
+        <p>
+            This ensures that text is <strong>searchable</strong>, <strong>selectable</strong>, and <strong>translatable</strong> by the browser.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The WebVTT Standard</h2>
+        <p>
+            Timed text is written in a separate file with the <code>.vtt</code> extension (Web Video Text Tracks). It is a plain-text format that uses specific timestamps to define "Cues."
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">VTT</span>
+            <span class="file-name">subtitles_en.vtt</span>
+        </div>
+        <pre><code class="language-vtt">WEBVTT
+
+00:00:01.000 --> 00:00:04.000
+&lt;v Narrator&gt;The Rosetta Artifact was discovered in the late 21st century.
+
+00:00:05.500 --> 00:00:09.000
+It contained the sum of all digital knowledge.</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Implementing the &lt;track&gt; Tag</h2>
+        <p>
+            The <code>&lt;track&gt;</code> element is placed inside the <code>&lt;video&gt;</code> tag. You can provide multiple tracks for different languages or purposes.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>kind="subtitles":</strong> Transcription of dialogue (translation).</li>
+            <li><strong>kind="captions":</strong> Includes dialogue + sound effects (e.g., [Door Creaks]). For the deaf or hard-of-hearing.</li>
+            <li><strong>srclang:</strong> The BCP 47 language tag (e.g., "en", "ar").</li>
+            <li><strong>label:</strong> The name shown to the user in the "Captions" menu.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">accessible_media.html</span>
+        </div>
+        <pre><code class="language-html">&lt;video controls&gt;
+  &lt;source src="artifact-tour.mp4" type="video/mp4"&gt;
+  
+  &lt;!-- English Subtitles --&gt;
+  &lt;track kind="subtitles" src="subs_en.vtt" srclang="en" label="English" default&gt;
+  
+  &lt;!-- Arabic Subtitles --&gt;
+  &lt;track kind="subtitles" src="subs_ar.vtt" srclang="ar" label="العربية"&gt;
+
+  &lt;!-- English Captions (SDH) --&gt;
+  &lt;track kind="captions" src="captions_en.vtt" srclang="en" label="English [SDH]"&gt;
+&lt;/video&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Styling with ::cue</h2>
+        <p>
+            As a UI Architect, you can control the appearance of the captions to match the ROSETTA aesthetic (Deep Black / Ancient Gold) using the <code>::cue</code> pseudo-element in your CSS.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">style.css</span>
+            </div>
+            <pre><code class="language-css">video::cue {
+  background: rgba(5, 5, 5, 0.8);
+  color: #d4af37;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>CORS Policy Warning:</strong> Browsers treat <code>.vtt</code> files as cross-origin resources. If your VTT files are on a different domain (or sometimes even a different subfolder on some servers), the tracks will fail to load unless you add the <code>crossorigin</code> attribute to the <code>&lt;video&gt;</code> tag.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Metadata Tracks</h2>
+        <p>
+            The <code>kind="metadata"</code> track is the most advanced. It doesn't show text to the user. Instead, it sends JSON data to a JavaScript event listener at specific times. This allows you to trigger UI changes in ROSETTA (like showing a specific card) exactly when a certain word is spoken in the video.
+        </p>
+    </div>
+
+</section>
