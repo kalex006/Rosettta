@@ -1,0 +1,115 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.5 Complex Controls</h1>
+    <p class="artifact-subtitle">Beyond the Input: Implementing high-order selection systems and semantic data indicators.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Advanced Selection: &lt;select&gt; & &lt;optgroup&gt;</h2>
+        <p>
+            The <code>&lt;select&gt;</code> element provides a collapsible menu of options. For high-end information architecture, a flat list is often insufficient. We use the <code>&lt;optgroup&gt;</code> element to create a nested, non-selectable hierarchy within the menu.
+        </p>
+        <p>
+            This improves <strong>Scanability</strong>, allowing the user to navigate large datasets by category rather than scrolling through a single exhaustive list.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">hierarchical_select.html</span>
+        </div>
+        <pre><code class="language-html">&lt;label for="lang-select"&gt;Primary Language Artifact&lt;/label&gt;
+&lt;select id="lang-select" name="language"&gt;
+    &lt;optgroup label="System Level"&gt;
+        &lt;option value="rust"&gt;Rust&lt;/option&gt;
+        &lt;option value="cpp"&gt;C++&lt;/option&gt;
+    &lt;/optgroup&gt;
+    &lt;optgroup label="High Level"&gt;
+        &lt;option value="js"&gt;JavaScript&lt;/option&gt;
+        &lt;option value="py"&gt;Python&lt;/option&gt;
+    &lt;/optgroup&gt;
+&lt;/select&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Hybrid Interaction: &lt;datalist&gt;</h2>
+        <p>
+            The <code>&lt;datalist&gt;</code> is a powerful architectural bridge between a text <code>&lt;input&gt;</code> and a <code>&lt;select&gt;</code>. It provides a list of "suggested" values, but unlike a select menu, it allows the user to type a custom value that isn't in the list.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Performance Note:</strong> This is the native way to build a "Combobox" or "Autocomplete" feature without using heavy JavaScript search libraries.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">datalist_implementation.html</span>
+        </div>
+        <pre><code class="language-html">&lt;label for="tag-input"&gt;Artifact Tags&lt;/label&gt;
+&lt;input type="text" id="tag-input" list="tag-suggestions"&gt;
+
+&lt;datalist id="tag-suggestions"&gt;
+    &lt;option value="Encryption"&gt;
+    &lt;option value="Metadata"&gt;
+    &lt;option value="Semantics"&gt;
+    &lt;option value="Optimization"&gt;
+&lt;/datalist&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Visual Feedback: &lt;progress&gt; vs. &lt;meter&gt;</h2>
+        <p>
+            Beginners often use these interchangeably, but an Architect distinguishes them based on <strong>Semantics</strong>:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Progress:</strong> Represents the completion status of a task (e.g., "Downloading..."). The value is expected to change over time.</li>
+            <li><strong>Meter:</strong> Represents a scalar measurement within a known range (e.g., "CPU Usage," "Disk Space," or "Password Strength"). The value represents a static state.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">data_indicators.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Task Completion --&gt;
+&lt;label&gt;Indexing Content...&lt;/label&gt;
+&lt;progress value="70" max="100"&gt;70%&lt;/progress&gt;
+
+&lt;!-- Capacity/Measurement --&gt;
+&lt;label&gt;System Entropy&lt;/label&gt;
+&lt;meter value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.1"&gt;60%&lt;/meter&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Dynamic Logic: &lt;output&gt;</h2>
+        <p>
+            The <code>&lt;output&gt;</code> element is specifically designed to display the result of a calculation performed by a script. By using the <code>for</code> attribute, you explicitly link the result to the input IDs that produced it, creating a semantic loop.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">calculation_output.html</span>
+            </div>
+            <pre><code class="language-html">&lt;form oninput="result.value=parseInt(a.value)+parseInt(b.value)"&gt;
+    &lt;input type="range" id="a" value="50"&gt; +
+    &lt;input type="number" id="b" value="10"&gt; =
+    &lt;output name="result" for="a b"&gt;60&lt;/output&gt;
+&lt;/form&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Styling Constraint:</strong> Much like range inputs, <code>&lt;progress&gt;</code> and <code>&lt;meter&gt;</code> are notoriously difficult to style consistently across browsers (WebKit vs. Mozilla). In the ROSETTA project, we often use <code>appearance: none;</code> and custom CSS variables to force our Ancient Gold aesthetic onto these bars.
+        </div>
+    </div>
+
+</section>
