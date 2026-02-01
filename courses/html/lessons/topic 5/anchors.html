@@ -1,0 +1,101 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.1 Anchor Mechanics & Link Types</h1>
+    <p class="artifact-subtitle">The Connective Tissue: Understanding the protocol-aware nature of Hypertext.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Hyperlink Primitive</h2>
+        <p>
+            The <code>&lt;a&gt;</code> (Anchor) element is the fundamental unit of the World Wide Web. Its primary attribute, <code>href</code> (Hypertext Reference), defines a destination. 
+        </p>
+        <p>
+            An anchor is more than a click-target; it is a <strong>state machine</strong>. The browser tracks whether a link is <em>unvisited</em>, <em>active</em>, or <em>visited</em>, and provides native accessibility features like keyboard focus and status-bar previews.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Fragment Identifiers (Jump Links)</h2>
+        <p>
+            Links do not always point to new pages. The <strong>Fragment Identifier</strong> (using the <code>#</code> symbol) allows an anchor to point to a specific element within the current document or a specific section of a remote document.
+        </p>
+        <p>
+            When a user clicks a link ending in <code>#archives</code>, the browser looks for an element with <code>id="archives"</code> and scrolls it into the viewport automatically.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">fragment_navigation.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Linking to a specific ID on the same page --&gt;
+&lt;a href="#lesson-summary"&gt;Jump to Summary&lt;/a&gt;
+
+&lt;!-- Linking to a specific section on another site --&gt;
+&lt;a href="https://rosetta.dev/docs#security"&gt;Read Security Specs&lt;/a&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Non-HTTP Protocols</h2>
+        <p>
+            The <code>href</code> attribute is protocol-aware. It can trigger system-level applications beyond the web browser by using specific prefixes:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>mailto:</strong> Opens the default email client.</li>
+            <li><strong>tel:</strong> Triggers the dialer on mobile devices or VOIP apps on desktop.</li>
+            <li><strong>sms:</strong> Opens the messaging app to a specific number.</li>
+            <li><strong>file:</strong> Points to a local file system (restricted by browser security).</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">protocol_links.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Email Link with Subject --&gt;
+&lt;a href="mailto:arch@rosetta.dev?subject=Inquiry"&gt;Contact Architect&lt;/a&gt;
+
+&lt;!-- Click-to-Call --&gt;
+&lt;a href="tel:+15550001234"&gt;Call Support&lt;/a&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Download Attribute</h2>
+        <p>
+            The <code>download</code> attribute tells the browser to treat the target as a download rather than navigating to it. You can even provide a suggested filename as the value.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">HTML</span>
+                <span class="file-name">asset_delivery.html</span>
+            </div>
+            <pre><code class="language-html">&lt;!-- Downloads the file and renames it locally --&gt;
+&lt;a href="/assets/docs/manual_v1.pdf" download="Rosetta-Manual"&gt;
+    Download PDF
+&lt;/a&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Relationship Metadata (rel)</h2>
+        <p>
+            The <code>rel</code> attribute describes the relationship between the current document and the linked resource. This is vital for SEO and security performance.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>nofollow:</strong> Tells search engines not to endorse the target link (prevents "link juice" transfer).</li>
+            <li><strong>external:</strong> Indicates the link goes to a different domain.</li>
+            <li><strong>help:</strong> Points to documentation or help context.</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Security Note:</strong> When using <code>target="_blank"</code> to open links in a new tab, modern browsers automatically apply <code>rel="noopener"</code>. However, for older browser support, you should explicitly include it to prevent the new page from accessing your window object via <code>window.opener</code>.
+        </div>
+    </div>
+
+</section>
