@@ -1,0 +1,120 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.4 Audio/Video Containers & Codecs</h1>
+    <p class="artifact-subtitle">Temporal Architecture: Orchestrating stream-based media through native browser engines.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Anatomy of a Media File</h2>
+        <p>
+            In multimedia architecture, we distinguish between the <strong>Container</strong> and the <strong>Codec</strong>.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Container (The Box):</strong> The file extension (e.g., .mp4, .webm). It holds the video stream, the audio stream, and metadata (like subtitles).</li>
+            <li><strong>Codec (The Math):</strong> The compression algorithm (e.g., H.264, VP9, AV1). This is the "logic" used to shrink the data.</li>
+        </ul>
+        <p>
+            As an Architect, you must provide multiple sources to ensure that if a browser cannot "unlock" the codec inside a container, it can fall back to a more universal one.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>The &lt;video&gt; Implementation</h2>
+        <p>
+            Modern video implementation avoids the <code>src</code> attribute on the primary tag. Instead, we use nested <code>&lt;source&gt;</code> tags to create a priority-based delivery stack.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">video_stack.html</span>
+        </div>
+        <pre><code class="language-html">&lt;video controls width="800" poster="thumbnail.jpg" preload="metadata"&gt;
+  &lt;!-- Tier 1: AV1 in WebM (Highest Efficiency) --&gt;
+  &lt;source src="artifact-render.webm" type="video/webm; codecs='av1, opus'"&gt;
+  
+  &lt;!-- Tier 2: H.264 in MP4 (Universal Compatibility) --&gt;
+  &lt;source src="artifact-render.mp4" type="video/mp4"&gt;
+
+  &lt;!-- Fallback for ancient browsers --&gt;
+  Your browser does not support the video tag.
+&lt;/video&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Critical Attributes</h2>
+        <p>
+            The behavior of media is controlled by specific boolean and value-based attributes:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>poster:</strong> An image shown while the video is downloading. Essential for UX.</li>
+            <li><strong>preload:</strong> Set to <code>metadata</code> to save bandwidth; it only downloads the duration and dimensions until the user hits play.</li>
+            <li><strong>playsinline:</strong> Critical for mobile; prevents the video from automatically forcing full-screen mode on iOS.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>The "Autoplay" Paradox</h2>
+        <p>
+            Modern browsers block audio from playing automatically to protect the user experience. To make a video <code>autoplay</code>, it <strong>must</strong> also be <code>muted</code>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Background Video Pattern:</strong> For aesthetic elements (like moving dust in ROSETTA), use: <br>
+                <code>&lt;video autoplay muted loop playsinline&gt;</code>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Audio: The Invisible Layer</h2>
+        <p>
+            The <code>&lt;audio&gt;</code> element follows the same logic as video but lacks a visual viewport. Common codecs include <strong>AAC</strong> (standard) and <strong>Opus</strong> (modern/high-fidelity).
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">audio_implementation.html</span>
+        </div>
+        <pre><code class="language-html">&lt;audio controls&gt;
+  &lt;source src="ambient-echo.opus" type="audio/ogg"&gt;
+  &lt;source src="ambient-echo.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Standard Codecs for 2026</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Codec</th>
+                    <th>Container</th>
+                    <th>Best Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>H.264 (AVC)</td>
+                    <td>MP4</td>
+                    <td>Universal compatibility / Legacy.</td>
+                </tr>
+                <tr>
+                    <td>VP9</td>
+                    <td>WebM</td>
+                    <td>YouTube standard, free license.</td>
+                </tr>
+                <tr>
+                    <td>AV1</td>
+                    <td>WebM / MP4</td>
+                    <td>Next-gen, best quality-to-size ratio.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
