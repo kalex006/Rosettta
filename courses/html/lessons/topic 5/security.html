@@ -1,0 +1,114 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.3 Security Attributes</h1>
+    <p class="artifact-subtitle">Defensive Connectivity: Mitigating the 'Window Opener' exploit and protecting user privacy.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Vulnerability: target="_blank"</h2>
+        <p>
+            The <code>target="_blank"</code> attribute is used to open links in a new browser tab. While convenient for UX, it creates a significant security flaw known as <strong>Reverse Tab-napping</strong>.
+        </p>
+        <p>
+            When you open a new tab, that new page gains partial control over the original page via the <code>window.opener</code> JavaScript object. A malicious site can use this to change the URL of your original tab to a phishing site without the user noticing.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JavaScript (Malicious)</span>
+            <span class="file-name">exploit_example.js</span>
+        </div>
+        <pre><code class="language-javascript">// Inside the site you linked to:
+if (window.opener) {
+  window.opener.location = "https://phishing-site.com/login";
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Shield: rel="noopener"</h2>
+        <p>
+            The <code>rel="noopener"</code> attribute instructs the browser to open the new tab without providing it access to the original window. It sets <code>window.opener</code> to <code>null</code>.
+        </p>
+        <p>
+            In modern browsers (Chrome 88+, Firefox 79+, Safari 12.1+), <code>target="_blank"</code> implicitly applies <code>noopener</code> behavior. However, for a <strong>Senior Architect</strong>, explicit declaration is still mandatory to support older environments and to clearly define security intent.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">secure_link.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- The Secure Standard --&gt;
+&lt;a href="https://external-site.com" target="_blank" rel="noopener"&gt;
+    Visit External Site
+&lt;/a&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Privacy Control: rel="noreferrer"</h2>
+        <p>
+            When a user clicks a link, the browser sends a <code>Referer</code> (sic) header to the destination server, revealing where the user came from.
+        </p>
+        <p>
+            By using <code>rel="noreferrer"</code>, you hide your URL from the destination site. This is vital for security-conscious applications where internal URLs might contain sensitive tokens or data structures. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Tip:</strong> <code>noreferrer</code> also implies <code>noopener</code> behavior. If you use <code>rel="noreferrer"</code>, you don't strictly need to add <code>noopener</code> as well, though many developers include both for clarity.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The Reverse: rel="opener"</h2>
+        <p>
+            Occasionally, you *want* the new tab to communicate back to the original window (for example, an OAuth login popup). In these specific architectural cases, you must explicitly use <code>rel="opener"</code> to override the browser's modern security defaults.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">intentional_communication.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Explicitly allowing window.opener access --&gt;
+&lt;a href="/login-popup.html" target="_blank" rel="opener"&gt;
+    Log In via Artifact-Auth
+&lt;/a&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Comparison Summary</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Security Action</th>
+                    <th>Privacy Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>noopener</code></td>
+                    <td>Blocks <code>window.opener</code></td>
+                    <td>None (Referer sent)</td>
+                </tr>
+                <tr>
+                    <td><code>noreferrer</code></td>
+                    <td>Blocks <code>window.opener</code></td>
+                    <td>Hides Source URL</td>
+                </tr>
+                <tr>
+                    <td><code>opener</code></td>
+                    <td>Allows <code>window.opener</code></td>
+                    <td>None (Referer sent)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
