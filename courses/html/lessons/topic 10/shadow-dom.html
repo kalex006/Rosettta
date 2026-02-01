@@ -1,0 +1,111 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.2 Shadow DOM Encapsulation</h1>
+    <p class="artifact-subtitle">The Private Scope: Implementing structural shields to isolate component styles and logic.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Encapsulation Crisis</h2>
+        <p>
+            One of the greatest weaknesses of the standard Web is its <strong>Global Scope</strong>. A single CSS rule written for a generic <code>&lt;button&gt;</code> in a third-party library can inadvertently break the styling of every button in your "Artifact" interface.
+        </p>
+        <p>
+            The <strong>Shadow DOM</strong> is the architect's solution to this "Global Pollution." it allows a component to have its own private DOM tree that cannot be styled or selected from the outside.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Shadow Root</h2>
+        <p>
+            To create this isolation, we attach a <strong>Shadow Root</strong> to a host element. Once attached, the browser creates a boundary between the "Light DOM" (the regular page) and the "Shadow DOM" (the private interior).
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Mode: 'open'</strong> – Allows the shadow root to be accessed via JavaScript (<code>element.shadowRoot</code>).</li>
+            <li><strong>Mode: 'closed'</strong> – Denies all external access to the internal nodes.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JavaScript</span>
+            <span class="file-name">shadow_attachment.js</span>
+        </div>
+        <pre><code class="language-javascript">// Selecting our host element
+const host = document.querySelector('#artifact-container');
+
+// Attaching the 'Shield'
+const shadow = host.attachShadow({ mode: 'open' });
+
+// Injecting content that is invisible to global CSS
+shadow.innerHTML = `
+    &lt;style&gt;
+        p { color: #d4af37; font-family: 'Cinzel'; } 
+    &lt;/style&gt;
+    &lt;p&gt;This text is protected by the Shadow Root.&lt;/p&gt;
+`;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Scoped Styling</h2>
+        <p>
+            Styles defined inside a Shadow Root <strong>stay inside</strong> the Shadow Root. 
+        </p>
+        <ul class="artifact-list">
+            <li>If you define <code>h2 { color: red; }</code> inside the shadow, only headers inside that specific component turn red. All other headers on the page remain untouched.</li>
+            <li>Conversely, global CSS rules from your <code>style.css</code> will not apply to elements inside the shadow.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The :host Pseudo-class</h2>
+        <p>
+            How do you style the "container" from the inside? We use the <code>:host</code> selector. This allows the component to define its own default layout, such as display type or margins.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS (Inside Shadow)</span>
+                <span class="file-name">component_styles.css</span>
+            </div>
+            <pre><code class="language-css">:host {
+    display: block;
+    border: 1px solid #333;
+    padding: 20px;
+    background: #050505;
+}
+
+/* Style only if the host has an '.active' class */
+:host(.active) {
+    border-color: #d4af37;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Boundary Breach (CSS Variables)</h2>
+        <p>
+            While the Shadow DOM blocks selectors, it <strong>does not block CSS Custom Properties (Variables)</strong>. 
+        </p>
+        <p>
+            As an Architect, you can use this to your advantage. You can define a <code>--primary-gold</code> variable at the <code>:root</code> of your site, and the Shadow DOM will still be able to read it. This is how we maintain a consistent "Ancient Gold" theme across encapsulated components.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Rule:</strong> Use the Shadow DOM for <strong>Generic UI Components</strong> (like custom buttons, input sliders, or navigation bars) that you want to reuse across different projects without worrying about CSS conflicts.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Event Retargeting</h2>
+        <p>
+            To maintain the illusion of encapsulation, events that happen inside the Shadow DOM (like a click) are <strong>retargeted</strong> by the browser. 
+        </p>
+        <p>
+            If you click a button inside the shadow, an event listener on the main <code>body</code> will see the <code>target</code> as the <strong>host element</strong>, not the internal button. This prevents the outside world from needing to know the internal structure of your artifact.
+        </p>
+    </div>
+
+</section>
