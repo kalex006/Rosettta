@@ -1,0 +1,102 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.5 The Critical Rendering Path</h1>
+    <p class="artifact-subtitle">The Final Transmutation: Deconstructing the engine's journey from raw bytes to visual reality.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Engine's Odyssey</h2>
+        <p>
+            The <strong>Critical Rendering Path (CRP)</strong> is the series of events that must occur before the browser can perform the first "paint" of your website. In the ROSETTA project, where we prioritize a high-end, smooth experience, optimizing this path is the difference between a "stuttery" load and a cinematic one.
+        </p>
+        <p>
+            The process is a linear pipeline of five distinct stages: <strong>DOM → CSSOM → Render Tree → Layout → Paint.</strong>
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Model Construction (DOM & CSSOM)</h2>
+        <p>
+            As we learned in Topic 1, the browser turns HTML into the <strong>DOM</strong>. Simultaneously, it parses all linked and inline CSS to build the <strong>CSSOM (CSS Object Model)</strong>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>The Rendering Blockers:</strong> HTML parsing is incremental (it happens as the bits arrive), but <strong>CSS is Render-Blocking</strong>. The browser will not paint a single pixel until it has finished parsing 100% of the CSS, because it doesn't want to show unstyled content.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">Process</span>
+            <span class="file-name">rendering_pipeline.log</span>
+        </div>
+        <pre><code class="language-bash">1. [Bytes] → [Characters] → [Tokens] → [Nodes] → [DOM]
+2. [Bytes] → [Characters] → [Tokens] → [Nodes] → [CSSOM]
+3. [DOM] + [CSSOM] = [Render Tree]</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Render Tree</h2>
+        <p>
+            The <strong>Render Tree</strong> is a combination of the DOM and CSSOM. It contains only the nodes required to paint the page. 
+        </p>
+        <ul class="artifact-list">
+            <li>Elements with <code>display: none</code> are <strong>not</strong> in the Render Tree.</li>
+            <li>Elements with <code>visibility: hidden</code> <strong>are</strong> in the Render Tree (because they still take up space).</li>
+            <li>Head tags (meta, link, script) are excluded.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Layout (The Reflow)</h2>
+        <p>
+            Once the Render Tree is built, the browser performs <strong>Layout</strong> (also called Reflow). It calculates the exact geometry of every node—how many pixels wide they are and where they sit relative to the viewport.
+        </p>
+        <p>
+            In ROSETTA, if you change the width of an element via JavaScript, the browser must re-calculate the entire layout. This is "expensive" and can cause lag.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Paint & Compositing</h2>
+        <p>
+            Finally, the browser converts each node in the Render Tree into actual pixels on the screen. This is <strong>Painting</strong>. 
+        </p>
+        <p>
+            Modern engines use <strong>Compositing</strong>. They split the page into layers (like a Photoshop file). Moving a layer (using <code>transform</code> or <code>opacity</code>) is much faster than re-painting, because it happens on the <strong>GPU</strong> (Graphics Processing Unit) rather than the main CPU thread.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JavaScript</span>
+            <span class="file-name">architect_optimization.js</span>
+        </div>
+        <pre><code class="language-javascript">// ❌ BAD: Causes a "Reflow" (Expensive)
+element.style.width = "500px";
+
+// ✅ GOOD: Causes a "Composite" (Cheap)
+element.style.transform = "scale(1.5)";</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Architect's Optimization Checklist</h2>
+        <ol class="artifact-list">
+            <li><strong>Minimize CSS:</strong> Keep your <code>style.css</code> lean to unblock the Render Tree faster.</li>
+            <li><strong>Defer JavaScript:</strong> Use <code>defer</code> or <code>async</code> so the parser doesn't stop for scripts.</li>
+            <li><strong>Optimize Assets:</strong> Use the modern formats (AVIF/WebP) learned in Topic 6 to reduce data-processing time.</li>
+            <li><strong>Avoid Layout Thrashing:</strong> Don't read a property (like <code>offsetHeight</code>) and immediately write to it in a loop.</li>
+        </ol>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Conclusion of the Odyssey:</strong> You have completed the 50-chapter HTML curriculum for PROJECT ROSETTA. You are no longer a coder; you are a <strong>Digital Architect</strong>. You understand the bone, the muscle, and the nervous system of the web.
+        </div>
+    </div>
+
+</section>
