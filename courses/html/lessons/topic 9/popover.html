@@ -1,0 +1,121 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.3 Popover API Basics</h1>
+    <p class="artifact-subtitle">Declarative Overlays: Implementing light-dismiss UI patterns without the overhead of external logic.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Popover Paradigm</h2>
+        <p>
+            The <strong>Popover API</strong> is a revolutionary architectural shift in HTML. Previously, any "floating" UI—like a dropdown menu or a tooltip—required JavaScript to manage the display state and CSS `z-index` to ensure it appeared above other elements.
+        </p>
+        <p>
+            The <code>popover</code> attribute turns any element into a <strong>Top Layer</strong> artifact. Unlike the <code>&lt;dialog&gt;</code> (which is for focused, modal interactions), popovers are designed for "light-dismiss" interactions: they disappear as soon as you click outside of them or hit the Escape key.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Declarative Control</h2>
+        <p>
+            To create a popover, you only need two components:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>The Target:</strong> An element with the <code>popover</code> attribute (and a unique ID).</li>
+            <li><strong>The Trigger:</strong> A button with the <code>popovertarget</code> attribute matching the target's ID.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">declarative_popover.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- The Trigger: No JavaScript required --&gt;
+&lt;button popovertarget="glossary-popup"&gt;Define 'Artifact'&lt;/button&gt;
+
+&lt;!-- The Popover: Hidden by default --&gt;
+&lt;div id="glossary-popup" popover&gt;
+    &lt;p&gt;&lt;strong&gt;Artifact:&lt;/strong&gt; A digital unit of preserved knowledge within the Rosetta system.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Automatic Top Layer Management</h2>
+        <p>
+            When a popover is activated, the browser moves it to the <strong>Top Layer</strong>. This is a special internal stack that sits above *all* other CSS layers. You no longer need to worry about <code>z-index: 9999</code>; a popover will always sit on top of the main UI, even if it is nested deep inside a container with <code>overflow: hidden</code>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Manual vs. Auto States</h2>
+        <p>
+            The <code>popover</code> attribute can take two values:
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Value</th>
+                    <th>Behavior</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>auto</code> (Default)</td>
+                    <td>Closes when clicking outside (light-dismiss). Only one auto-popover can be open at a time.</td>
+                </tr>
+                <tr>
+                    <td><code>manual</code></td>
+                    <td>Must be closed explicitly via a trigger or script. Allows multiple popovers to stay open.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Styling with :popover-open</h2>
+        <p>
+            As a ROSETTA Architect, you style the popover's appearance using the <code>:popover-open</code> pseudo-class. This allows you to apply Ancient Gold borders and deep-black backgrounds specifically when the element is active.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">popover_theme.css</span>
+        </div>
+        <pre><code class="language-css">#glossary-popup {
+    background: #050505;
+    color: #d4af37;
+    border: 1px solid #d4af37;
+    padding: 20px;
+    /* Center it by default */
+    margin: auto; 
+}
+
+/* Custom animation when opening */
+#glossary-popup:popover-open {
+    animation: fade-in 0.4s ease-out;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Comparison:</strong> Use <code>&lt;dialog&gt;</code> when you need to <strong>force</strong> user interaction (like a login or a critical warning). Use <code>popover</code> for <strong>supplemental</strong> UI (like menus, info-bubbles, or settings panels).
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. popovertargetaction</h2>
+        <p>
+            By default, the trigger button toggles the popover. However, you can explicitly define the action using <code>popovertargetaction="show"</code>, <code>"hide"</code>, or <code>"toggle"</code>.
+        </p>
+    </div>
+
+</section>
