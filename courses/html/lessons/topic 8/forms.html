@@ -1,0 +1,107 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.1 Form Architecture & Encodings</h1>
+    <p class="artifact-subtitle">The Transaction Interface: Defining the transport logic and serialization of user-generated data.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Form as a Bridge</h2>
+        <p>
+            The <code>&lt;form&gt;</code> element is the container for interactive controls. Its primary purpose is to collect data and "bundle" it for submission to a processing agent (usually a server-side script or a client-side JavaScript function).
+        </p>
+        <p>
+            In the ROSETTA <strong>Zero-Backend</strong> model, we often prevent the default submission of forms to process the data locally in memory, but we must still adhere to semantic standards to ensure the browser's native autofill and accessibility systems function correctly.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Primary Attributes: Action & Method</h2>
+        <p>
+            Every form is defined by two architectural pillars:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Action:</strong> The URL where the data should be sent. If left empty, the form submits to the current page.</li>
+            <li><strong>Method:</strong> The HTTP verb used to transmit the data. The choice here is fundamental to the security and idempotency of the transaction.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>GET vs. POST: The Architect's Choice</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Mechanism</th>
+                    <th>Best Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>GET</code></td>
+                    <td>Appends data to the URL (<code>?key=value</code>).</td>
+                    <td>Idempotent actions (Search queries, Filters).</td>
+                </tr>
+                <tr>
+                    <td><code>POST</code></td>
+                    <td>Includes data in the HTTP request body.</td>
+                    <td>State-changing actions (Login, Registration, Deletion).</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Security Protocol:</strong> Never use <code>GET</code> for sensitive data like passwords. Because the data is in the URL, it will be visible in the user's browser history, server logs, and analytics trackers.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Encoding Types (enctype)</h2>
+        <p>
+            The <code>enctype</code> attribute tells the browser how to "serialize" the form data before sending it.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>application/x-www-form-urlencoded:</strong> (Default) Converts spaces to <code>+</code> and symbols to alphanumeric codes. Efficient for small amounts of text.</li>
+            <li><strong>multipart/form-data:</strong> Mandatory if the form contains a <code>&lt;input type="file"&gt;</code>. It sends the data in discrete blocks.</li>
+            <li><strong>text/plain:</strong> Mostly used for debugging; it sends data without any encoding, making it unsuitable for machine processing.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">form_standard.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- 
+  A standard POST form configured for file uploads.
+  The 'novalidate' attribute tells the browser to skip 
+  native validation (often used when JS handles it).
+--&gt;
+&lt;form action="/api/process-artifact" method="POST" enctype="multipart/form-data"&gt;
+    
+    &lt;!-- Interactive controls will dwell here --&gt;
+    
+    &lt;button type="submit"&gt;Execute Transmission&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Autocomplete & UX Control</h2>
+        <p>
+            The <code>autocomplete</code> attribute can be applied to the entire form or individual inputs. For high-end UI design, controlling this is essential to prevent the browser from cluttering your "Artifact" aesthetic with ugly yellow autofill boxes on non-relevant fields.
+        </p>
+        <p>
+            Values like <code>autocomplete="off"</code> disable it, while <code>autocomplete="on"</code> (default) assists the user.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The "Zero-Backend" Pattern:</strong> In ROSETTA, we use <code>event.preventDefault()</code> in JavaScript. This allows the <code>&lt;form&gt;</code> tag to maintain its semantic meaning (so 'Enter' key submission still works) without actually reloading the page or sending data to a non-existent server.
+        </div>
+    </div>
+
+</section>

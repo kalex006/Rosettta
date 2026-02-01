@@ -73,7 +73,7 @@
       "title": "topic 7: Vector & Data Graphics",
       "folder": "Topic 7",
       "files": [
-        { "title": "7.1 SVG Namespace & Structure", "filename": "core.html" },
+        { "title": "7.1 Namespace & Structure", "filename": "core.html" },
         { "title": "7.2 Inline SVG vs Object vs Img", "filename": "implementation.html" },
         { "title": "7.3 Table Anatomy (Thead/Tbody)", "filename": "tables.html" },
         { "title": "7.4 Spanning & Column Groups", "filename": "spanning.html" },
