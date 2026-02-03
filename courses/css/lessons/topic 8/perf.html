@@ -1,0 +1,116 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.5 Animation Performance & Layers</h1>
+    <p class="artifact-subtitle">The 60fps Standard: Optimizing the rendering pipeline for cinematic fluid motion.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The 16ms Threshold</h2>
+        <p>
+            To achieve a smooth 60fps animation, the browser has exactly <strong>16.6 milliseconds</strong> to calculate and paint each frame. If the calculation takes longer, the browser "drops" the frame, resulting in <strong>Jank</strong>—the stuttering effect that ruins high-end UI.
+        </p>
+        <p>
+            In ROSETTA, we optimize for the GPU. By keeping animations off the Main Thread, we ensure that even if the CPU is busy parsing large JSON files, our animations remain fluid.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Main Thread vs. The Compositor</h2>
+        <p>
+            The browser engine is split into two primary areas:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>The Main Thread:</strong> Handles JavaScript, HTML parsing, Layout, and Paint. If you animate <code>margin</code>, the Main Thread must work on every frame.</li>
+            <li><strong>The Compositor Thread:</strong> A specialized thread that only handles <strong>Transforms</strong> and <strong>Opacity</strong>. It communicates directly with the GPU.</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Performance Rule:</strong> Only animate <code>transform</code> and <code>opacity</code>. These are the only two properties that can be handled entirely by the Compositor, bypassing the expensive Layout and Paint stages.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Layer Promotion</h2>
+        <p>
+            When an element is animated via transform, the browser often "promotes" it to its own <strong>Compositor Layer</strong>. Think of this like a transparent sheet of glass that can move independently without affecting the rest of the drawing.
+        </p>
+        <p>
+            You can view these layers in DevTools by going to <strong>More Tools > Layers</strong>. Elements that are promoted to the GPU will appear as distinct 3D boxes.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The will-change Directive</h2>
+        <p>
+            The <code>will-change</code> property provides a hint to the browser that an element is expected to change in the future. This allows the browser to pre-promote the element to a GPU layer <em>before</em> the animation even starts.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">layer_promotion.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-hero-image {
+    /* Hinting that the transform will change frequently */
+    will-change: transform;
+    transition: transform 0.5s var(--ease-artifact);
+}
+
+.artifact-hero-image:hover {
+    transform: scale(1.05);
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The "Too Much" Warning:</strong> Do not apply <code>will-change</code> to everything. Each promoted layer consumes <strong>Video Memory (VRAM)</strong>. Over-promotion can lead to the browser crashing or the device overheating. Apply it only to large, complex artifacts that are actually stuttering.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Avoiding Layout Thrashing</h2>
+        <p>
+            Layout Thrashing occurs when an animation forces the browser to read a geometric value (like <code>offsetHeight</code>) and then immediately write a change. This forces the browser to stop everything and recalculate the entire page's layout mid-frame.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JavaScript</span>
+                <span class="file-name">performance_audit.js</span>
+            </div>
+            <pre><code class="language-javascript">// ❌ BAD: Forces a reflow in a loop
+for (let i = 0; i < boxes.length; i++) {
+    const width = boxes[i].offsetWidth; // READ
+    boxes[i].style.width = (width + 10) + 'px'; // WRITE
+}
+
+// ✅ GOOD: Use requestAnimationFrame for sync
+requestAnimationFrame(() => {
+    // All reads first, then all writes
+});</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. The Final Audit Checklist</h2>
+        <p>Before deploying a ROSETTA artifact, perform this technical check:</p>
+        <ol class="artifact-list">
+            <li><strong>Property Check:</strong> Am I animating only <code>transform</code>, <code>opacity</code>, or <code>filter</code>?</li>
+            <li><strong>Duration Check:</strong> Is the duration between 150ms and 500ms?</li>
+            <li><strong>Easing Check:</strong> Am I using a custom <code>cubic-bezier</code> to signify weight?</li>
+            <li><strong>Hardware Check:</strong> Does it maintain 60fps on a mobile device?</li>
+        </ol>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Conclusion:</strong> You have mastered the physics of motion. Your interfaces no longer just "appear"; they arrive with purpose and depart with grace, all while maintaining the technical integrity of the browser engine.
+        </div>
+    </div>
+
+</section>
