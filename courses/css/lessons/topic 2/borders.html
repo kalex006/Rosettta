@@ -1,0 +1,117 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.4 Borders & Outlines</h1>
+    <p class="artifact-subtitle">Structural Framing: Mastering physical boundaries and the non-layout layer of outlines.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Boundary Layer</h2>
+        <p>
+            In CSS architecture, we use two distinct methods to frame an element. While they may look similar, their impact on the <strong>Layout Engine</strong> and the <strong>Painting Phase</strong> is fundamentally different.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Border:</strong> A physical component of the Box Model. It occupies space and sits between the padding and the margin.</li>
+            <li><strong>Outline:</strong> A "Topological" layer. It is drawn outside the border, does <strong>not</strong> take up space in the layout, and can overlap neighboring elements without causing a reflow.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Border Geometry</h2>
+        <p>
+            Borders are defined by three properties: <code>width</code>, <code>style</code>, and <code>color</code>. In high-end design, we use specific styles like <code>double</code> or <code>ridge</code> to create the "Ancient Artifact" feel for ROSETTA.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">artifact_border.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-frame {
+    /* Shorthand: width | style | color */
+    border: 4px double #d4af37; 
+    
+    /* Logical targeting */
+    border-bottom-width: 8px; 
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Corner Radius Logic</h2>
+        <p>
+            The <code>border-radius</code> property allows you to round the corners of the border box. Crucially, this property also acts as a <strong>Clip Path</strong> for the element's background and content (if <code>overflow: hidden</code> is set).
+        </p>
+        <p>
+            <strong>The Architect's Math:</strong> To create a perfect circle, set <code>border-radius: 50%</code> on an element with equal width and height.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Outline: The Non-Layout Layer</h2>
+        <p>
+            Outlines are primarily used for <strong>Accessibility (Focus States)</strong>. Because they do not occupy space, adding an outline to an element when it is clicked or focused will <strong>not</strong> cause the rest of the page to "jump" or shift.
+        </p>
+        <p>
+            A unique property of the outline is <code>outline-offset</code>, which allows you to push the outline further away from the element's edge, creating a cinematic "floating" frame effect.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">focus_states.css</span>
+        </div>
+        <pre><code class="language-css">.interactive-artifact:focus {
+    /* No layout shift occurs here */
+    outline: 2px solid #d4af37;
+    outline-offset: 4px; 
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Architectural Comparison</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Border</th>
+                    <th>Outline</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Box Model</strong></td>
+                    <td>Occupies Space</td>
+                    <td>No Space Occupied</td>
+                </tr>
+                <tr>
+                    <td><strong>Shape</strong></td>
+                    <td>Follows <code>border-radius</code></td>
+                    <td>Usually Rectangular*</td>
+                </tr>
+                <tr>
+                    <td><strong>Purpose</strong></td>
+                    <td>Structure & Design</td>
+                    <td>Accessibility & Focus</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><small>*Modern browsers now allow outlines to follow border-radius, but legacy support varies.</small></p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Accessibility Cardinal Sin:</strong> Never use <code>outline: none</code> or <code>outline: 0</code> without providing a clear, high-contrast alternative focus style. If you remove the outline, keyboard users (including those using screen readers) will lose their "place" on the page, making your documentation unusable.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Border Images (Advanced)</h2>
+        <p>
+            For the highest tier of "Artifact" design, we can use <code>border-image</code>. This allows us to use a custom SVG or texture as the border itself, slicing it into nine sections that scale with the element.
+        </p>
+    </div>
+
+</section>
