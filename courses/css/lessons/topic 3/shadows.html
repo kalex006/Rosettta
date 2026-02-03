@@ -1,0 +1,118 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.5 Shadows & Depth</h1>
+    <p class="artifact-subtitle">Elevation Architecture: Orchestrating the Z-axis through light occlusion and depth perception.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Illusion of Elevation</h2>
+        <p>
+            In a two-dimensional document, depth is an illusion created by <strong>Occlusion</strong>. In the ROSETTA aesthetic, we treat the screen as a physical desk. Elements that are "closer" to the user should cast larger, softer shadows, while elements "resting" on the surface cast sharp, tight shadows.
+        </p>
+        <p>
+            In dark mode, standard black shadows are often invisible. As an architect, you must use <strong>Color-Tinted Shadows</strong> or <strong>Glows</strong> to signify elevation against a deep black (`#050505`) background.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Box-Shadow Anatomy</h2>
+        <p>
+            The <code>box-shadow</code> property allows you to cast a shadow from the frame of an element. It consists of five primary values:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>X-offset:</strong> Horizontal position (Positive = Right, Negative = Left).</li>
+            <li><strong>Y-offset:</strong> Vertical position (Positive = Down, Negative = Up).</li>
+            <li><strong>Blur Radius:</strong> How "fuzzy" the edge is. Higher values simulate a light source that is further away.</li>
+            <li><strong>Spread Radius:</strong> How much the shadow expands or contracts.</li>
+            <li><strong>Color:</strong> The tint of the occlusion.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">elevation_levels.css</span>
+        </div>
+        <pre><code class="language-css">/* Low Elevation: Resting on the surface */
+.artifact-low {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* High Elevation: Floating with a gold "under-glow" */
+.artifact-high {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 
+                0 0 15px rgba(212, 175, 55, 0.2);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Layered Shadows (The "Smooth" Technique)</h2>
+        <p>
+            A single <code>box-shadow</code> often looks "digital" and harsh. Professional architects use <strong>Layered Shadows</strong>—stacking multiple shadows with increasing blur and decreasing opacity—to mimic <strong>Ambient Occlusion</strong> (how light behaves in the real world).
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Pro-Architect Method:</strong> Instead of one shadow with 20px blur, use five shadows: 1px, 2px, 4px, 8px, and 16px. This creates a "Penumbra" effect that feels soft and organic.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Text-Shadow & Readability</h2>
+        <p>
+            <code>text-shadow</code> follows the same logic as box-shadow but lacks a "spread" value. In ROSETTA, we use subtle text shadows to ensure our Ancient Gold titles remain legible if they ever overlap a complex background or a bright image.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">lithic_text.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-title {
+    color: #d4af37;
+    /* Creating a "Carved in Stone" look */
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.1), 
+                 -1px -1px 0px rgba(0, 0, 0, 0.5);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The drop-shadow() Filter</h2>
+        <p>
+            A common architectural error is using <code>box-shadow</code> on an image with transparency (like a PNG or an SVG). The browser will cast a shadow on the <strong>rectangular box</strong> of the image, not the actual shape.
+        </p>
+        <p>
+            To cast a shadow on the <strong>content</strong> of the element, we use the <code>filter: drop-shadow()</code> property.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">shape_awareness.css</span>
+        </div>
+        <pre><code class="language-css">/* Wrong: Casts shadow on the square box */
+.icon-box { box-shadow: 0 10px 10px black; }
+
+/* Correct: Casts shadow on the actual SVG paths */
+.icon-drop { filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); }</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Inset Shadows: Inner Depth</h2>
+        <p>
+            By adding the <code>inset</code> keyword, the shadow is cast <strong>inside</strong> the element. This is used to create "sunken" or "etched" effects, making a button look like it has been pressed into the surface.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Warning:</strong> Shadows are calculated during the <strong>Painting</strong> phase of the Critical Rendering Path. Heavy blurs and multiple layers of shadows can cause "laggy" scrolling, especially on mobile devices. Use <code>will-change: transform</code> sparingly if you plan to animate elements with large shadows.
+        </div>
+    </div>
+
+</section>
