@@ -1,0 +1,102 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.2 Variable Fonts & Weights</h1>
+    <p class="artifact-subtitle">The Fluid Typeface: Mastering the multi-axis mathematical spectrum of modern typography.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Single-File Revolution</h2>
+        <p>
+            In the legacy era, every variation of a font (Thin, Regular, Bold, Black) required a separate HTTP request. For a high-end site like **ROSETTA**, this created a conflict between design richness and page performance.
+        </p>
+        <p>
+            <strong>Variable Fonts</strong> solve this by storing multiple variations within a single font file. Instead of fixed weights, we have a continuous <strong>Axis</strong> of possibilities. A variable font doesn't just have "Bold"; it has every value from 1 to 1000.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Registered Axes</h2>
+        <p>
+            Most Variable Fonts (like <strong>Inter</strong>, which we use for our body text) support the five standard registered axes:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>wght (Weight):</strong> Control the thickness of the strokes (e.g., 100 to 900).</li>
+            <li><strong>wdth (Width):</strong> Control how condensed or expanded the letters are.</li>
+            <li><strong>ital (Italic):</strong> A binary or range toggle for italicization.</li>
+            <li><strong>slnt (Slant):</strong> Adjusts the angle of the letters (Oblique).</li>
+            <li><strong>opsz (Optical Sizing):</strong> Automatically adjusts the font's design for different sizes (e.g., thicker stems for tiny text, thinner for headlines).</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">variable_declaration.css</span>
+        </div>
+        <pre><code class="language-css">@font-face {
+    font-family: 'Inter Variable';
+    /* Note the 'woff2-variations' format */
+    src: url('../../fonts/Inter-Variable.woff2') format('woff2-variations');
+    /* Define the range of supported weights */
+    font-weight: 100 900;
+    font-display: swap;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. font-variation-settings</h2>
+        <p>
+            While you can use standard properties like <code>font-weight: 542;</code>, the most powerful way to manipulate a variable font is the <code>font-variation-settings</code> property. This allows you to tap into "Custom Axes" defined by the font designer.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">axis_control.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-heading {
+    /* Precise control over Weight and Width */
+    font-variation-settings: 'wght' 750, 'wdth' 110;
+    
+    /* Smooth transition between weights */
+    transition: font-variation-settings 0.5s ease;
+}
+
+.artifact-heading:hover {
+    font-variation-settings: 'wght' 900, 'wdth' 125;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Optical Sizing (opsz)</h2>
+        <p>
+            This is the "Senior Architect" secret to premium UI. In the physical world of printing, tiny letters were carved differently than huge headlines to ensure legibility. 
+        </p>
+        <p>
+            With <code>font-optical-sizing: auto;</code>, the browser detects the <code>font-size</code> and automatically adjusts the variable font's internal geometry. It makes small text more readable and large text more elegant.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Performance: The Font-Weight Tax</h2>
+        <p>
+            A single Variable Font file is usually larger than a single static font file (e.g., 200kb vs 30kb). However, it is significantly smaller than the **sum** of 4 or 5 static files.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Recommendation:</strong> Use Variable Fonts for your primary UI font (Inter) to allow for subtle weight changes in hover states and animations. Use static fonts only for highly decorative, single-weight titles (like Cinzel).
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Legacy Fallback:</strong> Always provide a standard <code>font-weight</code> fallback for browsers that do not support variable axes. The browser will ignore <code>font-variation-settings</code> if it doesn't understand them.
+        </div>
+    </div>
+
+</section>
