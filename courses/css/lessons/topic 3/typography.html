@@ -1,0 +1,113 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.1 Web Typography Standards</h1>
+    <p class="artifact-subtitle">The Architecture of Legibility: Mastering the font-face engine and the physics of digital type.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Typography Pipeline</h2>
+        <p>
+            In the ROSETTA aesthetic, typography is a primary structural element. We use <strong>Cinzel</strong> for its lithic, ancient feel and <strong>Inter</strong> for its modern, high-legibility clarity.
+        </p>
+        <p>
+            However, loading custom fonts introduces a performance bottleneck. The browser must download the font file before it can paint the text, leading to either a <strong>Flash of Invisible Text (FOIT)</strong> or a <strong>Flash of Unstyled Text (FOUT)</strong>. As an architect, you must control this transition.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The @font-face Declaration</h2>
+        <p>
+            The <code>@font-face</code> rule allows us to define our own font family by pointing to a local or remote file. For maximum performance, we use the <strong>WOFF2</strong> format, which offers the best compression for modern browsers.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">font_engine.css</span>
+        </div>
+        <pre><code class="language-css">@font-face {
+    font-family: 'Cinzel';
+    src: url('../../assets/fonts/cinzel.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    /* The Performance Lever */
+    font-display: swap; 
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Understanding font-display: swap</h2>
+        <p>
+            The <code>font-display</code> property is the most critical tool for UX. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>auto:</strong> Browser default (usually hides text until font loads).</li>
+            <li><strong>block:</strong> Hides text for a short period (up to 3s), then shows fallback.</li>
+            <li><strong>swap:</strong> Immediately shows the fallback system font, then "swaps" it for the custom font once downloaded. <strong>(Recommended for ROSETTA)</strong>.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Vertical Rhythm: Unitless line-height</h2>
+        <p>
+            "Leading" (the space between lines) is vital for readability. In CSS architecture, we almost always use <strong>unitless values</strong> for <code>line-height</code>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Architect's Rule:</strong> If you use <code>line-height: 1.5em</code>, the browser calculates the height based on the parent and passes that <em>fixed pixel value</em> down. If you use <code>line-height: 1.5</code> (unitless), the browser passes the <em>multiplier</em> down, ensuring every child element calculates its own perfect line height relative to its own font-size.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">vertical_rhythm.css</span>
+        </div>
+        <pre><code class="language-css">body {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    /* Unitless multiplier is safer for inheritance */
+    line-height: 1.6; 
+}
+
+h1 {
+    font-family: 'Cinzel', serif;
+    /* Headings usually need tighter leading */
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Font Synthesis (The "Fake" Bold/Italic)</h2>
+        <p>
+            If you set an element to <code>font-weight: bold</code> but haven't loaded a bold version of that font, the browser will "smear" the pixels to create a <strong>faux-bold</strong>. This looks unprofessional and ruins the "Artifact" aesthetic.
+        </p>
+        <p>
+            Use <code>font-synthesis: none;</code> to prevent the browser from creating fake bolds or italics. This forces you to be a better architect by ensuring you've loaded all necessary font weights.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Smooth Rendering (Antialiasing)</h2>
+        <p>
+            For dark-themed websites like ROSETTA (light text on dark background), text can sometimes look too "chunky." We use non-standard but widely supported properties to trigger better subpixel rendering.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">smoothing.css</span>
+            </div>
+            <pre><code class="language-css">body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}</code></pre>
+        </div>
+    </div>
+
+</section>
