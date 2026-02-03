@@ -1,0 +1,118 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.4 The fr Unit & Repeat/Minmax</h1>
+    <p class="artifact-subtitle">Fluid Mathematics: Orchestrating proportional distribution and boundary-aware track sizing.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Evolution of Proportion</h2>
+        <p>
+            In the legacy era, we used percentages (<code>width: 33.33%</code>) to create columns. Percentages are problematic because they don't account for <strong>gutters (gaps)</strong>. If you have three 33% columns and a 20px gap, the layout breaks.
+        </p>
+        <p>
+            The <strong>fr (Fractional)</strong> unit was engineered specifically for Grid. It represents a "fraction of the free space" in the grid container <em>after</em> all non-flexible items (like pixels or content) and gaps have been accounted for.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">fractional_logic.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-layout {
+    display: grid;
+    /* Gaps are subtracted FIRST, then remaining space is divided by 4. 
+       Sidebar gets 1/4, Content gets 3/4. */
+    grid-template-columns: 1fr 3fr;
+    gap: 40px;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The repeat() Function</h2>
+        <p>
+            Efficiency is an architectural virtue. If you need 12 identical columns, writing <code>1fr</code> twelve times is redundant. The <code>repeat()</code> function simplifies track definitions.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">repetition_logic.css</span>
+            </div>
+            <pre><code class="language-css">.gallery-grid {
+    /* repeat( [count], [track-size] ) */
+    grid-template-columns: repeat(12, 1fr);
+    
+    /* Complex patterns can be repeated */
+    grid-template-rows: repeat(3, 100px 2fr);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Boundary Logic: minmax()</h2>
+        <p>
+            The <code>minmax(min, max)</code> function is the most sophisticated tool in the Grid engine. It defines a range of sizes. The track will grow as large as the <code>max</code> allows, but will never shrink smaller than the <code>min</code>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Use Case:</strong> Use <code>minmax()</code> to ensure a sidebar is never too narrow to read text, but can expand to fill large screens.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">boundary_sizing.css</span>
+        </div>
+        <pre><code class="language-css">.sidebar {
+    /* Never smaller than 200px, but takes 1 fraction of free space */
+    grid-template-columns: minmax(200px, 1fr) 3fr;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The "Holy Grail" Responsive Grid</h2>
+        <p>
+            The pinnacle of Grid architecture is the <strong>No-Media-Query Grid</strong>. By combining <code>repeat()</code> with two special keywords—<code>auto-fill</code> or <code>auto-fit</code>—and <code>minmax()</code>, we create a layout that handles its own responsiveness.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>auto-fill:</strong> Fills the row with as many tracks as possible, even if they are empty.</li>
+            <li><strong>auto-fit:</strong> Fills the row with tracks, but "collapses" empty ones to zero, stretching the remaining items to fill the row.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">fluid_artifact_grid.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-gallery {
+    display: grid;
+    /* 'auto-fit' + 'minmax' is the industry standard for card grids */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Critical Logic:</strong> When using <code>minmax()</code> as the <em>min</em> value for a track, avoid using <code>1fr</code>. The <em>min</em> value must be a fixed length (px, rem) or a keyword like <code>min-content</code>. <code>1fr</code> is only valid as a <em>max</em> value.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Intrinsic Sizing: min-content & max-content</h2>
+        <p>
+            Sometimes we want the grid to respond to the content itself:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>min-content:</strong> The track shrinks to the smallest possible width without overflowing (usually the width of the longest word).</li>
+            <li><strong>max-content:</strong> The track expands to fit the content exactly without wrapping.</li>
+        </ul>
+    </div>
+
+</section>
