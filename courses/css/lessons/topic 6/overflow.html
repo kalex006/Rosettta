@@ -1,0 +1,116 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.4 Overflow & Containment</h1>
+    <p class="artifact-subtitle">The Perimeter Logic: Managing content seepage and optimizing rendering through structural isolation.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Container Boundary</h2>
+        <p>
+            In CSS, every box has a defined <strong>Perimeter</strong>. However, content is often dynamic—text may be longer than expected, or an image may be too wide. As an architect, you must decide whether the container should expand, clip the content, or provide a scrolling interface.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Overflow Spectrum</h2>
+        <p>
+            The <code>overflow</code> shorthand (and its specific <code>overflow-x</code> and <code>overflow-y</code> counterparts) defines how the browser handles content that exceeds the element's box.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>visible (Default):</strong> Content leaks out and covers neighboring elements. Does not create a new formatting context.</li>
+            <li><strong>hidden:</strong> Content is clipped. The user cannot scroll to see it, but it can still be scrolled programmatically via JavaScript.</li>
+            <li><strong>scroll:</strong> Always shows scrollbars, even if the content fits.</li>
+            <li><strong>auto:</strong> Shows scrollbars only when necessary. This is the standard for ROSETTA sidebars.</li>
+            <li><strong>clip:</strong> A modern alternative to <code>hidden</code>. It prevents all scrolling (even programmatic) and is more performant for the engine.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">boundary_control.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-scroll-pane {
+    max-height: 500px;
+    overflow-y: auto;
+    /* Prevent horizontal leakage */
+    overflow-x: hidden; 
+    /* Modern smooth scrolling */
+    scroll-behavior: smooth;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Scroll Chaining: overscroll-behavior</h2>
+        <p>
+            A common UX failure: a user scrolls to the bottom of a modal, and suddenly the <strong>main page</strong> starts scrolling. This is called <strong>Scroll Chaining</strong>.
+        </p>
+        <p>
+            The <code>overscroll-behavior</code> property allows the architect to "cut the chain." Setting it to <code>contain</code> ensures that scrolling stays within the active artifact and does not propagate to the parent.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">ux_optimization.css</span>
+        </div>
+        <pre><code class="language-css">.modal-content {
+    overflow-y: auto;
+    /* Stops the background page from moving */
+    overscroll-behavior: contain; 
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Performance Shield: contain</h2>
+        <p>
+            In a high-end application, the browser spends significant time recalculating the layout of the entire page whenever one small element changes. The <code>contain</code> property allows you to tell the browser: <strong>"This element is an island."</strong>
+        </p>
+        <ul class="artifact-list">
+            <li><strong>layout:</strong> Changes inside this element won't affect the layout of the rest of the page.</li>
+            <li><strong>paint:</strong> Content won't be painted outside the bounds of this box.</li>
+            <li><strong>size:</strong> The size of the container is independent of its children (requires a fixed size).</li>
+            <li><strong>content:</strong> A shorthand for <code>layout paint</code>. Excellent for dashboard widgets.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">rendering_isolation.css</span>
+        </div>
+        <pre><code class="language-css">.complex-artifact-widget {
+    /* Isolates this component for better FPS */
+    contain: content;
+    background: #050505;
+    border: 1px solid #d4af37;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Layout Shift Problem: scrollbar-gutter</h2>
+        <p>
+            When a scrollbar appears, it often "pushes" the content by 15-20px, causing a jarring <strong>Layout Shift</strong>. 
+        </p>
+        <p>
+            The <code>scrollbar-gutter: stable;</code> property reserves space for the scrollbar even when it isn't visible, ensuring the "Artifact" remains perfectly centered regardless of content length.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Recommendation:</strong> Apply <code>scrollbar-gutter: stable</code> to your main <code>&lt;body&gt;</code> or main content wrapper. It provides that "high-end" stability found in premium documentation sites.
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Security/UX Note:</strong> Never hide overflow on the <code>&lt;html&gt;</code> or <code>&lt;body&gt;</code> tag unless you are building a specific "Full Screen App" experience. Doing so can trap users who rely on browser-level scrolling tools.
+        </div>
+    </div>
+
+</section>
