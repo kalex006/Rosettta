@@ -1,0 +1,117 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.3 Fluid Typography (Clamp)</h1>
+    <p class="artifact-subtitle">Interpolation Logic: Engineering seamless scalability between defined extrema.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Breakthrough: clamp()</h2>
+        <p>
+            In legacy responsive design, font sizes jumped between fixed values at specific breakpoints (e.g., 24px on mobile, 48px on desktop). This created jarring transitions. 
+        </p>
+        <p>
+            The <code>clamp()</code> function provides a <strong>Fluid Middle Ground</strong>. It takes three parameters and ensures a value stays between a defined minimum and maximum, while "flowing" according to a preferred value in between.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Tripartite Parameters</h2>
+        <p>The syntax is <code>clamp(MIN, PREFERRED, MAX)</code>. Think of it as a logical circuit:</p>
+        <ul class="artifact-list">
+            <li><strong>MIN:</strong> The lower bound (e.g., <code>1rem</code>). The value will never drop below this.</li>
+            <li><strong>PREFERRED:</strong> The dynamic engine (usually using <code>vw</code> units). This value grows and shrinks with the viewport.</li>
+            <li><strong>MAX:</strong> The upper bound (e.g., <code>3rem</code>). The value will never exceed this.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">fluid_scaling.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-title {
+    /* 
+       Min: 2rem (~32px)
+       Preferred: 5% of viewport width
+       Max: 5rem (~80px)
+    */
+    font-size: clamp(2rem, 5vw, 5rem);
+    
+    font-family: var(--font-heading);
+    color: var(--gold-primary);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Engineering the "Ideal" Value</h2>
+        <p>
+            As a Senior Architect, you don't just guess the middle value. To achieve perfect fluid typography, we use <strong>Linear Interpolation (Lerp)</strong>. We calculate a "slope" so the font starts growing at exactly the right screen width and stops at another.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Architect's Formula:</strong> <br>
+                Instead of just <code>5vw</code>, we use <code>calc()</code> to add a base value. This prevents the font from becoming zero on tiny screens. <br>
+                <code>font-size: clamp(1rem, 0.8rem + 1vw, 2rem);</code>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Accessibility and the 'rem' Requirement</h2>
+        <p>
+            A critical failure in many modern sites is using <code>clamp(16px, 2vw, 32px)</code>. 
+        </p>
+        <p>
+            <strong>The Problem:</strong> If you use pixels inside a clamp, the user's browser "Zoom" settings may be ignored. If a visually impaired user increases their default font size to 200%, the <code>16px</code> limit will stay <code>16px</code>.
+        </p>
+        <p>
+            <strong>The Standard:</strong> Always use <code>rem</code> for the MIN and MAX values. This ensures the fluid typography respects the user's fundamental sovereignty over their own display settings.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">accessible_clamp.css</span>
+        </div>
+        <pre><code class="language-css">:root {
+    /* Tokenizing fluid scales */
+    --step-5: clamp(2.5rem, 5vw + 1rem, 6rem);
+    --step-0: clamp(1rem, 0.2vw + 0.9rem, 1.2rem);
+}
+
+p {
+    font-size: var(--step-0);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Beyond Text: Fluid Spacing</h2>
+        <p>
+            The <code>clamp()</code> function is not limited to typography. It is the perfect tool for <strong>Fluid Padding</strong> and <strong>Fluid Gaps</strong>. In ROSETTA, we use it to make the sidebar-to-content gap feel "airy" on large screens but "tight" on small ones.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS Layout</span>
+                <span class="file-name">fluid_geometry.css</span>
+            </div>
+            <pre><code class="language-css">.main-container {
+    /* Padding grows from 20px to 100px based on screen width */
+    padding: clamp(1.25rem, 8vw, 6.25rem);
+    
+    /* Gaps between cards grow proportionally */
+    gap: clamp(1rem, 3vw, 3rem);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Note:</strong> <code>clamp()</code> is highly performant because it is handled during the <strong>Layout</strong> phase of the rendering engine. It is significantly more efficient than using JavaScript <code>window.onresize</code> listeners to change font sizes.
+        </div>
+    </div>
+
+</section>
