@@ -1,0 +1,123 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.2 Explicit vs. Implicit Grids</h1>
+    <p class="artifact-subtitle">The Automated Matrix: Managing deterministic definitions and heuristic growth.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Grid Duality</h2>
+        <p>
+            In CSS architecture, we distinguish between two states of the matrix. The <strong>Explicit Grid</strong> consists of the rows and columns you manually define. However, in dynamic systems like ROSETTA, we often fetch an unknown number of data artifacts from a JSON file.
+        </p>
+        <p>
+            When there are more items than defined cells, the browser engine creates an <strong>Implicit Grid</strong> to house the remaining items. Mastering how these implicit tracks are sized is vital for structural stability.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Explicit Grid (Manual)</h2>
+        <p>
+            You create the explicit grid using <code>grid-template-columns</code> and <code>grid-template-rows</code>. These are the "fixed blueprints" of your container.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">explicit_blueprint.css</span>
+        </div>
+        <pre><code class="language-css">.container {
+    display: grid;
+    /* We defined exactly 2 columns and 1 row */
+    grid-template-columns: 200px 200px;
+    grid-template-rows: 100px;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Implicit Grid (Automatic)</h2>
+        <p>
+            If you have 4 items but only defined 1 row (as in the example above), the browser will "invent" new rows to hold items 3 and 4. By default, these implicit rows have a height of <code>auto</code> (fitting the content). 
+        </p>
+        <p>
+            To control the size of these "ghost" tracks, we use the <code>grid-auto-rows</code> and <code>grid-auto-columns</code> properties.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">implicit_control.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    
+    /* Every row created automatically will be exactly 250px */
+    grid-auto-rows: 250px;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Grid Auto-Flow</h2>
+        <p>
+            The <code>grid-auto-flow</code> property acts as the "Traffic Controller" for the matrix. It decides whether new items should trigger new rows or new columns.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>row (Default):</strong> Items fill up a row and then create a new row below.</li>
+            <li><strong>column:</strong> Items fill up a column and then create a new column to the right.</li>
+            <li><strong>dense:</strong> An advanced algorithm that attempts to fill in empty holes earlier in the grid if smaller items appear later.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">flow_optimization.css</span>
+        </div>
+        <pre><code class="language-css">.masonry-lite {
+    display: grid;
+    grid-auto-flow: row dense; /* Prevents gaps in the layout */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Named Lines (Advanced Architecture)</h2>
+        <p>
+            For complex layouts, referring to lines by numbers (1, 2, 3) becomes confusing. CSS allows you to **Name** your lines within the template definition. This makes your code self-documenting.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">named_lines.css</span>
+        </div>
+        <pre><code class="language-css">.main-layout {
+    display: grid;
+    grid-template-columns: [sidebar-start] 250px [sidebar-end content-start] 1fr [content-end];
+}
+
+.sidebar {
+    /* Using names instead of numbers */
+    grid-column: sidebar-start / sidebar-end;
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Recommendation:</strong> In the ROSETTA project, always define your columns explicitly (as the horizontal structure is usually fixed), but leave your rows <strong>Implicit</strong> using <code>grid-auto-rows</code>. This ensures that as we add more lessons to the course, the page expands vertically without needing to update the CSS.
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Note:</strong> The <code>dense</code> packing algorithm is computationally more expensive than standard flow. For grids with thousands of items, stick to the default flow to prevent "stuttering" during the Layout phase of the Critical Rendering Path.
+        </div>
+    </div>
+
+</section>
