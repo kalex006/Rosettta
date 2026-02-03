@@ -1,0 +1,121 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.1 Grid Terminology & Lines</h1>
+    <p class="artifact-subtitle">The Matrix Protocol: Establishing the two-dimensional coordinate system of modern layout.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The 2D Shift</h2>
+        <p>
+            CSS Grid is the most powerful layout system ever introduced to the browser. While Flexbox manages space along a single axis (row OR column), Grid manages <strong>both axes simultaneously</strong>.
+        </p>
+        <p>
+            In the ROSETTA project, Grid is used for the "Grand Layout"—orchestrating the relationship between the sidebar, the header, and the multi-column artifact gallery.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Anatomy of a Grid</h2>
+        <p>To communicate as an architect, you must use precise terminology:</p>
+        <ul class="artifact-list">
+            <li><strong>Grid Container:</strong> The parent element where <code>display: grid</code> is applied.</li>
+            <li><strong>Grid Lines:</strong> The horizontal and vertical dividers. They are <strong>1-indexed</strong> (1, 2, 3...).</li>
+            <li><strong>Grid Track:</strong> The space between two adjacent lines (essentially a "row" or "column").</li>
+            <li><strong>Grid Cell:</strong> The smallest unit of a grid (where one row and one column intersect).</li>
+            <li><strong>Grid Area:</strong> Any rectangular space composed of one or more grid cells.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">matrix_definition.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-matrix {
+    display: grid;
+    /* Creating 3 columns of equal width */
+    grid-template-columns: 1fr 1fr 1fr;
+    /* Creating 2 rows of fixed height */
+    grid-template-rows: 200px 200px;
+    gap: 20px;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Line-Based Positioning</h2>
+        <p>
+            Unlike Flexbox, where items flow naturally, Grid allows you to "pin" an item to specific line numbers. A grid line exists at the very start, between tracks, and at the very end.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Architect's Rule:</strong> An item spans from a <strong>Start Line</strong> to an <strong>End Line</strong>. If you want an item to cover two columns, it goes from line 1 to line 3.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">positioning_logic.css</span>
+        </div>
+        <pre><code class="language-css">.hero-artifact {
+    /* Spans from vertical line 1 to 3 */
+    grid-column-start: 1;
+    grid-column-end: 3;
+    
+    /* Spans from horizontal line 1 to 2 */
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+/* Shorthand Syntax: start / end */
+.hero-artifact-alt {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Negative Index</h2>
+        <p>
+            A unique feature of Grid is the ability to count backward from the end of the grid using negative numbers. <code>-1</code> always represents the <strong>last line</strong> of the grid, regardless of how many tracks exist.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">reverse_addressing.css</span>
+            </div>
+            <pre><code class="language-css">.full-width-banner {
+    /* Spans from the very first line to the very last line */
+    grid-column: 1 / -1;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Spanning logic</h2>
+        <p>
+            If you don't know the line numbers, you can use the <code>span</code> keyword to tell an item how many "cells" to occupy relative to its current position.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">spanning_syntax.css</span>
+            </div>
+            <pre><code class="language-css">.wide-card {
+    /* Start wherever the flow puts you, but take up 2 columns */
+    grid-column: span 2;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Visualization Tip:</strong> CSS Grid is invisible by default. To debug your architecture, open your Browser DevTools (F12), go to the "Elements" tab, and click the small "grid" badge next to your container. This will overlay the lines and line numbers directly on your screen.
+        </div>
+    </div>
+
+</section>
