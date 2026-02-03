@@ -1,0 +1,105 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.2 Math Functions (Calc, Min, Max)</h1>
+    <p class="artifact-subtitle">Computational Layout: Mastering the browser's native arithmetic engine for precise spatial logic.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Calculation Engine</h2>
+        <p>
+            Static values are the enemies of fluid architecture. In a modern "Zero-Backend" system, elements must often be sized based on complex relationships—for instance, a sidebar that is exactly 300px wide, while the content area takes up the remaining space minus a 40px gap.
+        </p>
+        <p>
+            CSS provides three primary functions to handle this logic: <code>calc()</code>, <code>min()</code>, and <code>max()</code>. Unlike pre-processor math (SASS), these functions are calculated at **runtime** by the browser, allowing them to respond to viewport changes instantly.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The calc() Operator</h2>
+        <p>
+            The <code>calc()</code> function allows you to perform basic arithmetic (addition, subtraction, multiplication, division). Its greatest architectural power is <strong>Unit Mixing</strong>—the ability to perform math between absolute units (px) and relative units (%, vh, rem).
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Syntax Protocol:</strong> For addition (<code>+</code>) and subtraction (<code>-</code>), you <strong>must</strong> have a space on both sides of the operator. <code>calc(100% - 20px)</code> is valid; <code>calc(100%-20px)</code> will fail.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">dynamic_spacing.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-main {
+    /* Full height minus the header height and bottom padding */
+    height: calc(100vh - 80px - 2rem);
+    
+    /* Perfect centering math */
+    margin-left: calc(50% - 200px); 
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Comparison Functions: min() and max()</h2>
+        <p>
+            These functions allow the architect to define boundaries without using complex "if/else" logic.
+        </p>
+        <ul class="artifact-list">
+            <li><code>min(val1, val2)</code>: The browser selects the <strong>smallest</strong> of the provided values.</li>
+            <li><code>max(val1, val2)</code>: The browser selects the <strong>largest</strong> of the provided values.</li>
+        </ul>
+        <p>
+            This is extremely useful for <strong>Responsive Constraints</strong>. For example, you want a card to be 80% of the screen wide, but never larger than 1200px.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">boundary_logic.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-container {
+    /* "I want it to be 80% wide, but stop growing at 1200px" */
+    width: min(80%, 1200px);
+    
+    /* "I want it to have 5% padding, but never less than 20px" */
+    padding: max(5%, 20px);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Mathematical Composition</h2>
+        <p>
+            You can nest these functions to create highly sophisticated rules. In the ROSETTA project, we might use nested math to ensure that an artifact's font size scales with the screen but stays within a readable "safe zone."
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">composition.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-title {
+    /* Select the smaller of (large text) OR (math based on viewport) */
+    font-size: min(5rem, calc(2rem + 5vw));
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The 'abs' and 'round' (New in Spec)</h2>
+        <p>
+            The latest CSS specifications have introduced even more advanced functions like <code>abs()</code> (absolute value), <code>round()</code>, <code>sin()</code>, and <code>cos()</code>. While support is still growing in 2026, they allow for pure-CSS geometric animations and complex grid calculations that previously required JavaScript.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> Use <code>calc()</code> in combination with <strong>CSS Variables</strong> (Topic 7.1). This allows you to create "smart tokens." For example: <code>--grid-gap: 20px; --double-gap: calc(var(--grid-gap) * 2);</code>. This ensures that if you update the gap, the entire system scales perfectly.
+        </div>
+    </div>
+
+</section>
