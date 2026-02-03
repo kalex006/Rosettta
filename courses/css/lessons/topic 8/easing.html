@@ -1,0 +1,128 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.3 Easing & Cubic Bezier</h1>
+    <p class="artifact-subtitle">The Calculus of Motion: Engineering momentum and weight through mathematical timing functions.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Illusion of Life</h2>
+        <p>
+            In the physical world, objects require force to start moving and friction to stop. Constant, linear motion feels robotic and "cheap" to the human eye. 
+        </p>
+        <p>
+            An architect uses <strong>Easing Functions</strong> to define how an animation's speed changes over its duration. By manipulating these curves, we can make the ROSETTA artifacts feel heavy like stone, or light like digital light.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Standard Timing Keywords</h2>
+        <p>
+            CSS provides several built-in keywords that represent pre-defined mathematical curves:
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Keyword</th>
+                    <th>Physics Description</th>
+                    <th>Best Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>linear</code></td>
+                    <td>Constant speed. No acceleration.</td>
+                    <td>Color fades or background shifts.</td>
+                </tr>
+                <tr>
+                    <td><code>ease-in</code></td>
+                    <td>Starts slow, ends fast.</td>
+                    <td>Objects leaving the screen.</td>
+                </tr>
+                <tr>
+                    <td><code>ease-out</code></td>
+                    <td>Starts fast, ends slow.</td>
+                    <td>Objects entering the screen.</td>
+                </tr>
+                <tr>
+                    <td><code>ease-in-out</code></td>
+                    <td>Slow start and slow end.</td>
+                    <td>Loops or internal state changes.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Deconstructing cubic-bezier()</h2>
+        <p>
+            For "Elite" motion, keywords are insufficient. The <code>cubic-bezier(x1, y1, x2, y2)</code> function allows you to draw your own acceleration curve on a 2D coordinate system.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>x1, x2:</strong> Time coordinates (must be between 0 and 1).</li>
+            <li><strong>y1, y2:</strong> Progress coordinates (can be greater than 1 to create "Bounce" effects).</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Rosetta "Heavy Stone" Curve:</strong><br>
+                For our artifacts, we use a custom curve that has a significant "lag" at the start to simulate weight: <br>
+                <code>cubic-bezier(0.7, 0, 0.3, 1)</code>.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">physics_tokens.css</span>
+        </div>
+        <pre><code class="language-css">:root {
+    /* Design Tokens for Motion */
+    --ease-artifact: cubic-bezier(0.7, 0, 0.3, 1);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy entry */
+}
+
+.artifact-card:hover {
+    transform: translateY(-10px);
+    transition: transform 0.6s var(--ease-artifact);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Discrete Motion: steps()</h2>
+        <p>
+            Sometimes you don't want a smooth curve. The <code>steps()</code> function divides the animation into equal segments. This is the architectural standard for creating "Typewriter" effects or "Loading" indicators that feel like mechanical clocks.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">typewriter.css</span>
+            </div>
+            <pre><code class="language-css">.terminal-text {
+    /* Moves the cursor in 20 distinct jumps */
+    animation: typing 4s steps(20) forwards;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Visualizing with DevTools</h2>
+        <p>
+            You cannot "guess" a bezier curve. All modern browsers (Chrome/Edge/Firefox) have a <strong>Bezier Visualizer</strong> built into the Inspector. 
+        </p>
+        <ol class="artifact-list">
+            <li>Inspect an element with a transition.</li>
+            <li>In the Styles pane, click the small <strong>curved icon</strong> next to the timing function.</li>
+            <li>Drag the handles to feel the physics change in real-time.</li>
+        </ol>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Golden Ratio of Duration:</strong> Large movements (like a modal opening) should take <code>300ms - 500ms</code>. Small interactions (like a button hover) should take <code>100ms - 200ms</code>. Anything faster than 100ms is imperceptible; anything slower than 500ms feels "sluggish."
+        </div>
+    </div>
+
+</section>
