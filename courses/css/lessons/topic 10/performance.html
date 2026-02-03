@@ -1,0 +1,131 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.2 CSS Performance & CRP</h1>
+    <p class="artifact-subtitle">The Execution Engine: Optimizing the browser's rendering pipeline for high-fidelity visual delivery.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Render-Blocking Nature</h2>
+        <p>
+            In the architectural flow of the web, **CSS is a Render-Blocking Resource**. This means the browser will refuse to paint any pixels to the screen until it has fully downloaded and parsed all linked stylesheets.
+        </p>
+        <p>
+            The browser requires both the **DOM** (Structure) and the **CSSOM** (Styles) to build the **Render Tree**. If your CSS file is massive or poorly optimized, the user is left staring at a white screen—a catastrophic failure for a high-end artifact like ROSETTA.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The CSSOM Construction</h2>
+        <p>
+            The **CSS Object Model (CSSOM)** is a map of all CSS selectors and their relevant properties. Like the DOM, it is a tree structure. The browser "cascades" styles from the root down to the leaf nodes.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Right-to-Left Rule:</strong> Browsers read CSS selectors from **right to left**. In the selector <code>.card h2 span</code>, the engine first finds every <code>span</code> on the page, then checks if it's inside an <code>h2</code>, then checks if that's inside a <code>.card</code>. Shallow selectors are mathematically faster to parse.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">Performance Audit</span>
+            <span class="file-name">selector_efficiency.css</span>
+        </div>
+        <pre><code class="language-css">/* ❌ EXPENSIVE: High Recalculation Cost */
+header nav ul li a.active { color: gold; }
+
+/* ✅ OPTIMIZED: Constant Time Lookup */
+.nav-link--active { color: gold; }</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Critical CSS Strategy</h2>
+        <p>
+            To improve the **First Contentful Paint (FCP)**, architects use the "Critical CSS" pattern. You extract the minimum amount of CSS required to style the "Above-the-Fold" content and inline it directly into the HTML <code>&lt;head&gt;</code>.
+        </p>
+        <p>
+            The remaining "Non-Critical" CSS is loaded asynchronously, preventing it from blocking the initial render.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML Architecture</span>
+            <span class="file-name">index.html</span>
+        </div>
+        <pre><code class="language-html">&lt;head&gt;
+    &lt;style&gt;
+        /* Critical CSS: Styles for the logo and first fold */
+        body { background: #050505; color: #fff; }
+        .hero { height: 100vh; display: flex; }
+    &lt;/style&gt;
+    
+    &lt;!-- Non-Critical CSS: Loaded Asynchronously --&gt;
+    &lt;link rel="preload" href="full-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"&gt;
+&lt;/head&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Minimizing Style Recalculation</h2>
+        <p>
+            Every time an element's class is toggled via JavaScript, the browser must perform a "Style Recalculation." 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Avoid the Universal Selector:</strong> <code>* { ... }</code> forces the browser to check every single node.</li>
+            <li><strong>Reduce Nesting:</strong> Aim for a maximum depth of 3 levels to keep the CSSOM tree shallow.</li>
+            <li><strong>Use containment:</strong> The <code>contain</code> property (Lesson 6.4) limits the scope of recalculations.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Asset Delivery Optimization</h2>
+        <p>
+            Since ROSETTA is a **Zero-Backend** project hosted on GitHub Pages, we rely on the network layer for speed.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Minification:</strong> Removing whitespace and comments from the production <code>style.css</code> file.</li>
+            <li><strong>Compression:</strong> Ensuring the server provides the file using **Brotli** or **Gzip** (handled automatically by GitHub).</li>
+            <li><strong>Caching:</strong> Setting long-term cache headers for static CSS artifacts.</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Tool:</strong> Use the **Lighthouse** or **Performance** tab in Chrome DevTools. Look for "Reduce unused CSS" and "Avoid large layout shifts." A performance score below 90 is unacceptable for a Senior Architect.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Summary Table</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Optimal Goal</th>
+                    <th>Architectural Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>TTFB</strong></td>
+                    <td>< 200ms</td>
+                    <td>Optimize hosting/CDN.</td>
+                </tr>
+                <tr>
+                    <td><strong>FCP</strong></td>
+                    <td>< 1.0s</td>
+                    <td>Inline Critical CSS.</td>
+                </tr>
+                <tr>
+                    <td><strong>Cumulative Layout Shift</strong></td>
+                    <td>< 0.1</td>
+                    <td>Set explicit dimensions on images.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
