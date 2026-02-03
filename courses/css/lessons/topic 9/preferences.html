@@ -1,0 +1,122 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.5 Preference Queries</h1>
+    <p class="artifact-subtitle">User Sovereignty: Harmonizing the interface with the operating system's physiological and aesthetic configurations.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Empathic Interface</h2>
+        <p>
+            In high-end software architecture, the viewport is not just a rectangle of pixels; it is a gateway to a human being with specific needs. <strong>Preference Queries</strong> allow the ROSETTA engine to detect OS-level settings and adjust the UI before the user even interacts with the page.
+        </p>
+        <p>
+            By responding to these signals, we ensure that our "Artifact" aesthetic remains accessible and respectful of the user's physical and neurological comfort.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Dark Mode Switch: prefers-color-scheme</h2>
+        <p>
+            While **PROJECT ROSETTA** is designed as a deep-black artifact by default, some users may have their system set to "Light Mode" for better readability in bright environments. 
+        </p>
+        <p>
+            By using <code>prefers-color-scheme</code>, we can provide a "Light Artifact" variant of our theme automatically.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">theming_engine.css</span>
+        </div>
+        <pre><code class="language-css">/* ROSETTA Default: Deep Black */
+:root {
+    --bg: #050505;
+    --text: #ffffff;
+    --accent: #d4af37;
+}
+
+/* User Preference: Light Mode */
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg: #faf9f6; /* Bone White */
+        --text: #1a1a1a;
+        --accent: #b08d2b;
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Motion Safety: prefers-reduced-motion</h2>
+        <p>
+            The sophisticated animations we learned in Topic 08 (Pulse, Morph, 3D Flips) can cause physical illness, dizziness, or seizures for users with vestibular disorders.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>The Architect's Mandate:</strong> If a user has "Reduce Motion" enabled in their system settings, you **must** disable non-essential animations. This is not a design choice; it is an accessibility requirement.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">accessibility_reset.css</span>
+        </div>
+        <pre><code class="language-css">@media (prefers-reduced-motion: reduce) {
+    /* Stop all animations and transitions instantly */
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. High Contrast: prefers-contrast</h2>
+        <p>
+            For users with low vision, our subtle "Gold-on-Black" aesthetic might not provide enough legibility. The <code>prefers-contrast</code> query allows us to detect if a user has requested a high-contrast mode at the OS level.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">legibility_boost.css</span>
+            </div>
+            <pre><code class="language-css">@media (prefers-contrast: more) {
+    :root {
+        --accent: #ffcc00; /* Brighter, high-contrast gold */
+    }
+    
+    .artifact-card {
+        border-width: 3px; /* Thicker borders for better definition */
+    }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Data & Battery: prefers-reduced-data</h2>
+        <p>
+            This query (currently in draft/experimental) detects if the user has enabled "Data Saver" mode. In the future of ROSETTA, we can use this to stop the auto-loading of heavy 4K "Artifact Renders" or background videos (Lesson 6.4) to save the user's bandwidth.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Senior Design Pattern:</strong> Don't just "turn off" features. For <code>prefers-reduced-motion</code>, consider replacing a "Sliding" transition with a simple "Fade." Fading is generally safe for vestibular-sensitive users and still provides visual feedback.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. The User-Agent Check</h2>
+        <p>
+            Beyond preferences, we can also sense the "Capabilities" of the hardware using queries like <code>(hover: hover)</code>. This tells us if the user has a mouse. If they don't (e.g., a touch screen), we should ensure all "Hover Artifacts" are visible by default.
+        </p>
+    </div>
+
+</section>
