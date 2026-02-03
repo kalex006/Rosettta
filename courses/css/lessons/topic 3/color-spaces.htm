@@ -1,0 +1,107 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.3 RGB, HEX, HSL & OKLCH</h1>
+    <p class="artifact-subtitle">Chromatographic Engineering: Mastering perceptual uniformity and the expanded P3 color gamut.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Evolution of Color Models</h2>
+        <p>
+            Color in CSS has historically been defined by how <strong>hardware</strong> works (Red, Green, Blue LEDs). However, a Senior Architect must define color by how the <strong>human eye</strong> works.
+        </p>
+        <p>
+            Standard color spaces like <strong>sRGB</strong> (used by HEX and RGB) can only display about 35% of the colors the human eye can see. Modern displays support <strong>Display P3</strong>, and modern CSS gives us the mathematical tools to unlock these "High Definition" colors.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Legacy: HEX and RGB</h2>
+        <p>
+            HEX (<code>#d4af37</code>) and RGB (<code>rgb(212, 175, 55)</code>) are essentially the same. They are <strong>coordinate-based</strong> systems that tell the monitor how much light to blast from each LED.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Pros:</strong> Universal support; easy to copy from design tools.</li>
+            <li><strong>Cons:</strong> Impossible for a human to "read." You cannot look at a HEX code and know how to make it 10% darker just by changing the numbers in your head.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Perceptual Flaw of HSL</h2>
+        <p>
+            HSL (Hue, Saturation, Lightness) was a major improvement because it is <strong>intuitive</strong>. However, HSL is mathematically "dishonest." 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>The HSL Glitch:</strong> In HSL, a "Lightness" of 50% for Yellow looks much brighter to the human eye than a "Lightness" of 50% for Blue. This makes creating consistent accessible UI (contrast ratios) very difficult.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Future: OKLCH</h2>
+        <p>
+            <strong>OKLCH</strong> is the new architectural standard. It is a <strong>Perceptually Uniform</strong> color space. If you change the Hue, the perceived brightness stays exactly the same.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>L (Lightness):</strong> 0% (Black) to 100% (White).</li>
+            <li><strong>C (Chroma):</strong> The "amount" of color. Unlike saturation, this has no theoretical cap.</li>
+            <li><strong>H (Hue):</strong> The angle on the color wheel (0-360).</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">modern_colors.css</span>
+        </div>
+        <pre><code class="language-css">/* Defining our Ancient Gold in OKLCH */
+:root {
+    --gold-hd: oklch(75% 0.15 85); 
+}
+
+.artifact-card {
+    /* Making it 10% darker is mathematically simple */
+    background: oklch(65% 0.15 85);
+    
+    /* Accessing colors that don't exist in sRGB */
+    color: oklch(70% 0.5 20); /* A neon red impossible in HEX */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Color Gamuts: sRGB vs. P3</h2>
+        <p>
+            By using the <code>color()</code> function or <code>oklch()</code>, we can access the <strong>P3 Gamut</strong>. P3 contains 25% more colors than sRGB, specifically in the vibrant greens and deep reds.
+        </p>
+        <p>
+            For the ROSETTA project, using P3 colors on high-end devices (MacBooks, iPhones, OLED screens) makes the "Ancient Gold" appear to glow with a metallic vibrance that is impossible with standard HEX codes.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Color Mixing</h2>
+        <p>
+            The modern <code>color-mix()</code> function allows you to blend colors directly in the browser. This is essential for creating "Tint" and "Shade" systems without manually picking new HEX codes.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">dynamic_mixing.css</span>
+            </div>
+            <pre><code class="language-css">.artifact-overlay {
+    /* Mix 20% gold into a black background */
+    background: color-mix(in oklch, var(--gold-hd), black 80%);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Recommendation:</strong> Use OKLCH for your design system variables. It allows you to generate accessible color palettes (ensuring 4.5:1 contrast) programmatically by simply adjusting the <strong>L</strong> (Lightness) value.
+        </div>
+    </div>
+
+</section>
