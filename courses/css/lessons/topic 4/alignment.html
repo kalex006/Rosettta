@@ -1,0 +1,141 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.3 Alignment & Distribution</h1>
+    <p class="artifact-subtitle">Orchestrating the Void: Mastering the mathematical distribution of space across dual axes.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Physics of Positioning</h2>
+        <p>
+            In a Flexbox environment, alignment is not about fixed coordinates (x, y). Instead, it is about how the browser handles <strong>unused space</strong>. As an architect, you must decide what happens to the "void" when your items do not fill the entire container.
+        </p>
+        <p>
+            We manage this through two distinct properties: <code>justify-content</code> for the Main Axis and <code>align-items</code> for the Cross Axis.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Main Axis: justify-content</h2>
+        <p>
+            The <code>justify-content</code> property defines how space is distributed between and around flex items along the <strong>Main Axis</strong>.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Value</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>flex-start</code></td>
+                    <td>Items pack toward the start of the axis (Default).</td>
+                </tr>
+                <tr>
+                    <td><code>flex-end</code></td>
+                    <td>Items pack toward the end of the axis.</td>
+                </tr>
+                <tr>
+                    <td><code>center</code></td>
+                    <td>Items pack toward the center of the line.</td>
+                </tr>
+                <tr>
+                    <td><code>space-between</code></td>
+                    <td>First item at the start, last item at the end, even gaps between.</td>
+                </tr>
+                <tr>
+                    <td><code>space-around</code></td>
+                    <td>Even space around items (end-spaces are half the size of mid-spaces).</td>
+                </tr>
+                <tr>
+                    <td><code>space-evenly</code></td>
+                    <td>All gaps, including edges, are mathematically equal.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">distribution_logic.css</span>
+        </div>
+        <pre><code class="language-css">.navbar {
+    display: flex;
+    /* Logo on left, Navigation on right */
+    justify-content: space-between; 
+    align-items: center; /* Perfect vertical centering */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Cross Axis: align-items</h2>
+        <p>
+            The <code>align-items</code> property defines the default behavior for how flex items are laid out along the <strong>Cross Axis</strong> of the current line.
+        </p>
+        <ul class="artifact-list">
+            <li><code>stretch</code> (Default): Items expand to fill the container's cross-axis height.</li>
+            <li><code>center</code>: Items are centered along the cross axis (The famous "Center a Div" method).</li>
+            <li><code>baseline</code>: Items align based on the "sit-line" of their text content. Useful for mixing different font sizes.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Individual Overrides: align-self</h2>
+        <p>
+            Sometimes, a single artifact needs to break the rules. The <code>align-self</code> property is applied to the <strong>Flex Item</strong>, allowing it to override the container's <code>align-items</code> setting for just that specific node.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">rogue_alignment.css</span>
+            </div>
+            <pre><code class="language-css">.container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.item-highlight {
+    /* This specific item ignores the container and sticks to the bottom */
+    align-self: flex-end;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Multi-line Spacing: align-content</h2>
+        <p>
+            This property only takes effect when <code>flex-wrap: wrap</code> is enabled and there are multiple lines of items. It defines how the <strong>rows themselves</strong> are distributed within the container. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Trap:</strong> Beginners often confuse <code>align-items</code> with <code>align-content</code>. Remember: <em>align-items</em> is about how items sit within their single line. <em>align-content</em> is about how the lines themselves stack in the container.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. The Modern Standard: gap</h2>
+        <p>
+            In the past, we used <code>margin</code> to create space between flex items, which often required <code>:last-child { margin: 0; }</code> hacks. The modern architect uses the <code>gap</code> property on the container.
+        </p>
+        <p>
+            The <code>gap</code> (or <code>row-gap</code> and <code>column-gap</code>) creates space <strong>only between items</strong>, never at the edges. It is much cleaner and mathematically precise.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">gap_architecture.css</span>
+            </div>
+            <pre><code class="language-css">.artifact-grid {
+    display: flex;
+    flex-wrap: wrap;
+    /* 20px between rows, 40px between columns */
+    gap: 20px 40px; 
+}</code></pre>
+        </div>
+    </div>
+
+</section>
