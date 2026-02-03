@@ -1,0 +1,125 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.4 Gradients & Layering</h1>
+    <p class="artifact-subtitle">Luminous Architecture: Orchestrating light, depth, and texture through mathematical color transitions.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Physics of Digital Light</h2>
+        <p>
+            In professional UI architecture, gradients are not just "color fades." They are tools used to simulate <strong>Depth (Z-axis)</strong> and <strong>Materiality</strong>. By manipulating the transition between colors, we can make a flat <code>&lt;div&gt;</code> look like a brushed gold plate or a backlit stone tablet.
+        </p>
+        <p>
+            CSS treats gradients as <strong>Images</strong> (Specifically, <code>&lt;image&gt;</code> data types). This means they can be used anywhere an image is used, and they follow the same layering rules.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Linear & Radial Mechanics</h2>
+        <p>
+            The two primary gradient types define the direction of the light source:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Linear:</strong> Colors transition along a straight line. You can define angles (e.g., <code>45deg</code>) or directions (<code>to bottom right</code>).</li>
+            <li><strong>Radial:</strong> Colors radiate from a central point. You can control the shape (circle/ellipse) and the "focal point" of the light.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">lighting_effects.css</span>
+        </div>
+        <pre><code class="language-css">/* Simulated Gold Sheen (Linear) */
+.metallic-gold {
+    background: linear-gradient(
+        135deg, 
+        #8a6d3b 0%, 
+        #d4af37 50%, 
+        #f9f4e1 51%, 
+        #8a6d3b 100%
+    );
+}
+
+/* Atmospheric Spotlight (Radial) */
+.artifact-spotlight {
+    background: radial-gradient(
+        circle at 50% 0%, 
+        rgba(212, 175, 55, 0.15) 0%, 
+        transparent 70%
+    );
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Stacking Backgrounds</h2>
+        <p>
+            One of the most powerful features of CSS is the ability to apply <strong>multiple backgrounds</strong> to a single element. Layers are listed from top to bottom; the first image in the list is the one closest to the user.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Rosetta Technique:</strong> We combine a subtle noise texture (as a top layer) with a gold radial gradient (middle layer) and a deep black base (bottom layer). This creates an "authentic" material feel that is characteristic of PROJECT ROSETTA.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">layered_artifact.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-surface {
+    background: 
+        /* Layer 1: Subtle Grain Texture */
+        url('assets/img/noise.png'),
+        /* Layer 2: Gold Highlight */
+        radial-gradient(circle at top left, rgba(212, 175, 55, 0.2), transparent),
+        /* Layer 3: Solid Base */
+        #050505;
+    
+    background-blend-mode: overlay;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Dithering Problem</h2>
+        <p>
+            On many displays, smooth gradients—especially in dark themes—suffer from <strong>"Banding"</strong> (visible stripes where the colors change).
+        </p>
+        <p>
+            <strong>The Architect's Solution:</strong> To eliminate banding, use a <strong>Dithering</strong> technique. By adding a tiny amount of high-frequency noise or using the modern <code>oklch</code> color space (Lesson 3.3) for your gradient stops, the browser can calculate smoother sub-pixel transitions.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Conic Gradients & Hard Stops</h2>
+        <p>
+            The <code>conic-gradient</code> (colors rotating around a center point) is often used for charts, but for architects, it is perfect for creating "hard-stop" patterns without adding extra HTML.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">hard_stops.css</span>
+        </div>
+        <pre><code class="language-css">/* Creating a checkered "Safety" pattern */
+.calibration-grid {
+    background: conic-gradient(
+        #000 0.25turn, #fff 0.25turn 0.5turn, 
+        #000 0.5turn 0.75turn, #fff 0.75turn
+    );
+    background-size: 20px 20px;
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Warning:</strong> Complex gradients (especially those involving multiple layers and <code>background-blend-mode</code>) are calculated on the <strong>GPU</strong>. While fast, having hundreds of these elements on a single page can cause mobile devices to overheat or drain the battery. Use them strategically.
+        </div>
+    </div>
+
+</section>
