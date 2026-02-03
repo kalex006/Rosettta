@@ -104,7 +104,7 @@
     },
     {
       "title": "Topic 10: Optimization & Methodology",
-      "folder": "topic-10",
+      "folder": "topic 10",
       "files": [
         { "title": "10.1 BEM & Atomic CSS Strategies", "filename": "methodologies.html" },
         { "title": "10.2 CSS Performance & CRP", "filename": "performance.html" },
