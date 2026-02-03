@@ -1,0 +1,121 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.2 Mobile-First Strategy</h1>
+    <p class="artifact-subtitle">Foundations First: The architectural philosophy of progressive enhancement through additive constraints.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Philosophy of Constraints</h2>
+        <p>
+            In the early era of web design, architects followed <strong>Graceful Degradation</strong> (Desktop-First). They built the most complex version of a site and then "fixed" it for mobile by hiding or shrinking elements.
+        </p>
+        <p>
+            Modern architecture utilizes <strong>Progressive Enhancement</strong> (Mobile-First). We start by defining the styles for the most restrictive environment—the small screen—and then "add" complexity as the viewport expands. 
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Logic of min-width</h2>
+        <p>
+            A mobile-first strategy relies exclusively on <code>min-width</code> media queries. This ensures that your base CSS applies to <strong>all</strong> devices, and larger screens inherit those styles before layering on their own specific enhancements.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Architect's Rule:</strong> CSS is read top-to-bottom. By starting with mobile styles, the browser doesn't have to "undo" complex desktop layouts (like 3-column grids) to display a simple mobile list. This reduces "Redundant Overrides."
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">mobile_first_standard.css</span>
+        </div>
+        <pre><code class="language-css">/* ==============================
+   1. BASE STYLES (Mobile First)
+   Applied to ALL devices
+   ============================== */
+.artifact-layout {
+    display: flex;
+    flex-direction: column; /* Vertical stack */
+    padding: 20px;
+}
+
+/* ==============================
+   2. ENHANCEMENT (Tablet/Desktop)
+   Applied only when space allows
+   ============================== */
+@media (width >= 1024px) {
+    .artifact-layout {
+        flex-direction: row; /* Horizontal flow */
+        padding: 60px;
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Performance Benefits</h2>
+        <p>
+            Mobile devices typically have less processing power and slower network connections than desktops. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Leaner Parsing:</strong> The mobile browser only parses the base styles and ignores all desktop media queries.</li>
+            <li><strong>Reduced Reflow:</strong> Because the layout starts simple, the browser's "Layout" phase (Lesson 10.5) is significantly faster on initial load.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Organizing the Cascade</h2>
+        <p>
+            A Senior Architect organizes breakpoints in an <strong>ascending order</strong>. This allows the cascade to flow naturally from small to large.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">breakpoint_cascade.css</span>
+            </div>
+            <pre><code class="language-css">/* Base: Single Column */
+.grid { grid-template-columns: 1fr; }
+
+/* Small Tablet Enhancement */
+@media (width >= 600px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Desktop Enhancement */
+@media (width >= 1200px) {
+    .grid { grid-template-columns: repeat(4, 1fr); }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The "Desktop-First" Trap</h2>
+        <p>
+            Using <code>max-width</code> (Desktop-First) forces you to write "Negative CSS." You might set a large margin on desktop, and then you have to explicitly write <code>margin: 0</code> for mobile. 
+        </p>
+        <p>
+            In a Mobile-First architecture, you simply don't define the margin until the desktop media query. You write code to <strong>create</strong> features, not to <strong>destroy</strong> them.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Exception Rule:</strong> While 95% of your architecture should be mobile-first, <code>max-width</code> is still useful for specific "one-off" fixes or for features that <strong>only</strong> exist on mobile (like a touch-only swipe menu).
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Content Hierarchy</h2>
+        <p>
+            Designing mobile-first forces you to prioritize. On a tiny screen, you cannot fit 10 sidebars and 5 hero banners. You must decide what the <strong>Core Content</strong> is. 
+        </p>
+        <p>
+            For PROJECT ROSETTA, the mobile-first hierarchy ensures that the <strong>Code Snippet</strong> and the <strong>Technical Explanation</strong> are always visible, while decorative "Artifact Stones" are layered in as screen size increases.
+        </p>
+    </div>
+
+</section>
