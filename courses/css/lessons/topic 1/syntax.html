@@ -1,0 +1,107 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.1 The CSS Rule & Syntax</h1>
+    <p class="artifact-subtitle">The Neural Blueprint: Deconstructing the atomic units of the Cascading Style Sheet.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Rule-Set Anatomy</h2>
+        <p>
+            A CSS <strong>Rule-set</strong> is a declaration of intent. It tells the browser: "Find these specific elements, and apply these specific visual constraints to them." 
+        </p>
+        <p>
+            Architecturally, a rule-set is composed of two primary parts: the <strong>Selector</strong> and the <strong>Declaration Block</strong>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">anatomy_of_style.css</span>
+        </div>
+        <pre><code class="language-css">/* The Selector */
+.artifact-card {
+    /* The Declaration Block */
+    color: #d4af37;        /* Property: Value */
+    border: 1px solid;    /* Semicolons are mandatory */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Anatomy of a Declaration</h2>
+        <p>
+            Inside the curly braces <code>{}</code>, we find individual <strong>Declarations</strong>. Each declaration is a pair consisting of:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Property:</strong> The visual characteristic you wish to alter (e.g., <code>font-family</code>, <code>background-color</code>).</li>
+            <li><strong>Value:</strong> The specific setting applied to that property (e.g., <code>'Cinzel'</code>, <code>#050505</code>).</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Tip:</strong> Always include the trailing semicolon <code>;</code>. While the CSS parser can sometimes guess the end of a block, missing semicolons are the #1 cause of "broken" styles when your CSS is minified for production.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Shorthand vs. Longhand</h2>
+        <p>
+            Efficiency is the hallmark of a Senior Architect. CSS provides <strong>Shorthand Properties</strong> that allow you to set multiple related properties in a single line.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Syntax Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Longhand</strong></td>
+                    <td><code>border-width: 1px; border-style: solid; border-color: gold;</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Shorthand</strong></td>
+                    <td><code>border: 1px solid gold;</code></td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            While shorthands keep the <code>style.css</code> file small, be careful: shorthands often reset unspecified sub-properties to their <code>initial</code> values, which can cause bugs in complex cascades.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Case Sensitivity and Whitespace</h2>
+        <p>
+            CSS is largely <strong>case-insensitive</strong>. <code>COLOR: GOLD;</code> will function the same as <code>color: gold;</code>. However, by architectural convention, we strictly use <strong>lowercase</strong>. 
+        </p>
+        <p>
+            The exceptions are <strong>Class Names</strong> and <strong>IDs</strong>, which can be case-sensitive depending on how the HTML is parsed. To avoid collision, ROSETTA uses <code>kebab-case</code> (e.g., <code>.main-container</code>) exclusively.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Architectural Commenting</h2>
+        <p>
+            In a large project, CSS becomes unmanageable without a structural map. CSS only supports block comments: <code>/* comment */</code>.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">documentation_style.css</span>
+            </div>
+            <pre><code class="language-css">/* ==========================================
+   TOPIC 01: CORE UI
+   The primary theme for ROSETTA artifacts.
+   ========================================== */
+
+.artifact-title {
+    font-family: 'Cinzel', serif;
+}</code></pre>
+        </div>
+    </div>
+
+</section>
