@@ -1,0 +1,112 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.1 Custom Properties (Variables)</h1>
+    <p class="artifact-subtitle">The Logic Layer: Establishing a centralized token system for dynamic design orchestration.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>From Static to Dynamic</h2>
+        <p>
+            In legacy CSS, values were "hard-coded." If you used the color <code>#d4af37</code> (Ancient Gold) in 50 different places and decided to change it, you had to perform a manual find-and-replace. 
+        </p>
+        <p>
+            <strong>Custom Properties</strong> (commonly known as CSS Variables) transform CSS into a programmable system. They allow an architect to store a value in one location and reference it throughout the document. Unlike pre-processor variables (like SASS), CSS variables are <strong>live</strong>; they exist in the browser and can be changed in real-time based on user interaction or state.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Declaration Syntax</h2>
+        <p>
+            Custom properties must begin with two hyphens (<code>--</code>). They are usually declared within the <code>:root</code> pseudo-class, which represents the highest-level element (the <code>&lt;html&gt;</code> tag), making them available globally.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">design_tokens.css</span>
+        </div>
+        <pre><code class="language-css">:root {
+    /* Defining Global Tokens */
+    --gold-primary: #d4af37;
+    --bg-deep: #050505;
+    --font-heading: 'Cinzel', serif;
+    --card-radius: 12px;
+    --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Usage: The var() Function</h2>
+        <p>
+            To retrieve a value, we use the <code>var()</code> function. This function also supports a <strong>Fallback Value</strong>—a secondary instruction used if the variable is not defined or fails to load.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">implementation.css</span>
+            </div>
+            <pre><code class="language-css">.artifact-card {
+    background-color: var(--bg-deep);
+    border: 1px solid var(--gold-primary);
+    
+    /* Using a fallback: if --accent is missing, use gold */
+    color: var(--accent, var(--gold-primary));
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Local Overriding & Scoping</h2>
+        <p>
+            One of the most powerful architectural features of CSS variables is <strong>Inheritance</strong>. You can redefine a global variable inside a specific component to change its "theme" without affecting the rest of the page.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS Scoping</span>
+                <span class="file-name">theming_logic.css</span>
+            </div>
+            <pre><code class="language-css">/* Global Default */
+:root { --accent: #888; }
+
+/* In the sidebar, the accent becomes Gold */
+.sidebar {
+    --accent: var(--gold-primary);
+}
+
+/* Every element inside .sidebar now uses the gold accent */
+.sidebar a { color: var(--accent); }</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The "Semantic Token" Strategy:</strong> A Senior Architect doesn't just name variables after colors (e.g., <code>--gold</code>). We name them after their <strong>purpose</strong> (e.g., <code>--color-active</code>). This allows us to swap themes (Light/Dark mode) by simply changing the value of the purpose-based token.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Real-time Interaction (JS Bridge)</h2>
+        <p>
+            CSS Variables are accessible via JavaScript. This creates a powerful bridge where scripts can update the entire UI's appearance by modifying a single root property.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JavaScript</span>
+                <span class="file-name">theme_engine.js</span>
+            </div>
+            <pre><code class="language-javascript">// Dynamically changing the accent color based on user choice
+document.documentElement.style.setProperty('--gold-primary', '#f9f4e1');</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Case Sensitivity:</strong> CSS properties are generally case-insensitive, but **Custom Properties are case-sensitive**. <code>--Gold</code> is not the same as <code>--gold</code>. Always stick to strictly lowercase kebab-case for consistency.
+        </div>
+    </div>
+
+</section>
