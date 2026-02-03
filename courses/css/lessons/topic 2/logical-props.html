@@ -1,0 +1,134 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.5 Logical vs. Physical Properties</h1>
+    <p class="artifact-subtitle">Flow-Relative Architecture: Transitioning from screen-fixed coordinates to writing-mode awareness.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Death of 'Left' and 'Right'</h2>
+        <p>
+            Historically, CSS properties were mapped to the physical screen: <code>top</code>, <code>bottom</code>, <code>left</code>, and <code>right</code>. While intuitive for English speakers, this creates a massive architectural debt when translating a site into languages like Arabic, Hebrew, or Japanese.
+        </p>
+        <p>
+            <strong>Logical Properties</strong> solve this by mapping styles to the <strong>flow of the text</strong> rather than the edges of the monitor. This is known as "Writing-Mode Awareness."
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Two Axes of the Web</h2>
+        <p>
+            To understand logical properties, you must view the viewport as two axes:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Inline Axis:</strong> The direction in which text is read (Horizontal in English: Left to Right).</li>
+            <li><strong>Block Axis:</strong> The direction in which blocks (like paragraphs) are stacked (Vertical in English: Top to Bottom).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Mapping the Box Model</h2>
+        <p>
+            Every physical property now has a logical equivalent. As a Senior Architect, you should begin adopting the logical syntax for all new components.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Physical (Screen-Fixed)</th>
+                    <th>Logical (Flow-Relative)</th>
+                    <th>Axis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>width</code> / <code>height</code></td>
+                    <td><code>inline-size</code> / <code>block-size</code></td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td><code>margin-left</code></td>
+                    <td><code>margin-inline-start</code></td>
+                    <td>Inline</td>
+                </tr>
+                <tr>
+                    <td><code>padding-top</code></td>
+                    <td><code>padding-block-start</code></td>
+                    <td>Block</td>
+                </tr>
+                <tr>
+                    <td><code>border-right</code></td>
+                    <td><code>border-inline-end</code></td>
+                    <td>Inline</td>
+                </tr>
+                <tr>
+                    <td><code>top</code> / <code>bottom</code></td>
+                    <td><code>inset-block-start</code> / <code>-end</code></td>
+                    <td>Block</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">future_proof_box.css</span>
+        </div>
+        <pre><code class="language-css">/* Legacy Method: Breaks in Arabic/Hebrew */
+.button-legacy {
+    margin-left: 20px;
+    padding-right: 10px;
+    border-left: 2px solid gold;
+}
+
+/* Modern Logical Method: Flips automatically */
+.button-modern {
+    margin-inline-start: 20px;
+    padding-inline-end: 10px;
+    border-inline-start: 2px solid gold;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Vertical Writing Modes</h2>
+        <p>
+            Logical properties truly shine when the <code>writing-mode</code> changes. If you set a document to <code>writing-mode: vertical-rl</code> (common in Japanese typography), the "top" of the text becomes the physical "right" of the screen. 
+        </p>
+        <p>
+            Because logical properties follow the text, your <code>padding-block-start</code> will automatically move to the right side of the screen without you changing a single line of CSS.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The 'inset' Shorthand</h2>
+        <p>
+            One of the most useful additions to the logical specification is the <code>inset</code> property. It is a shorthand for <code>top</code>, <code>right</code>, <code>bottom</code>, and <code>left</code> simultaneously.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">positioning_shorthand.css</span>
+            </div>
+            <pre><code class="language-css">/* Instead of writing 4 lines for an absolute overlay */
+.overlay {
+    position: absolute;
+    inset: 0; /* Sets top, right, bottom, and left to 0 */
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Verdict:</strong> By using logical properties in **PROJECT ROSETTA**, we ensure the documentation is "Global by Default." Even if we add a Right-to-Left language (like Arabic) to the syllabus later, our layouts will remain structurally perfect without manual adjustments.
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Browser Support:</strong> As of 2026, logical properties have 98%+ support across all modern browsers. However, when working on extremely legacy systems, verify support for <code>margin-inline</code> and <code>padding-block</code>.
+        </div>
+    </div>
+
+</section>
