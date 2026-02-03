@@ -1,0 +1,117 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.5 Clipping & Masking Path</h1>
+    <p class="artifact-subtitle">Geometric Liberation: Shattering the rectangular constraint through vector-based clipping and alpha-masking.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Beyond the Rectangle</h2>
+        <p>
+            In standard CSS, every element is a rectangle. While we can use <code>border-radius</code> to soften corners, it is limited to ellipses. <strong>Clipping</strong> and <strong>Masking</strong> allow us to create "Non-Rectangular" artifacts.
+        </p>
+        <p>
+            The fundamental difference is:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Clipping (clip-path):</strong> A vector-based operation. It is binary—either a pixel is inside the path (visible) or outside (hidden). It creates sharp, hard edges.</li>
+            <li><strong>Masking (mask-image):</strong> An image-based or gradient-based operation. It supports <strong>Alpha Transparency</strong>, allowing for soft edges, feathering, and complex texture-based visibility.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The clip-path Geometry</h2>
+        <p>
+            The <code>clip-path</code> property is the architect's tool for structural "Stone Cutting." We define a region, and everything outside that region is simply not rendered.
+        </p>
+        <ul class="artifact-list">
+            <li><code>circle(50% at 50% 50%)</code>: Creates a perfect circular artifact.</li>
+            <li><code>inset(10% 20% round 5px)</code>: A rectangle offset from the edges with optional rounded corners.</li>
+            <li><code>polygon(...)</code>: The most powerful function, allowing for arbitrary vertices.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">shard_geometry.css</span>
+        </div>
+        <pre><code class="language-css">/* Creating an Octagonal Artifact Card */
+.octagonal-card {
+    clip-path: polygon(
+        30% 0%, 70% 0%, 100% 30%, 100% 70%, 
+        70% 100%, 30% 100%, 0% 70%, 0% 30%
+    );
+    background: #050505;
+    border: 1px solid #d4af37; /* Note: Borders are also clipped! */
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Border Conflict:</strong> When you use <code>clip-path</code>, the element's <strong>border</strong> is also clipped. If you need a border around a complex clipped shape, you must use a wrapping container or the <code>filter: drop-shadow()</code> trick (Lesson 3.5), as standard borders will likely disappear at the cut edges.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Masking with Alpha Channels</h2>
+        <p>
+            While clipping is for sharp shapes, <strong>Masking</strong> is for atmospheric effects. By using <code>mask-image</code>, you can use a CSS Gradient or a PNG/SVG to determine the visibility of an element based on transparency levels.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">atmospheric_mask.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-fade {
+    /* Fades the bottom of the element into transparency */
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    
+    /* Using an external SVG texture as a mask */
+    -webkit-mask-image: url('assets/masks/stone-texture.svg');
+    mask-size: cover;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Interaction & Pointer Events</h2>
+        <p>
+            An essential architectural detail: <strong>Clipped regions do not respond to pointer events.</strong> 
+        </p>
+        <p>
+            If you clip a large square into a tiny circle, the area outside the circle will not trigger <code>:hover</code> states and will allow the user to click elements "behind" it. This makes <code>clip-path</code> highly efficient for complex UI layering.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Animating Paths</h2>
+        <p>
+            If two <code>clip-path</code> polygons have the same number of vertices, they can be animated. In ROSETTA, we use this for the "Artifact Unlock" effect—morphing a simple diamond into a complex technical readout.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">morph_transition.css</span>
+            </div>
+            <pre><code class="language-css">.morph-shard {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.morph-shard:hover {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Recommendation:</strong> Use <strong>Clipping</strong> for UI components and navigation elements where precision is required. Use <strong>Masking</strong> for hero images and background decorations where you want to blend the artifact into the "Deep Black" atmospheric void.
+        </div>
+    </div>
+
+</section>
