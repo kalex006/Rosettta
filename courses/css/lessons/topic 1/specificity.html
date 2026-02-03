@@ -1,0 +1,125 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.3 Specificity Calculation</h1>
+    <p class="artifact-subtitle">The Priority Algorithm: Mastering the mathematical weights of the Cascading Engine.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Conflict Resolution</h2>
+        <p>
+            When multiple CSS rules target the same element and attempt to modify the same property (e.g., <code>color</code>), the browser must decide which one "wins." 
+        </p>
+        <p>
+            This is not decided by the order of the code alone, but by a <strong>Specificity Score</strong>. Specificity is a weight applied to a given CSS declaration, determined by the types of selectors used.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Four-Column Score (0, 0, 0, 0)</h2>
+        <p>
+            Think of specificity as a four-digit score. A higher number in a left-most column always beats any number in a column to its right.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Weight</th>
+                    <th>Examples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Inline Styles</strong></td>
+                    <td>1, 0, 0, 0</td>
+                    <td><code>style="color: gold;"</code></td>
+                </tr>
+                <tr>
+                    <td><strong>IDs</strong></td>
+                    <td>0, 1, 0, 0</td>
+                    <td><code>#header</code>, <code>#main-nav</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Classes / Attr / Pseudo</strong></td>
+                    <td>0, 0, 1, 0</td>
+                    <td><code>.card</code>, <code>[type="text"]</code>, <code>:hover</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Elements / Pseudo-el</strong></td>
+                    <td>0, 0, 0, 1</td>
+                    <td><code>div</code>, <code>h1</code>, <code>::before</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Logic</span>
+            <span class="file-name">specificity_math.css</span>
+        </div>
+        <pre><code class="language-css">/* Score: 0, 0, 0, 1 (Lowest) */
+p { color: white; }
+
+/* Score: 0, 0, 1, 0 */
+.intro { color: gray; }
+
+/* Score: 0, 0, 1, 1 (Wins over .intro) */
+body .intro { color: gold; }
+
+/* Score: 0, 1, 0, 0 (Wins over all above) */
+#main-title { color: deepblack; }</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The "Nuclear Option": !important</h2>
+        <p>
+            When the <code>!important</code> flag is added to a declaration, it overrides all other specificity scores, including inline styles. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Warning:</strong> Using <code>!important</code> is often a sign of poor architectural planning. It breaks the natural cascade and makes the CSS significantly harder to maintain. Use it only as a last resort for utility classes or when overriding aggressive third-party library styles.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Proximity & Source Order</h2>
+        <p>
+            If two selectors have the <strong>exact same specificity score</strong>, the browser defaults to the <strong>Source Order</strong>. The rule that appears later in the CSS file (lower down) will take precedence.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">order_logic.css</span>
+        </div>
+        <pre><code class="language-css">/* Both have score 0, 0, 1, 0 */
+.artifact-text { color: white; }
+
+/* This wins because it comes second */
+.artifact-text { color: #d4af37; }</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Strategies for Low Specificity</h2>
+        <p>
+            In a high-end project like ROSETTA, we strive for <strong>Low Specificity</strong>. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Avoid IDs for styling:</strong> Use classes instead. IDs are too powerful and hard to override.</li>
+            <li><strong>Use BEM (Block Element Modifier):</strong> This methodology (Lesson 10.1) encourages single-class selectors to keep the score at 0,0,1,0.</li>
+            <li><strong>Leverage Inheritance:</strong> Let properties like <code>font-family</code> flow down from the <code>body</code> instead of re-declaring them everywhere.</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Calculation Tip:</strong> The <code>:not()</code> pseudo-class does not add specificity itself, but the selectors <em>inside</em> the parentheses do count toward the final score.
+        </div>
+    </div>
+
+</section>
