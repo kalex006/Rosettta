@@ -1,0 +1,130 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.5 Conditional Styling (@supports)</h1>
+    <p class="artifact-subtitle">Defensive Architecture: Implementing logic-gates for progressive enhancement and feature detection.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Feature Query</h2>
+        <p>
+            An Architect's primary responsibility is <strong>Graceful Degradation</strong>. As we implement cutting-edge features in PROJECT ROSETTA, we must ensure the site remains functional on older devices. 
+        </p>
+        <p>
+            The <code>@supports</code> at-rule (also known as a Feature Query) allows you to wrap CSS rules in a logical "if-statement." The browser will only execute the code inside the block if it supports the specific property-value pair you've defined.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Logical Operators</h2>
+        <p>
+            Feature queries support Boolean logic to handle complex architectural requirements:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>and:</strong> Both conditions must be true.</li>
+            <li><strong>or:</strong> At least one condition must be true.</li>
+            <li><strong>not:</strong> Executes if the browser <em>does not</em> support the feature.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Logic</span>
+            <span class="file-name">feature_detection.css</span>
+        </div>
+        <pre><code class="language-css">/* Standard background fallback */
+.artifact-overlay {
+    background: rgba(5, 5, 5, 0.9);
+}
+
+/* Enhancing for browsers that support glassmorphism */
+@supports (backdrop-filter: blur(10px)) {
+    .artifact-overlay {
+        background: rgba(5, 5, 5, 0.5);
+        backdrop-filter: blur(10px);
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Selector Queries: @supports selector()</h2>
+        <p>
+            Sometimes it isn't a property we need to check, but a <strong>Selector</strong>. Modern CSS introduces powerful selectors like <code>:has()</code>. We can check for support before using them to prevent syntax errors in older engines.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">selector_logic.css</span>
+            </div>
+            <pre><code class="language-css">@supports selector(:has(p)) {
+    /* Style the card only if it contains an error paragraph */
+    .artifact-card:has(.error-text) {
+        border-color: #ff4d4d;
+    }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Progressive Enhancement Strategy</h2>
+        <p>
+            As a Senior Architect, you should follow the <strong>"Outside-In"</strong> approach:
+        </p>
+        <ol class="artifact-list">
+            <li>Write the simplest, most compatible CSS first (The Baseline).</li>
+            <li>Use <code>@supports</code> to add "Luxury" features (The Enhancement).</li>
+        </ol>
+        <p>
+            In ROSETTA, we use this for <strong>Subgrid</strong>. If a browser doesn't support subgrid, the cards use a standard nested grid. If it does, we unlock pixel-perfect alignment.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">grid_enhancement.css</span>
+        </div>
+        <pre><code class="language-css">.card-inner {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+@supports (grid-template-rows: subgrid) {
+    .card-inner {
+        grid-template-rows: subgrid;
+        grid-row: span 3;
+    }
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The "Everything is a Variable" Trick:</strong> You can use <code>@supports</code> to redefine <strong>CSS Variables</strong>. This allows you to centralize your feature-switching logic.
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Tokens</span>
+            <span class="file-name">dynamic_tokens.css</span>
+        </div>
+        <pre><code class="language-css">:root {
+    --glass-opacity: 0.95;
+}
+
+@supports (backdrop-filter: blur(5px)) {
+    :root {
+        --glass-opacity: 0.7;
+    }
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Limit:</strong> <code>@supports</code> cannot detect if a browser has a <em>bug</em> in a feature; it only detects if the browser <em>claims</em> to support the syntax. Always perform cross-browser testing for complex layout properties like <code>sticky</code> or <code>flex-basis</code>.
+        </div>
+    </div>
+
+</section>
