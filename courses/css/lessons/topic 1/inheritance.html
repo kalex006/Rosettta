@@ -1,0 +1,117 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.4 Inheritance & Initial</h1>
+    <p class="artifact-subtitle">The Genetic Blueprint: Managing the propagation and termination of styles through the document hierarchy.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Concept of Inheritance</h2>
+        <p>
+            In CSS architecture, <strong>Inheritance</strong> is the process by which certain properties are passed down from a parent element to its descendants. This allows for global consistency; for example, setting a font on the <code>&lt;body&gt;</code> ensures all text in the document shares that font without individual declarations.
+        </p>
+        <p>
+            However, not all properties are "hereditary." The browser's engine distinguishes between <strong>Inherited Properties</strong> and <strong>Non-Inherited Properties</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Hereditary Divide</h2>
+        <p>
+            As a general rule, properties related to <strong>Typography</strong> and <strong>Color</strong> are inherited, while properties related to <strong>Box Geometry</strong> (Layout) are not.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Inherited:</strong> <code>color</code>, <code>font-family</code>, <code>line-height</code>, <code>visibility</code>, <code>list-style</code>.</li>
+            <li><strong>Non-Inherited:</strong> <code>border</code>, <code>margin</code>, <code>padding</code>, <code>width</code>, <code>background</code>, <code>position</code>.</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Logic:</strong> Imagine if <code>border</code> were inherited. If you put a border on a <code>&lt;div&gt;</code>, every paragraph and span inside it would also have a border. The layout would collapse into visual chaos. Non-inheritance is a safeguard for structural stability.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Explicit Control Keywords</h2>
+        <p>
+            CSS provides four powerful keywords that allow you to override the natural flow of inheritance for any property:
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Keyword</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>inherit</code></td>
+                    <td>Forces the element to take the value from its parent, even for non-inherited properties.</td>
+                </tr>
+                <tr>
+                    <td><code>initial</code></td>
+                    <td>Resets the property to the "factory default" of the CSS specification (often <code>inline</code> for display or <code>black</code> for color).</td>
+                </tr>
+                <tr>
+                    <td><code>unset</code></td>
+                    <td>A hybrid: acts as <code>inherit</code> if the property is naturally inherited, otherwise acts as <code>initial</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>revert</code></td>
+                    <td>Rolls the style back to the <strong>User Agent Stylesheet</strong> (the browser's default style), ignoring your CSS.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">inheritance_overrides.css</span>
+        </div>
+        <pre><code class="language-css">/* Force a button to use the same font as its parent container */
+button {
+    font-family: inherit;
+}
+
+/* Reset an element's margin to the CSS spec default (0) */
+.artifact-reset {
+    margin: initial;
+}
+
+/* Roll back a custom link to look like a blue browser link again */
+.legacy-link {
+    color: revert;
+    text-decoration: revert;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Nuclear Reset: all</h2>
+        <p>
+            The <code>all</code> property is a modern architectural tool that allows you to apply a keyword (like <code>unset</code> or <code>revert</code>) to <strong>every single CSS property</strong> of an element at once, except for <code>unicode-bidi</code> and <code>direction</code>.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">component_isolation.css</span>
+            </div>
+            <pre><code class="language-css">/* Completely isolate a component from any global styles */
+.widget-isolated {
+    all: unset;
+    /* Now start with a clean slate */
+    display: block;
+    background: #050505;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Note:</strong> Overusing <code>all: unset</code> can be expensive for the rendering engine on low-powered devices, as it forces the browser to recalculate every property from scratch for that node. Use it only for critical component isolation.
+        </div>
+    </div>
+
+</section>
