@@ -1,0 +1,115 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.4 Logical Queries (Orientation & Aspect)</h1>
+    <p class="artifact-subtitle">Geometric Proportions: Optimizing spatial arrangements through aspect-ratio and orientation sensing.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Shape of the Frame</h2>
+        <p>
+            An Architect recognizes that 800 pixels of width on a vertical phone (Portrait) is a completely different ergonomics challenge than 800 pixels on a horizontal tablet (Landscape). 
+        </p>
+        <p>
+            <strong>Logical Queries</strong> allow us to sense the proportions of the viewport. Instead of asking "How wide is it?", we ask "Is it tall or wide?" and "What is the mathematical ratio of its dimensions?".
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The orientation Query</h2>
+        <p>
+            The <code>orientation</code> feature is a binary state detection:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>portrait:</strong> The viewport height is greater than or equal to the width.</li>
+            <li><strong>landscape:</strong> The viewport width is greater than the height.</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Tip:</strong> Do not use orientation to block content (e.g., "Please rotate your phone"). Use it to reposition UI elements. In landscape mode, users have more horizontal space but significantly less "vertical scan" room. 
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">orientation_logic.css</span>
+        </div>
+        <pre><code class="language-css">/* Optimize the ROSETTA header for landscape phones */
+@media (orientation: landscape) and (max-height: 500px) {
+    .main-header {
+        height: 40px; /* Reduce height to save vertical space */
+        font-size: 0.8rem;
+    }
+    
+    .artifact-sidebar {
+        /* Move navigation to the side to maximize reading area */
+        display: flex;
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Aspect Ratio Sensing</h2>
+        <p>
+            The <code>aspect-ratio</code> media feature allows for precise targeting based on the width-to-height ratio. This is essential for targeting <strong>Ultrawide Monitors</strong> (21:9) or older <strong>Standard Displays</strong> (4:3).
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">ultrawide_optimization.css</span>
+        </div>
+        <pre><code class="language-css">/* Target 'Cinematic' displays (21:9 or wider) */
+@media (min-aspect-ratio: 21/9) {
+    .artifact-container {
+        /* On ultrawides, we limit content width to prevent 
+           unreadably long lines of text. */
+        max-width: 1400px;
+        margin: 0 auto;
+        padding-inline: 100px;
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The "Foldable" Era: spanning</h2>
+        <p>
+            Modern hardware includes foldable and dual-screen devices. While still emerging, the <code>screen-spanning</code> feature allows architects to detect if the browser is stretched across two physical screens (separated by a hinge).
+        </p>
+        <p>
+            <strong>Standard:</strong> <code>single-fold-vertical</code> or <code>single-fold-horizontal</code>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. target-counter (The Pagination Ratio)</h2>
+        <p>
+            In the context of <code>@media print</code>, we often care about the aspect ratio of a physical page (e.g., A4 is roughly 1:1.41). By using logical queries, we can ensure the ROSETTA documentation prints in a multi-column layout on landscape paper but a single column on portrait.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Print</span>
+            <span class="file-name">print_geometry.css</span>
+        </div>
+        <pre><code class="language-css">@media print and (orientation: landscape) {
+    .lesson-content {
+        column-count: 2;
+        column-gap: 50px;
+    }
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The "Desktop Tablet" Ambiguity:</strong> Many small laptops have viewports that trigger "Tablet" width media queries. Using <code>orientation</code> helps distinguish them. A tablet is frequently rotated; a laptop almost never is.
+        </div>
+    </div>
+
+</section>
