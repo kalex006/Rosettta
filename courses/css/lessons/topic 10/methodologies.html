@@ -1,0 +1,134 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.1 BEM & Atomic CSS Strategies</h1>
+    <p class="artifact-subtitle">Structural Linguistics: Implementing industry-standard naming conventions to mitigate technical debt.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Naming Crisis</h2>
+        <p>
+            In a large-scale project like **ROSETTA**, CSS can quickly become a "Global Mess." Without a strict naming strategy, a class named <code>.title</code> in the sidebar might accidentally conflict with a <code>.title</code> in the main content.
+        </p>
+        <p>
+            Architectural methodologies provide a "Dictionary" for your styles, ensuring that every class has a predictable scope and a specific purpose.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. BEM: Block Element Modifier</h2>
+        <p>
+            BEM is the industry standard for <strong>Semantic Isolation</strong>. It uses a specific naming syntax to describe the relationship between components and their parts.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Block:</strong> The standalone component (e.g., <code>.artifact-card</code>).</li>
+            <li><strong>Element:</strong> A part of the block that has no meaning on its own (e.g., <code>__title</code>). Denoted by two underscores.</li>
+            <li><strong>Modifier:</strong> A flag used to change the appearance or state (e.g., <code>--active</code>). Denoted by two hyphens.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">bem_syntax.css</span>
+        </div>
+        <pre><code class="language-css">/* The Block (High-level container) */
+.artifact-card {
+    background: #050505;
+    border: 1px solid #333;
+}
+
+/* The Element (Internal piece) */
+.artifact-card__title {
+    color: var(--gold-primary);
+    font-family: var(--font-heading);
+}
+
+/* The Modifier (Variation) */
+.artifact-card--featured {
+    border-color: var(--gold-primary);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Specificity Control in BEM</h2>
+        <p>
+            The greatest architectural advantage of BEM is that it keeps <strong>Specificity Flat</strong>. Because every element has a unique class name, you never need to use nested selectors like <code>.card div h2</code>. 
+        </p>
+        <p>
+            Every selector has a specificity score of <code>0, 0, 1, 0</code>. This makes the system incredibly easy to override and maintain without resorting to <code>!important</code>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Atomic (Utility) CSS</h2>
+        <p>
+            Atomic CSS takes the opposite approach. Instead of naming components, you create <strong>Single-Purpose Utility Classes</strong>. You build your UI by composing these "Atoms" directly in the HTML.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Pros:</strong> Extreme development speed; zero CSS bloat (the CSS file stops growing as the project grows).</li>
+            <li><strong>Cons:</strong> "Ugly" HTML; makes maintaining a strict brand aesthetic like ROSETTA harder if variables aren't used correctly.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML</span>
+            <span class="file-name">utility_composition.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- Building a component using Atomic utilities --&gt;
+&lt;div class="p-20 m-10 bg-black border-gold flex flex-col"&gt;
+    &lt;h2 class="text-gold font-cinzel text-xl"&gt;Artifact&lt;/h2&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The ROSETTA Hybrid Approach</h2>
+        <p>
+            As a Senior Architect, you don't have to choose just one. The most robust modern systems use a <strong>Hybrid Methodology</strong>:
+        </p>
+        <ol class="artifact-list">
+            <li><strong>BEM</strong> for complex, reusable components (Cards, Sidebars, Modals).</li>
+            <li><strong>Utilities</strong> for "one-off" layout adjustments (Margins, Padding, Text Alignment).</li>
+        </ol>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Recommendation:</strong> Stick to BEM for the core ROSETTA design system. It ensures that the "Ancient Gold" aesthetic is tied to semantic names, making the code much easier for other developers to read and understand.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Comparison Summary</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>BEM (Semantic)</th>
+                    <th>Atomic (Utility)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Readability</strong></td>
+                    <td>High (in CSS)</td>
+                    <td>High (in HTML)</td>
+                </tr>
+                <tr>
+                    <td><strong>File Size</strong></td>
+                    <td>Grows with project</td>
+                    <td>Stays constant</td>
+                </tr>
+                <tr>
+                    <td><strong>Specificity</strong></td>
+                    <td>Flat (10)</td>
+                    <td>Flat (10)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
