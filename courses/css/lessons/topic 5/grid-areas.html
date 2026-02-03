@@ -1,0 +1,121 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.3 Grid Template Areas</h1>
+    <p class="artifact-subtitle">Topological Mapping: Drafting visual blueprints through semantic area declarations.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Painting the Matrix</h2>
+        <p>
+            While line-based positioning (Lesson 5.1) is precise, it can become difficult to manage in complex, multi-row layouts. <strong>Grid Template Areas</strong> provide a declarative way to describe the layout as a visual map.
+        </p>
+        <p>
+            As an architect, you assign a name to an element using the <code>grid-area</code> property, and then you describe where that name should "dwell" within the container's <code>grid-template-areas</code> string.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">blueprint_map.css</span>
+        </div>
+        <pre><code class="language-css">.app-shell {
+    display: grid;
+    grid-template-columns: 250px 1fr 300px;
+    grid-template-rows: 80px 1fr 60px;
+    
+    /* The Visual Map: Rows are separated by quotes */
+    grid-template-areas: 
+        "header  header  header"
+        "sidebar content archive"
+        "footer  footer  footer";
+}
+
+/* Assigning the artifacts to their mapped zones */
+header  { grid-area: header; }
+main    { grid-area: content; }
+aside   { grid-area: sidebar; }
+.meta   { grid-area: archive; }
+footer  { grid-area: footer; }</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Rules of the Map</h2>
+        <p>
+            To maintain structural integrity, the engine enforces strict rules on how areas are defined:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Rectangular only:</strong> An area must be a perfect rectangle (e.g., you cannot create an "L-shaped" area).</li>
+            <li><strong>Continuity:</strong> An area cannot be repeated in two different places in the same map.</li>
+            <li><strong>The Dot Notation:</strong> To leave a cell empty (a "dead zone"), use a period <code>.</code> character.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">void_space.css</span>
+        </div>
+        <pre><code class="language-css">.asymmetric-layout {
+    grid-template-areas: 
+        "title .     brand"
+        "nav   main  main"
+        "nav   stats .";
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Responsive Orchestration</h2>
+        <p>
+            The true power of Grid Areas is revealed during <strong>Viewport Adaptation</strong>. Instead of recalculating spans and line numbers inside media queries, you simply redefine the "Map." 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Senior Architect's Workflow:</strong> Define your components once (e.g., <code>grid-area: nav</code>). Then, for mobile, change the <code>grid-template-areas</code> to a single column. For desktop, change it to a 3-column grid. The components will "teleport" to their new homes automatically.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Logic</span>
+            <span class="file-name">responsive_blueprint.css</span>
+        </div>
+        <pre><code class="language-css">/* Mobile: Vertical Stack */
+.container {
+    grid-template-areas: 
+        "header"
+        "content"
+        "sidebar";
+}
+
+/* Desktop: Sidebar on left */
+@media (min-width: 1024px) {
+    .container {
+        grid-template-areas: 
+            "header  header"
+            "sidebar content";
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Implicit Line Naming</h2>
+        <p>
+            When you name an area (e.g., <code>"sidebar"</code>), the browser engine automatically generates named lines for you. 
+        </p>
+        <p>
+            It creates <code>sidebar-start</code> and <code>sidebar-end</code> for both rows and columns. This allows you to mix area-based and line-based positioning seamlessly—a sophisticated technique for overlaying artifacts.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Naming Convention:</strong> In the ROSETTA project, use single-word lowercase strings for areas. Avoid hyphens inside the name if possible (e.g., use <code>maincontent</code> or just <code>main</code>) to keep the ASCII map readable and prevent syntax errors with implicit line names.
+        </div>
+    </div>
+
+</section>
