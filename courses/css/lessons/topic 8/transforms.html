@@ -1,0 +1,113 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.4 Transform Matrix (2D & 3D)</h1>
+    <p class="artifact-subtitle">Spatial Engineering: Manipulating the geometric coordinates of artifacts across the Cartesian and Depth axes.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Coordinate Shift</h2>
+        <p>
+            The <code>transform</code> property allows an architect to modify the appearance of an element without affecting the document flow. Unlike <code>top</code> or <code>left</code>, which force the browser to recalculate the position of every element on the page, <strong>Transforms</strong> happen on a separate layer.
+        </p>
+        <p>
+            This is the foundation of high-performance UI. When you transform an artifact, you are essentially telling the GPU to "re-draw" the element at a new coordinate, scale, or angle.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. 2D Transformation Functions</h2>
+        <p>The standard 2D toolkit consists of four primary operations:</p>
+        <ul class="artifact-list">
+            <li><strong>translate(x, y):</strong> Moves the element from its current position.</li>
+            <li><strong>scale(x, y):</strong> Resizes the element. <code>scale(1.1)</code> increases size by 10%.</li>
+            <li><strong>rotate(angle):</strong> Rotates the element around its origin (e.g., <code>45deg</code>).</li>
+            <li><strong>skew(x-angle, y-angle):</strong> Tilts the element, useful for "italicizing" non-text blocks or creating isometric shadows.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">artifact_interaction.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-card:hover {
+    /* Combinatorial Transform */
+    transform: translateY(-10px) scale(1.05) rotate(1deg);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Transform Origin: The Pivot</h2>
+        <p>
+            By default, every transform happens relative to the center of the element (<code>50% 50%</code>). The <code>transform-origin</code> property allows you to move the "Pivot Point."
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Logic:</strong> To make a sidebar "swing" open like a door, set <code>transform-origin: left;</code>. To make a card grow from the bottom-up, set <code>transform-origin: bottom;</code>.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. 3D Space & Perspective</h2>
+        <p>
+            To unlock the <strong>Z-axis (Depth)</strong>, you must first define a <code>perspective</code> on the parent container. Perspective determines the "distance" between the user and the screen. Smaller values (e.g., 500px) create an aggressive, distorted 3D effect; larger values (e.g., 2000px) feel more subtle and professional.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS 3D</span>
+            <span class="file-name">depth_architecture.css</span>
+        </div>
+        <pre><code class="language-css">.gallery-container {
+    /* Defines the depth of the scene */
+    perspective: 1000px;
+}
+
+.artifact-3d-card {
+    transition: transform 0.8s var(--ease-artifact);
+    transform-style: preserve-3d; /* Allows children to live in 3D space */
+}
+
+.artifact-3d-card:hover {
+    /* Rotating around the Y-axis (Flipping like a page) */
+    transform: rotateY(180deg);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The backface-visibility Property</h2>
+        <p>
+            When an element rotates 180 degrees, you see its "back" side. By default, this is a mirrored version of the front. For "Premium" card-flip effects in ROSETTA, we use <code>backface-visibility: hidden;</code> to hide the front while the back is visible.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Performance: Hardware Acceleration</h2>
+        <p>
+            Even if you aren't rotating an element, you can "force" it onto the GPU by using a 3D transform like <code>translateZ(0)</code>. This is a common architectural hack used to prevent flickering during complex animations.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">Optimization</span>
+                <span class="file-name">gpu_trigger.css</span>
+            </div>
+            <pre><code class="language-css">.smooth-artifact {
+    /* Triggers GPU rendering without visual change */
+    transform: translateZ(0);
+    will-change: transform;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Stacking Note:</strong> Applying any <code>transform</code> (even 2D) creates a new **Stacking Context** (Lesson 6.3). This means a transformed element might appear in front of others even without a <code>z-index</code>.
+        </div>
+    </div>
+
+</section>
