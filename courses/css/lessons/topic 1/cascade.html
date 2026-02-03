@@ -1,0 +1,122 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.5 The Cascade Order</h1>
+    <p class="artifact-subtitle">The Engine of Authority: Determining the final priority through Origin, Importance, and Layers.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Final Algorithm</h2>
+        <p>
+            When multiple CSS rules conflict, the browser doesn't just look at specificity. It follows a multi-stage process called <strong>The Cascade</strong>. Think of it as a filter: at each stage, the browser tries to find a winner. If it can't, it moves to the next stage.
+        </p>
+        <p>
+            The order of priority, from highest to lowest, is:
+        </p>
+        <ol class="artifact-list">
+            <li><strong>Origin & Importance:</strong> Who wrote the style and is it <code>!important</code>?</li>
+            <li><strong>Context:</strong> Is it inside a Shadow DOM or a specific scope?</li>
+            <li><strong>Cascade Layers:</strong> Is it inside an <code>@layer</code>?</li>
+            <li><strong>Specificity:</strong> The mathematical score (Topic 1.3).</li>
+            <li><strong>Source Order:</strong> Which rule came last in the file?</li>
+        </ol>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Origin & Importance</h2>
+        <p>
+            CSS comes from three places (Origins). Their priority changes drastically when the <code>!important</code> flag is added.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Priority</th>
+                    <th>Origin + Importance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1 (Highest)</td>
+                    <td>User Agent <code>!important</code> (Browser defaults)</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>User <code>!important</code> (Accessibility overrides)</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>Author <code>!important</code></strong> (Your CSS with !important)</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><strong>Author Normal</strong> (Your standard CSS)</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>User Normal (User browser preferences)</td>
+                </tr>
+                <tr>
+                    <td>6 (Lowest)</td>
+                    <td>User Agent Normal (Standard browser styles)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Modern Architecture: Cascade Layers (@layer)</h2>
+        <p>
+            In the past, high-specificity rules (like those in third-party libraries) were hard to override. In 2022, <strong>Cascade Layers</strong> were introduced to solve this.
+        </p>
+        <p>
+            A layer defines a "Power Tier." A style in a higher-priority layer will <strong>always</strong> beat a style in a lower-priority layer, <em>regardless of specificity</em>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">layer_architecture.css</span>
+        </div>
+        <pre><code class="language-css">/* Define the order of authority at the top of the file */
+@layer reset, framework, theme;
+
+@layer theme {
+    /* This wins because 'theme' is higher than 'framework' */
+    button { color: #d4af37; } 
+}
+
+@layer framework {
+    /* This loses, even though it has higher specificity */
+    #main-nav button.primary { color: red; }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Proximity & Source Order</h2>
+        <p>
+            Only when Importance, Layers, and Specificity are all equal does the browser look at the <strong>Source Order</strong>. This is the simplest rule: the last declaration seen by the parser wins.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Rule:</strong> This is why you should always link your custom <code>style.css</code> <strong>after</strong> any third-party frameworks (like Bootstrap or Tailwind) in your HTML <code>&lt;head&gt;</code>. It ensures your custom rules have the final word in the source order.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The "Winner Takes All" Logic</h2>
+        <p>
+            The Cascade works property by property. If one rule wins for <code>color</code> but doesn't mention <code>font-size</code>, the <code>font-size</code> might be decided by a different, lower-priority rule.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Senior Summary:</strong> To master the cascade, use <strong>Layers</strong> for large structural groups, <strong>Classes</strong> for specific components, and <strong>Variables</strong> (Topic 7) for values. Avoid <code>!important</code> and <code>IDs</code> to keep the cascade "fluid" and easy to manage.
+        </div>
+    </div>
+
+</section>
