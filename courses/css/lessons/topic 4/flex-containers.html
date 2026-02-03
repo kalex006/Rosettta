@@ -1,0 +1,131 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.1 Flex Containers & Axis</h1>
+    <p class="artifact-subtitle">The Physics of Alignment: Orchestrating one-dimensional flow through axis-based distribution.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Flexible Box Model</h2>
+        <p>
+            Flexbox (The Flexible Box Module) is a one-dimensional layout model. Unlike the standard Block Model, which stacks elements vertically by default, Flexbox allows an architect to distribute space and align items along a specific <strong>Axis</strong>—even when their dimensions are unknown or dynamic.
+        </p>
+        <p>
+            The architecture is binary: it consists of a <strong>Flex Container</strong> (the parent) and <strong>Flex Items</strong> (the direct children). When you initialize a container, you are creating a new formatting context where traditional rules (like floats or vertical margin collapse) no longer apply.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Initializing the Context</h2>
+        <p>
+            By applying <code>display: flex</code> or <code>display: inline-flex</code>, you transform an element into a flex container. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>flex:</strong> The container behaves like a block-level element (takes up the full width of its parent).</li>
+            <li><strong>inline-flex:</strong> The container behaves like an inline element (only takes up the width of its contents).</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">flex_inauguration.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-grid {
+    display: flex;
+    /* The children are now 'Flex Items' */
+    background: #050505;
+    border: 1px solid #d4af37;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Compass: Main Axis vs. Cross Axis</h2>
+        <p>
+            The most critical concept in Flexbox is the <strong>Axis</strong>. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Main Axis:</strong> The primary direction in which items are laid out. This is determined by the <code>flex-direction</code>.</li>
+            <li><strong>Cross Axis:</strong> The direction perpendicular to the main axis.</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Logic:</strong> In Flexbox, we do not think in "Left/Right" or "Top/Bottom." We think in <strong>Start</strong> and <strong>End</strong>. If the main axis is horizontal, 'Start' is the left (in LTR). If you flip the axis to vertical, 'Start' becomes the top. This "Logical Mapping" is what makes Flexbox so powerful for global interfaces.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Directional Flow</h2>
+        <p>
+            The <code>flex-direction</code> property establishes the main axis.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Value</th>
+                    <th>Main Axis Direction</th>
+                    <th>Cross Axis Direction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>row</code> (Default)</td>
+                    <td>Horizontal (Left to Right*)</td>
+                    <td>Vertical (Top to Bottom)</td>
+                </tr>
+                <tr>
+                    <td><code>column</code></td>
+                    <td>Vertical (Top to Bottom)</td>
+                    <td>Horizontal (Left to Right)</td>
+                </tr>
+                <tr>
+                    <td><code>row-reverse</code></td>
+                    <td>Horizontal (Right to Left*)</td>
+                    <td>Vertical (Top to Bottom)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><small>*Note: These directions automatically flip if the <code>writing-mode</code> is Right-to-Left (Arabic/Hebrew).</small></p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">axis_reorientation.css</span>
+        </div>
+        <pre><code class="language-css">.sidebar-nav {
+    display: flex;
+    /* Items stack vertically */
+    flex-direction: column;
+}
+
+.gallery-row {
+    display: flex;
+    /* Items stack horizontally, starting from the right */
+    flex-direction: row-reverse;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Flex-Wrap: Managing Overflow</h2>
+        <p>
+            By default, flex items will try to fit onto a single line, even if it causes them to shrink or overflow the container. The <code>flex-wrap</code> property allows you to define if the items should "wrap" onto multiple lines (creating a new cross-axis row/column).
+        </p>
+        <ul class="artifact-list">
+            <li><code>nowrap</code> (Default): All items on one line.</li>
+            <li><code>wrap</code>: Items break into multiple lines from top to bottom.</li>
+            <li><code>wrap-reverse</code>: Items break into multiple lines from bottom to top.</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Shorthand: flex-flow</strong><br>
+            As a Senior Architect, you can combine <code>flex-direction</code> and <code>flex-wrap</code> into a single property: <code>flex-flow: row wrap;</code>. This keeps your stylesheet clean and your intent clear.
+        </div>
+    </div>
+
+</section>
