@@ -1,0 +1,127 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.2 Keyframe Animation Logic</h1>
+    <p class="artifact-subtitle">Temporal Choreography: Engineering complex, multi-stage sequences through the @keyframes directive.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Keyframe Engine</h2>
+        <p>
+            Unlike transitions, which require a state trigger (like <code>:hover</code>), <strong>Keyframe Animations</strong> allow you to orchestrate a sequence of styles that can start immediately or follow a complex timeline. 
+        </p>
+        <p>
+            An architect defines the "What" using the <code>@keyframes</code> directive and the "How" using the <code>animation</code> properties on the element itself.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The @keyframes Directive</h2>
+        <p>
+            You define a named animation by specifying "Waypoints" along a timeline from 0% (start) to 100% (end). You can use the keywords <code>from</code> and <code>to</code> for simple two-step animations.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">artifact_pulse.css</span>
+        </div>
+        <pre><code class="language-css">/* Defining a 'Breathing Gold' effect for ROSETTA artifacts */
+@keyframes artifact-pulse {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.2));
+    }
+    50% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
+    }
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.2));
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The animation Shorthand</h2>
+        <p>
+            To apply the keyframes, we use the <code>animation</code> property. A professional implementation considers the following sub-properties:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>name:</strong> The identifier used in <code>@keyframes</code>.</li>
+            <li><strong>duration:</strong> The time to complete one cycle.</li>
+            <li><strong>iteration-count:</strong> How many times to repeat (e.g., <code>3</code>, <code>infinite</code>).</li>
+            <li><strong>direction:</strong> <code>normal</code>, <code>reverse</code>, or <code>alternate</code> (back and forth).</li>
+            <li><strong>fill-mode:</strong> <code>forwards</code> (stay at the last frame) or <code>backwards</code>.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Implementation</span>
+            <span class="file-name">apply_animation.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-stone-card {
+    /* Shorthand: name | duration | timing | delay | iterations | direction */
+    animation: artifact-pulse 4s ease-in-out infinite;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. animation-fill-mode: The State Fix</h2>
+        <p>
+            By default, an element resets to its original CSS values the moment an animation ends. This often creates a jarring "snap." 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Architect's Choice:</strong> Use <code>animation-fill-mode: forwards</code> to instruct the browser to keep the element at the styling of the final keyframe (100%) after the animation finishes.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. State Management: animation-play-state</h2>
+        <p>
+            You can pause and resume animations without resetting them using JavaScript or CSS states. This is a subtle way to add high-end interactivity to the ROSETTA documentation.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS Interaction</span>
+                <span class="file-name">pause_logic.css</span>
+            </div>
+            <pre><code class="language-css">/* Pause the atmospheric pulse when the user is reading (hovering) */
+.artifact-stone-card:hover {
+    animation-play-state: paused;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Multiple Animations</h2>
+        <p>
+            An element is not restricted to a single animation. You can comma-separate multiple keyframe sequences. For example, a card can "fade in" while simultaneously "pulsing."
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">layered_motion.css</span>
+            </div>
+            <pre><code class="language-css">.hero-artifact {
+    animation: 
+        fade-in 1s ease-out forwards,
+        artifact-pulse 4s ease-in-out infinite;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Constraint:</strong> Keyframe animations that modify non-composite properties (like <code>box-shadow</code> or <code>margin</code>) can be extremely taxing on mobile devices if they run infinitely. For background effects in ROSETTA, stick to <code>opacity</code> and <code>transform</code> keyframes to ensure the CPU stays cool.
+        </div>
+    </div>
+
+</section>
