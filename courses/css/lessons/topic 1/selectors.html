@@ -1,0 +1,119 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.2 Selectors & Combinators</h1>
+    <p class="artifact-subtitle">Precision Targeting: Navigating the DOM hierarchy through relationship-based logic.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Selection Engine</h2>
+        <p>
+            In CSS architecture, a <strong>Selector</strong> is a pattern used to identify the elements you want to style. While beginners rely solely on IDs and Classes, an Architect utilizes <strong>Combinators</strong> to describe the structural relationship between elements.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Simple Selectors</h2>
+        <ul class="artifact-list">
+            <li><strong>Type Selector:</strong> Targets tags directly (e.g., <code>h1</code>, <code>p</code>). High reach, low precision.</li>
+            <li><strong>Class Selector:</strong> Targets elements with a specific class (e.g., <code>.card</code>). The workhorse of modern CSS.</li>
+            <li><strong>ID Selector:</strong> Targets a unique ID (e.g., <code>#main-nav</code>). Extremely high precision, but limited reusability.</li>
+            <li><strong>Universal Selector:</strong> (<code>*</code>) Targets every single element. Useful for global resets.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Combinatorial Logic</h2>
+        <p>
+            Combinators explain how two selectors relate to one another in the DOM tree. There are four primary combinators in the CSS specification:
+        </p>
+        
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Combinator</th>
+                    <th>Name</th>
+                    <th>Logic</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>A B</code></td>
+                    <td>Descendant</td>
+                    <td>Selects all B that are <strong>anywhere</strong> inside A.</td>
+                </tr>
+                <tr>
+                    <td><code>A &gt; B</code></td>
+                    <td>Child</td>
+                    <td>Selects all B that are <strong>direct children</strong> of A.</td>
+                </tr>
+                <tr>
+                    <td><code>A + B</code></td>
+                    <td>Adjacent Sibling</td>
+                    <td>Selects B only if it is <strong>immediately after</strong> A.</td>
+                </tr>
+                <tr>
+                    <td><code>A ~ B</code></td>
+                    <td>General Sibling</td>
+                    <td>Selects all B that <strong>follow</strong> A (must share parent).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">relationship_targeting.css</span>
+        </div>
+        <pre><code class="language-css">/* Only style paragraphs that immediately follow a heading */
+h2 + p {
+    margin-top: 0;
+    font-style: italic;
+}
+
+/* Style only the direct list items of a navigation menu */
+nav > ul > li {
+    display: inline-block;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Attribute Selectors</h2>
+        <p>
+            Attribute selectors allow you to target elements based on the presence or value of their HTML attributes. This is particularly powerful for styling forms or elements with <code>data-*</code> attributes in ROSETTA.
+        </p>
+        <ul class="artifact-list">
+            <li><code>[attr]</code>: Has the attribute.</li>
+            <li><code>[attr="val"]</code>: Value is exactly "val".</li>
+            <li><code>[attr^="val"]</code>: Value starts with "val".</li>
+            <li><code>[attr$="val"]</code>: Value ends with "val".</li>
+            <li><code>[attr*="val"]</code>: Value contains "val".</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">attribute_selectors.css</span>
+        </div>
+        <pre><code class="language-css">/* Style all external links (links starting with http) */
+a[href^="http"] {
+    color: #d4af37;
+    text-decoration: underline dotted;
+}
+
+/* Target ROSETTA data-attributes */
+[data-difficulty="advanced"] {
+    border-left: 4px solid gold;
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Performance Note:</strong> Browsers read CSS selectors from <strong>right to left</strong>. A selector like <code>body div ul li a</code> forces the browser to find every <code>a</code> tag on the page and then walk up the tree five levels to see if it matches. For high-performance sites, keep your selectors "shallow" (ideally 1-3 levels deep).
+        </div>
+    </div>
+
+</section>
