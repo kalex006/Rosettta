@@ -1,0 +1,113 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.3 The Z-Index & Stacking Context</h1>
+    <p class="artifact-subtitle">Dimensional Hierarchy: Mastering the internal logic of the browser's 3D rendering stack.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Painter's Algorithm</h2>
+        <p>
+            When the browser paints the screen, it follows a strict sequence called the <strong>Painter's Algorithm</strong>. If two elements overlap and neither has a <code>z-index</code>, the one that appears <strong>later</strong> in the HTML source code will be painted on top.
+        </p>
+        <p>
+            To override this, we use the <code>z-index</code> property. However, <code>z-index</code> only functions on <strong>positioned elements</strong> (relative, absolute, fixed, or sticky) and flex/grid items.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Stacking Context Paradox</h2>
+        <p>
+            A <strong>Stacking Context</strong> is a three-dimensional grouping of elements. Think of it as a "Parallel Universe" or a "Folder" of layers. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Golden Rule:</strong> Z-index is not global; it is local to its stacking context. If Parent A has a lower stacking priority than Parent B, no child inside Parent A—even with <code>z-index: 99999</code>—can ever appear in front of Parent B.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">stacking_trap.css</span>
+        </div>
+        <pre><code class="language-css">.container-alpha {
+    position: relative;
+    z-index: 1; /* This creates a new Stacking Context */
+}
+
+.child-alpha {
+    position: absolute;
+    z-index: 9999; /* Higher number, but trapped in 'alpha' */
+}
+
+.container-beta {
+    position: relative;
+    z-index: 2; /* Beta will always be in front of Alpha */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Triggers for a Stacking Context</h2>
+        <p>
+            Positioning is the most common trigger, but modern CSS has several "stealth" triggers that create a new stacking context. As an architect, you must watch for these:
+        </p>
+        <ul class="artifact-list">
+            <li>Elements with <code>opacity</code> less than 1.</li>
+            <li>Elements with <code>transform</code>, <code>filter</code>, or <code>perspective</code>.</li>
+            <li>Flex and Grid children with <code>z-index</code>.</li>
+            <li>The <code>will-change</code> property.</li>
+            <li><strong>The isolation: isolate</strong> property (The Architect's preferred method).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Atomic Stacking with 'isolation'</h2>
+        <p>
+            In the ROSETTA project, we want our components to be "Atomic." We don't want the z-index of a button inside a card to accidentally interact with a z-index in the sidebar.
+        </p>
+        <p>
+            The <code>isolation: isolate;</code> property explicitly creates a brand new stacking context without requiring positioning or opacity changes. This "wraps" the component's depth logic, making it safe from the rest of the page.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">atomic_components.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-card {
+    /* Creates a localized depth-universe */
+    isolation: isolate; 
+    background: #050505;
+    border: 1px solid #d4af37;
+}
+
+.artifact-card::before {
+    content: '';
+    z-index: -1; /* This stays behind the card content, but NOT behind the background */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Best Practices for Z-Index</h2>
+        <p>
+            To prevent "Z-Index Hell," Senior Architects follow these protocols:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Use Variables:</strong> Define your z-axis as a system (e.g., <code>--z-modal: 1000; --z-nav: 500;</code>).</li>
+            <li><strong>Stay Low:</strong> Most of your UI should function with z-indices between 1 and 10.</li>
+            <li><strong>Isolate:</strong> Use <code>isolation: isolate</code> on complex components to keep their internal layers private.</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Debugging Hint:</strong> If an element refuses to move to the front despite having a high z-index, check its ancestors. One of them likely has <code>opacity</code>, <code>transform</code>, or a lower <code>z-index</code>, which has "capped" the maximum depth of its children.
+        </div>
+    </div>
+
+</section>
