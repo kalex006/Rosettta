@@ -1,0 +1,150 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.5 Real-world Flex Patterns</h1>
+    <p class="artifact-subtitle">Applied Engineering: Synthesizing flex logic to solve common structural challenges.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>From Theory to Structure</h2>
+        <p>
+            An Architect does not reinvent the wheel for every layout. Instead, we use established <strong>Flex Patterns</strong> that have been mathematically proven to be robust across browsers. 
+        </p>
+        <p>
+            In the ROSETTA project, these patterns ensure that our deep-black UI remains stable whether the content is a single line or a thousand-page technical manual.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Sticky Footer Pattern</h2>
+        <p>
+            A common problem: if a page has very little content, the footer "floats" in the middle of the screen. We use the <strong>Vertical Flex Column</strong> pattern to force the footer to the bottom of the viewport.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">sticky_footer.css</span>
+        </div>
+        <pre><code class="language-css">body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Occupy full screen height */
+}
+
+main {
+    flex: 1; /* Consumes all available space, pushing footer down */
+}
+
+footer {
+    flex-shrink: 0; /* Prevents footer from collapsing */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Centering Trinity</h2>
+        <p>
+            There are three ways to achieve perfect centering in a Flexbox environment. As an architect, you should choose based on the required flexibility:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>The Container Method:</strong> Using <code>justify-content</code> and <code>align-items</code>. Best for centering multiple items.</li>
+            <li><strong>The Item Method:</strong> Using <code>margin: auto</code> on the child. Surprisingly, in Flexbox, a margin of auto will center an element both horizontally <em>and</em> vertically.</li>
+            <li><strong>The Place-Items Short:</strong> <code>display: flex; place-items: center;</code> (though more commonly used in Grid, it is becoming standard for simple flex centering).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Media Object (Icon + Text)</h2>
+        <p>
+            Used throughout ROSETTA for sidebar links and alert boxes. This pattern aligns a fixed-size graphic with a fluid text block.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">media_object.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.icon {
+    flex: 0 0 40px; /* Fixed width, never grows or shrinks */
+}
+
+.text-content {
+    flex: 1; /* Fluid width */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Fluid Card Grid (No Media Queries)</h2>
+        <p>
+            While <strong>CSS Grid</strong> (Topic 5) is better for complex grids, Flexbox can create a responsive "Masonry-lite" grid that wraps automatically without needing a single Media Query.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Architect's Trick:</strong> By setting a <code>flex-basis</code> and <code>flex-grow: 1</code>, cards will fill the row perfectly. When the screen shrinks below the basis, they will wrap to the next line and expand to fill the new row.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">fluid_grid.css</span>
+        </div>
+        <pre><code class="language-css">.grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    /* Grow to fill, shrink if needed, base at 300px */
+    flex: 1 1 300px; 
+    border: 1px solid #d4af37;
+    padding: 20px;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>5. The "Input Group" Pattern</h2>
+        <p>
+            Common in forms where you have a text input and a button joined together as a single visual unit.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">input_composition.css</span>
+            </div>
+            <pre><code class="language-css">.search-group {
+    display: flex;
+    width: 100%;
+}
+
+.search-group input {
+    flex: 1; /* Takes all available space */
+    border-radius: 4px 0 0 4px;
+}
+
+.search-group button {
+    flex: 0 0 auto; /* Only as wide as its label */
+    border-radius: 0 4px 4px 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Senior Architecture Summary:</strong> Flexbox is for <strong>Components</strong> and <strong>Linear layouts</strong>. When you find yourself creating "Rows" and "Columns" simultaneously, you have reached the limits of Flexbox and should move to the <strong>Grid Engine</strong>.
+        </div>
+    </div>
+
+</section>
