@@ -1,0 +1,119 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.3 The Cascade Layers (@layer)</h1>
+    <p class="artifact-subtitle">Explicit Authority: Mastering the modern hierarchy of CSS precedence through declarative layering.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The End of the Specificity War</h2>
+        <p>
+            In the legacy era of CSS architecture, overriding a third-party framework or a complex utility library required either higher specificity (more IDs/Classes) or the "nuclear" <code>!important</code> flag. This created a fragile system where developers constantly fought the cascade.
+        </p>
+        <p>
+            <strong>Cascade Layers</strong> allow an architect to group CSS into explicit "Power Tiers." Within a layer, standard specificity rules still apply, but between layers, the <strong>defined order of the layers</strong> determines the winner, regardless of how "heavy" a selector is.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Defining the Layer Order</h2>
+        <p>
+            As a Senior Architect, you should define your hierarchy at the very top of your main <code>style.css</code> file. This acts as the "Constitution" of your design system.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">hierarchy_protocol.css</span>
+            </div>
+            <pre><code class="language-css">/* Defining priority from LOWEST to HIGHEST */
+@layer reset, framework, components, utilities;
+
+/* 
+   Any code in 'utilities' will now beat code in 'framework' 
+   even if the framework uses an ID and the utility uses a single class. 
+*/</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Implementing Layers</h2>
+        <p>
+            You can wrap CSS blocks in an <code>@layer</code> directive. In the ROSETTA project, we use this to ensure our "Ancient Gold" theme always overrides base browser or library styles.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">layered_artifacts.css</span>
+        </div>
+        <pre><code class="language-css">@layer framework {
+    /* High specificity but low priority layer */
+    #main-container button {
+        background: blue;
+        color: white;
+    }
+}
+
+@layer components {
+    /* Low specificity but higher priority layer */
+    .artifact-btn {
+        background: var(--gold-primary);
+        color: #000;
+    }
+}
+
+/* Result: The button is GOLD because 'components' layer beats 'framework' layer. */</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Unlayered Styles Rule</h2>
+        <p>
+            There is one critical architectural rule regarding layers: <strong>Unlayered styles always win.</strong>
+        </p>
+        <p>
+            If you write CSS outside of an <code>@layer</code> block, the browser treats it as the highest priority Tier. This allows you to use layers for organization while keeping your "Hot Fixes" or global overrides in the default unlayered space.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Authority Hierarchy:</strong> <br>
+                1. Unlayered CSS (Highest) <br>
+                2. Last defined @layer <br>
+                3. First defined @layer (Lowest)
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Importing External Libraries into Layers</h2>
+        <p>
+            One of the most powerful use cases for an architect is "silencing" a bulky third-party library. You can import an entire stylesheet directly into a low-priority layer.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">library_containment.css</span>
+            </div>
+            <pre><code class="language-css">/* Import a framework into the lowest tier */
+@import url("legacy-framework.css") layer(framework);
+
+/* Now you can override anything in that file with simple classes */</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Nested Layers</h2>
+        <p>
+            For massive projects, layers can be nested (e.g., <code>@layer components.buttons</code>). This allows for granular control within a design system sub-module.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Maintenance Note:</strong> Cascade Layers are supported in all modern browsers (2022+). For ROSETTA, they provide the ultimate "Safety Net." By putting our core theme in a high-level layer, we ensure that no matter what content we fetch from the JSON, the "Artifact" aesthetic remains unbroken.
+        </div>
+    </div>
+
+</section>
