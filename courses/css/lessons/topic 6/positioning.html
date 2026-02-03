@@ -1,0 +1,112 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.1 Relative & Absolute Flow</h1>
+    <p class="artifact-subtitle">The Teleportation Logic: Breaking the document flow to orchestrate complex spatial overlays.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Document Flow</h2>
+        <p>
+            By default, every element has <code>position: static</code>. In this state, elements follow the **Normal Flow**: they sit one after another based on the HTML source order. 
+        </p>
+        <p>
+            To build the high-end, layered aesthetic of **ROSETTA**, we must use positioning to move elements to specific coordinates without affecting the space occupied by their neighbors.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Relative: The Anchor</h2>
+        <p>
+            Setting an element to <code>position: relative</code> does two critical things:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Offsetting:</strong> It allows you to move the element using <code>top</code>, <code>right</code>, <code>bottom</code>, or <code>left</code> without moving it out of the flow. The "ghost" of the element still occupies its original space.</li>
+            <li><strong>The Reference Point:</strong> It transforms the element into a <strong>Positioning Context</strong> for any children that are set to absolute.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">relative_anchor.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-card {
+    position: relative;
+    /* Move it 10px down from its original spot */
+    top: 10px; 
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Absolute: The Teleporter</h2>
+        <p>
+            When you apply <code>position: absolute</code>, the element is **ripped out of the document flow**. It no longer takes up any space in the layout, and other elements will behave as if it doesn't exist.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Search for the Ancestor:</strong> An absolute element positions itself relative to its <strong>nearest positioned ancestor</strong> (anyone with relative, absolute, or fixed). If it finds no such ancestor, it positions itself relative to the <code>&lt;body&gt;</code>.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">overlay_pattern.css</span>
+        </div>
+        <pre><code class="language-css">/* The Parent Container */
+.artifact-frame {
+    position: relative;
+    width: 400px;
+    height: 400px;
+}
+
+/* The Child Overlay */
+.status-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    /* This badge is now pinned to the corner of the frame */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Center-Absolute Pattern</h2>
+        <p>
+            Before Flexbox and Grid, the only way to center an item perfectly was through positioning math. While legacy, this is still a vital architectural tool for overlays (like "Loading" spinners).
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">absolute_centering.css</span>
+            </div>
+            <pre><code class="language-css">.center-artifact {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* Move it back by half its own width/height */
+    transform: translate(-50%, -50%);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The inset Shorthand</h2>
+        <p>
+            As a Senior Architect, you should use the logical <code>inset</code> property to define all four coordinates at once. 
+        </p>
+        <p>
+            <code>inset: 0;</code> is the standard way to make an absolute element stretch to perfectly fill its relative parent.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Maintenance Warning:</strong> Overusing <code>absolute</code> positioning can lead to "Layout Fragility." Since absolute elements don't push others away, content can easily overlap and become unreadable if the text size changes or the screen is resized. Use it for <strong>Decorations</strong> and <strong>Overlays</strong>, but use Grid/Flex for your <strong>Main Structure</strong>.
+        </div>
+    </div>
+
+</section>
