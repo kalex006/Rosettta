@@ -1,0 +1,87 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.1 The Standard Box Model</h1>
+    <p class="artifact-subtitle">The Geometry of Space: Deconstructing the foundational four-layer box structure.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Universal Box</h2>
+        <p>
+            In the eyes of the CSS rendering engine, **everything is a box**. Whether it is a circular profile picture, a line of text, or a transparent container, the browser treats every element as a rectangular coordinate space.
+        </p>
+        <p>
+            The **Standard Box Model** defines how these boxes are constructed. It consists of four concentric layers that stack from the inside out.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Four Layers of Artifacts</h2>
+        <ul class="artifact-list">
+            <li><strong>Content:</strong> The actual data (text, image, or child elements). This is where the <code>width</code> and <code>height</code> properties are applied by default.</li>
+            <li><strong>Padding:</strong> The internal "breathing room" between the content and the border. It is transparent and exists inside the element's background.</li>
+            <li><strong>Border:</strong> The structural frame surrounding the padding. It can have thickness, style, and color.</li>
+            <li><strong>Margin:</strong> The external "buffer zone" that separates this element from its neighbors. It is outside the border and does not count as part of the element's clickable area.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">box_definition.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-box {
+    width: 300px;      /* Content width */
+    padding: 20px;     /* Internal space */
+    border: 5px solid; /* Structural frame */
+    margin: 30px;      /* External buffer */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Standard Calculation (content-box)</h2>
+        <p>
+            By default, CSS uses <code>box-sizing: content-box</code>. In this mode, when you set a <code>width</code> of 300px, you are <strong>only</strong> sizing the content. The padding and borders are added on top of that width.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Architect's Math:</strong><br>
+                Total Physical Width = <code>width</code> + <code>left-padding</code> + <code>right-padding</code> + <code>left-border</code> + <code>right-border</code>.
+                <br><br>
+                Using the code above: <strong>300 + 20 + 20 + 5 + 5 = 350px</strong>. 
+            </div>
+        </div>
+        <p>
+            This is often the cause of broken layouts. If you have a container that is 100% wide and you add 1px of padding, the element becomes 100% + 2px, causing a horizontal scrollbar.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Background Propagation</h2>
+        <p>
+            It is a common misconception that backgrounds only apply to the content. In reality, the <code>background-color</code> and <code>background-image</code> of an element extend underneath the **Padding** and the **Border** (if the border is transparent or dashed). They do <strong>not</strong> extend into the **Margin**.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Box Model in DevTools</h2>
+        <p>
+            The most powerful way to visualize this architecture is through the browser's Developer Tools. In the "Computed" tab, you will find a diagram of your selected element's box model. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Blue:</strong> Content</li>
+            <li><strong>Green:</strong> Padding</li>
+            <li><strong>Yellow:</strong> Border</li>
+            <li><strong>Orange:</strong> Margin</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Senior Architecture Note:</strong> While the standard box model is the "default," most professional projects (including ROSETTA) switch to the <code>border-box</code> model for more intuitive sizing. We will master this transition in Chapter 2.2.
+        </div>
+    </div>
+
+</section>
