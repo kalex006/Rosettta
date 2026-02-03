@@ -1,0 +1,115 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.5 Subgrid & Nested Grids</h1>
+    <p class="artifact-subtitle">Recursive Orchestration: Synchronizing internal component tracks with global layout definitions.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Alignment Gap</h2>
+        <p>
+            When you place a grid inside another grid, they are—by default—completely independent. The inner grid (the <strong>Nested Grid</strong>) has no knowledge of the parent's tracks. This creates a common architectural problem: internal elements (like card titles or buttons) won't line up horizontally across different containers.
+        </p>
+        <p>
+            <strong>Subgrid</strong> is the architectural breakthrough that solves this. It allows a nested grid to "adopt" the rows or columns of its parent, ensuring all sub-components sit on the same global lines.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Nested Grids (The Independent Model)</h2>
+        <p>
+            A nested grid is simply a grid item that also has <code>display: grid</code> applied to it. Use this when the internal layout of the component does not need to correlate with the outside world.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">nested_logic.css</span>
+        </div>
+        <pre><code class="language-css">.parent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.child-component {
+    /* Starts a brand new, independent coordinate system */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Subgrid (The Inherited Model)</h2>
+        <p>
+            To enable subgrid, you set the track definition (columns or rows) of the child to the keyword <code>subgrid</code>. The child will now use the parent's tracks for its own layout.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Use Case:</strong> In ROSETTA, imagine a 3-row grid for our cards: [Title], [Description], [Action]. By using <code>grid-template-rows: subgrid</code>, the Title row will be the same height for every card in the gallery, sized by the tallest title in the entire group.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">subgrid_alignment.css</span>
+        </div>
+        <pre><code class="language-css">/* The Gallery Layout */
+.artifact-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Define 3 logical rows for all cards to share */
+    grid-auto-rows: min-content 1fr min-content; 
+}
+
+.artifact-card {
+    /* Span all 3 rows of the parent */
+    grid-row: span 3; 
+    display: grid;
+    /* Adopt the parent's row definitions */
+    grid-template-rows: subgrid; 
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Gaps and Names in Subgrid</h2>
+        <p>
+            A subgrid inherits the <code>gap</code> values of the parent by default. However, as an architect, you can override this by declaring a new <code>gap</code> on the subgrid element itself.
+        </p>
+        <p>
+            Additionally, <strong>Named Lines</strong> (Lesson 5.2) are passed down. If the parent grid has a line named <code>[content-start]</code>, the subgrid can reference it to align internal fragments perfectly.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Multi-Axis Subgrid</h2>
+        <p>
+            You are not limited to one axis. An element can be a subgrid for columns, rows, or both simultaneously. This is the ultimate tool for "Brutalist" or "Swiss" design styles where every element on the page must adhere to a strict underlying matrix.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">dual_axis_subgrid.css</span>
+        </div>
+        <pre><code class="language-css">.complex-artifact {
+    grid-column: 2 / 5;
+    grid-row: 1 / 4;
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Browser Support Note:</strong> As of 2026, <code>subgrid</code> has excellent support in all major engines (Chrome, Firefox, Safari). However, if you must support very old browsers, you should use a <strong>Feature Query</strong> (<code>@supports</code>) to provide a standard nested grid fallback.
+        </div>
+    </div>
+
+</section>
