@@ -1,0 +1,99 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.3 Padding, Margin & Collapse</h1>
+    <p class="artifact-subtitle">The Geometry of the Void: Mastering proximity, hit areas, and the vertical margin algorithm.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Architecture of Breathing Room</h2>
+        <p>
+            In visual design, the space *between* elements is as important as the elements themselves. However, in the CSS rendering engine, <strong>Padding</strong> and <strong>Margin</strong> are fundamentally different in how they interact with the document flow.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Padding (Internal):</strong> Increases the size of the element and the clickable area. It is used to separate content from the element's own edges.</li>
+            <li><strong>Margin (External):</strong> Separates the element from its neighbors. It does not increase the element's size or the background coverage.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The "Ghost" Phenomenon: Margin Collapse</h2>
+        <p>
+            One of the most complex architectural rules in CSS is <strong>Margin Collapsing</strong>. When the vertical margins of two adjacent elements meet, they do not add together. Instead, the browser "collapses" them into a single space equal to the <strong>largest</strong> of the two margins.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Logic:</strong> If Top Element has <code>margin-bottom: 30px</code> and Bottom Element has <code>margin-top: 20px</code>, the resulting space between them is <strong>30px</strong>, not 50px. 
+            </div>
+        </div>
+        <p>
+            <strong>Note:</strong> Margin collapse only happens <strong>vertically</strong>. Horizontal margins (left and right) are always additive.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">collapse_logic.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-header {
+    margin-bottom: 50px;
+}
+
+.artifact-body {
+    margin-top: 30px;
+    /* The gap between these two will be 50px */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Collapsing with Parents</h2>
+        <p>
+            Margins can also collapse between a parent and its first/last child. If a child has a <code>margin-top</code>, but the parent has no padding or border to "catch" it, the margin will "leak" outside the parent and move the entire parent container down.
+        </p>
+        <p>
+            <strong>The Architect's Fix:</strong> To stop a margin from leaking, add a 1px padding or a transparent border to the parent element.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Negative Margins</h2>
+        <p>
+            Unlike padding, <strong>margins can be negative</strong>. A negative margin allows you to "pull" an element outside its natural container or overlap it with another element. This is a common technique for creating the high-end, layered "Artifact" aesthetic of the ROSETTA project.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">layering_effects.css</span>
+        </div>
+        <pre><code class="language-css">.decorative-stone {
+    /* Pulls the image 50px into the header area */
+    margin-top: -50px;
+    z-index: 10;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The 'auto' Keyword</h2>
+        <p>
+            Setting <code>margin: auto</code> is the classic architectural pattern for centering block-level elements. It instructs the browser to calculate the remaining space in the parent container and divide it equally between the left and right margins.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Constraint:</strong> <code>margin: auto</code> only works if the element has a defined <code>width</code> (or <code>max-width</code>). If an element is 100% wide, there is no "remaining space" to distribute.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Padding and the "Hit Area"</h2>
+        <p>
+            As a Senior Architect, you must consider <strong>Fitts's Law</strong> (UX). For mobile users, small links are hard to touch. By using <strong>Padding</strong> instead of <strong>Margin</strong> to create space around a button or link, you increase the "Hit Area" (the clickable region) without changing the visual size of the text, making the interface significantly more accessible.
+        </p>
+    </div>
+
+</section>
