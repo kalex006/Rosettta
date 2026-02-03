@@ -1,0 +1,122 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.3 Container Queries (@container)</h1>
+    <p class="artifact-subtitle">Component Autonomy: Transcending the viewport to enable context-aware responsiveness.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Viewport Limitation</h2>
+        <p>
+            For over a decade, we used <strong>Media Queries</strong> to change layouts based on the browser's width. However, this is architecturally flawed for component-based design. A "Stone Card" might need to look different if it is placed in a wide <code>&lt;main&gt;</code> area versus a narrow <code>&lt;aside&gt;</code>.
+        </p>
+        <p>
+            <strong>Container Queries</strong> allow an element to sense the size of its own parent. This means a component carries its own responsiveness with it, regardless of where it is "dropped" into the ROSETTA interface.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Defining the Container</h2>
+        <p>
+            The browser engine does not watch every element for size changes (as this would be a performance disaster). You must explicitly declare an element as a <strong>Containment Context</strong> using the <code>container-type</code> property.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>inline-size:</strong> Most common. Watches the width of the container.</li>
+            <li><strong>size:</strong> Watches both width and height (requires a fixed height on the parent).</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">container_definition.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-slot {
+    /* 1. Tell the browser to monitor this element's width */
+    container-type: inline-size;
+    container-name: gallery-slot; /* Optional: specific naming */
+    width: 100%;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The @container Rule</h2>
+        <p>
+            Once a parent is defined as a container, its children can use the <code>@container</code> at-rule. The logic follows the same range syntax as modern media queries.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Logic</span>
+            <span class="file-name">portable_component.css</span>
+        </div>
+        <pre><code class="language-css">/* Default style: Stacked (Vertical) */
+.artifact-card {
+    display: flex;
+    flex-direction: column;
+}
+
+/* If the PARENT is wider than 500px, switch to Horizontal */
+@container (width > 500px) {
+    .artifact-card {
+        flex-direction: row;
+        gap: 20px;
+    }
+    
+    .artifact-title {
+        font-size: 2rem;
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Container Query Units (cqw, cqh)</h2>
+        <p>
+            Container queries also introduce a new set of relative units. These are superior to <code>vw</code> or <code>vh</code> because they scale relative to the container, not the entire screen.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>cqw:</strong> 1% of the query container's width.</li>
+            <li><strong>cqh:</strong> 1% of the query container's height.</li>
+            <li><strong>cqmin / cqmax:</strong> The smaller or larger of cqw and cqh.</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Trick:</strong> Use <code>font-size: 10cqw</code> to create text that perfectly fills its container's width, whether that container is a full-screen hero or a tiny sidebar widget.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Named Container Strategy</h2>
+        <p>
+            By default, a child looks at its <em>immediate</em> container parent. If you have nested containers, you can use <code>container-name</code> to target a specific ancestor.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">Advanced CSS</span>
+                <span class="file-name">nested_queries.css</span>
+            </div>
+            <pre><code class="language-css">@container gallery-slot (width > 800px) {
+    /* Styles applied only when the 'gallery-slot' is large */
+    .artifact-image { border-width: 10px; }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Infinite Loop Trap:</strong> You cannot change the size of the <strong>container itself</strong> inside a container query based on its own width. This would create a circular dependency (Infinite Loop) and the browser will ignore the rule to prevent crashing.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Why this matters for ROSETTA</h2>
+        <p>
+            In ROSETTA, we use a single <code>lesson-artifact.html</code> template. Because of Container Queries, that same artifact can be used in the main scroll area (where it expands) and in the "Related Lessons" sidebar (where it automatically collapses into a compact list view) without a single line of JavaScript.
+        </p>
+    </div>
+
+</section>
