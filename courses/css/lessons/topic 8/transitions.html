@@ -1,0 +1,147 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.1 Transition Physics</h1>
+    <p class="artifact-subtitle">Temporal Mechanics: Mastering the interpolation of states between initial and final artifact configurations.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Implicit State Changes</h2>
+        <p>
+            A <strong>Transition</strong> is the simplest form of motion in CSS. It allows you to change a property value smoothly over a given duration when an element changes state (e.g., from <code>:hover</code> or via a JavaScript class toggle).
+        </p>
+        <p>
+            Architecturally, transitions are "Interpolations." The browser calculates every intermediate value between the starting point (State A) and the ending point (State B), creating the illusion of fluid movement.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Four Pillars of Transition</h2>
+        <p>A professional transition is defined by four specific sub-properties:</p>
+        <ul class="artifact-list">
+            <li><strong>property:</strong> Which CSS properties should animate (e.g., <code>opacity</code>, <code>color</code>).</li>
+            <li><strong>duration:</strong> How long the change takes (e.g., <code>0.3s</code> or <code>300ms</code>).</li>
+            <li><strong>timing-function:</strong> The speed curve (acceleration/deceleration).</li>
+            <li><strong>delay:</strong> The wait time before the transition begins.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">standard_transition.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-link {
+    color: #ffffff;
+    /* Shorthd: [property] [duration] [timing] [delay] */
+    transition: color 0.4s ease-in-out;
+}
+
+.artifact-link:hover {
+    color: var(--gold-primary);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Performance Divide: Paint vs. Composite</h2>
+        <p>
+            As a Senior Architect, you must distinguish between <strong>Expensive</strong> and <strong>Cheap</strong> animations based on the browser's Rendering Pipeline (Lesson 10.5).
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Properties</th>
+                    <th>Impact</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Layout (Expensive)</strong></td>
+                    <td><code>width</code>, <code>height</code>, <code>top</code>, <code>margin</code></td>
+                    <td>Forces a full Reflow/Relayout of the page. Causes "jank."</td>
+                </tr>
+                <tr>
+                    <td><strong>Paint (Moderate)</strong></td>
+                    <td><code>background-color</code>, <code>box-shadow</code></td>
+                    <td>Forces the browser to re-draw the pixels.</td>
+                </tr>
+                <tr>
+                    <td><strong>Composite (Cheap)</strong></td>
+                    <td><code>transform</code>, <code>opacity</code></td>
+                    <td>Handled by the <strong>GPU</strong>. Buttery smooth 60fps.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Rule:</strong> For the ROSETTA project, always prefer <code>transform: scale()</code> over changing <code>width/height</code> and <code>transform: translate()</code> over changing <code>top/left</code>.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Discrete vs. Continuous Properties</h2>
+        <p>
+            Not all properties can be transitioned. You cannot transition from <code>display: none</code> to <code>display: block</code> because there is no mathematical "middle ground" between those states. These are called <strong>Discrete Properties</strong>.
+        </p>
+        <p>
+            However, in modern CSS (2024+), you can now transition discrete properties using the <code>allow-discrete</code> value in conjunction with <code>@starting-style</code>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">Modern CSS</span>
+            <span class="file-name">discrete_animation.css</span>
+        </div>
+        <pre><code class="language-css">.popup {
+    display: none;
+    opacity: 0;
+    transition: display 0.5s allow-discrete, opacity 0.5s;
+}
+
+.popup[open] {
+    display: block;
+    opacity: 1;
+}
+
+@starting-style {
+    .popup[open] { opacity: 0; }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The 'all' Keyword Trap</h2>
+        <p>
+            Beginners often use <code>transition: all 0.3s;</code>. This is an anti-pattern. It forces the browser to watch every single property for changes, which consumes unnecessary CPU cycles.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Optimization Protocol:</strong> Always explicitly list the properties you intend to transition. It improves performance and prevents accidental animations (like a font-size jump) when other styles change.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Accessibility: prefers-reduced-motion</h2>
+        <p>
+            Some users suffer from vestibular disorders where motion causes nausea. A Senior Architect respects user sovereignty by checking the <code>prefers-reduced-motion</code> media query.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">accessibility.css</span>
+            </div>
+            <pre><code class="language-css">@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}</code></pre>
+        </div>
+    </div>
+
+</section>
