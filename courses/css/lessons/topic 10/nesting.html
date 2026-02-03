@@ -1,0 +1,128 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.4 CSS Nesting & Modern Syntax</h1>
+    <p class="artifact-subtitle">Syntactic Eloquence: Implementing hierarchical logic and modern declarative patterns natively in the browser.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Hierarchical Paradigm</h2>
+        <p>
+            In legacy CSS, styles were strictly "flat." To style a part of a component, you had to repeat the parent selector over and over. This led to "Selector Bloat" and made the code harder to read.
+        </p>
+        <p>
+            <strong>Native Nesting</strong> allows you to group related styles inside the parent selector. This mirrors the structure of HTML and makes your CSS significantly more modular. In the ROSETTA architecture, this ensures that a component's "DNA" is contained within a single block of code.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">nesting_comparison.css</span>
+        </div>
+        <pre><code class="language-css">/* LEGACY: Repetitive and disconnected */
+.artifact-card { background: #050505; }
+.artifact-card:hover { border-color: gold; }
+.artifact-card .title { font-family: 'Cinzel'; }
+
+/* MODERN: Hierarchical and clean */
+.artifact-card {
+    background: #050505;
+
+    &:hover {
+        border-color: var(--gold-primary);
+    }
+
+    .title {
+        font-family: var(--font-heading);
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Nesting Selector (&)</h2>
+        <p>
+            The ampersand (<code>&</code>) is the <strong>Nesting Selector</strong>. It acts as a reference (a pointer) to the parent element.
+        </p>
+        <ul class="artifact-list">
+            <li>It can be used for pseudo-classes (<code>&:hover</code>, <code>&:active</code>).</li>
+            <li>It can be used to concatenate class names if following specific methodologies like BEM (though support for <code>&__element</code> varies, <code>& .element</code> is standard).</li>
+            <li>It can be used to change the rule based on a parent class (e.g., <code>.dark-theme & { ... }</code>).</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Nesting Media Queries</h2>
+        <p>
+            Perhaps the greatest architectural benefit of modern syntax is the ability to nest <strong>Media Queries</strong> directly inside the element they affect.
+        </p>
+        <p>
+            Instead of having a massive <code>@media</code> block at the bottom of your file that overrides 50 different classes, you keep the responsiveness <strong>contextual</strong>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">contextual_queries.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    @media (width >= 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Modern Pseudo-Selectors: :is() and :where()</h2>
+        <p>
+            Modern syntax provides "Grouping" selectors to reduce code repetition and manage specificity:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>:is(a, b, c):</strong> Matches any of the selectors. The specificity is determined by the <em>most specific</em> item in the list.</li>
+            <li><strong>:where(a, b, c):</strong> Same as <code>:is()</code>, but it has <strong>Zero Specificity</strong>. This is the architect's tool for creating "Default" styles that are extremely easy to override.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The :has() "Parent Selector"</h2>
+        <p>
+            The <code>:has()</code> pseudo-class is the "Holy Grail" of modern CSS. It allows you to style an element based on its <strong>children</strong>. 
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">CSS</span>
+                <span class="file-name">relational_logic.css</span>
+            </div>
+            <pre><code class="language-css">/* Style the card only if it contains an image */
+.artifact-card:has(img) {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Style a label if the input inside it is invalid */
+label:has(input:invalid) {
+    color: #ff4d4d;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The "Inception" Warning:</strong> Just because you <em>can</em> nest doesn't mean you should go deep. As a Senior Architect, follow the <strong>Rule of Three</strong>: try not to nest more than 3 levels deep. Over-nesting creates "Specifity Debt" and makes your CSS hard to debug in the inspector.
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Performance Note:</strong> Native nesting is handled by the browser's C++ parser. It is faster and consumes less memory than the CSS generated by pre-processors, as there is no "transpilation" layer between your intent and the execution.
+        </div>
+    </div>
+
+</section>
