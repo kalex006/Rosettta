@@ -1,0 +1,102 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.4 The Order Property</h1>
+    <p class="artifact-subtitle">Decoupling Hierarchy: Manipulating the visual sequence of artifacts without altering the source code.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Order Logic</h2>
+        <p>
+            In traditional CSS, the position of an element on the screen was strictly tied to its position in the HTML file. <strong>Flexbox</strong> breaks this dependency by introducing the <code>order</code> property.
+        </p>
+        <p>
+            Every flex item has a default <code>order</code> value of <code>0</code>. By assigning an integer (positive or negative) to an item, you can move it forward or backward in the visual sequence. 
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">reordering_logic.css</span>
+        </div>
+        <pre><code class="language-css">.artifact-list {
+    display: flex;
+}
+
+/* This item moves to the very beginning */
+.priority-item {
+    order: -1;
+}
+
+/* This item moves to the very end */
+.legacy-item {
+    order: 1;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Integer Scale</h2>
+        <p>
+            The <code>order</code> property works on a relative scale:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Negative Integers:</strong> Items appear before elements with the default 0.</li>
+            <li><strong>Zero:</strong> The default state for all nodes.</li>
+            <li><strong>Positive Integers:</strong> Items appear after elements with the default 0.</li>
+            <li><strong>Equality:</strong> If two items have the same order value, the browser reverts to the source code order.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Architectural Use Case: Mobile Reordering</h2>
+        <p>
+            The primary use for the <code>order</code> property is responsive design. In **PROJECT ROSETTA**, we might want our sidebar to appear *after* the content on mobile but *before* the content on desktop. 
+        </p>
+        <p>
+            Instead of duplicating HTML or using expensive JavaScript to move nodes, we simply toggle the <code>order</code> value within a Media Query.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">responsive_order.css</span>
+        </div>
+        <pre><code class="language-css">.container { display: flex; flex-direction: column; }
+
+.main-content { order: 1; }
+.sidebar { order: 2; }
+
+@media (min-width: 1024px) {
+    .container { flex-direction: row; }
+    /* Reverting to default flow for desktop */
+    .main-content { order: 0; }
+    .sidebar { order: 0; }
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Accessibility Trap:</strong> As a Senior Architect, you must be aware that <code>order</code> <strong>only changes the visual presentation</strong>. It does not change the tab order for keyboard users or the reading order for Screen Readers. 
+            <br><br>
+            If you move a "Buy Now" button to the top of the page using <code>order: -1</code>, a blind user will still find it at the bottom of the document. Overusing this property can create a confusing "Focus Traversal Gap."
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Grouping with Order</h2>
+        <p>
+            You can group artifacts visually by assigning them the same order value. For example, giving all "Premium Artifacts" an <code>order: -1</code> will cluster them at the start of the flex container, regardless of where they were added to the DOM.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Best Practice:</strong> Use <code>order</code> sparingly. If you find yourself using <code>order: 10</code>, <code>order: 20</code>, etc., your HTML structure is likely incorrect and should be refactored. The property is a tool for <em>adjustment</em>, not a substitute for proper structural planning.
+        </div>
+    </div>
+
+</section>
