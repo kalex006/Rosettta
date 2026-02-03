@@ -1,0 +1,109 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.2 Box-Sizing & Border-Box</h1>
+    <p class="artifact-subtitle">Geometric Predictability: Transitioning from additive dimensions to inclusive sizing models.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Inclusive Box Model</h2>
+        <p>
+            In the previous lesson, we saw that the default <code>content-box</code> adds padding and borders to the width, often causing elements to "overflow" their containers. 
+        </p>
+        <p>
+            The <code>border-box</code> model changes the way the browser's engine calculates the box. When you set a width of 300px on a <code>border-box</code> element, that 300px is the <strong>total horizontal space</strong> the element occupies (including padding and borders). The content area shrinks automatically to accommodate them.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">box_comparison.css</span>
+        </div>
+        <pre><code class="language-css">/* The Standard (Additive) */
+.legacy-box {
+    box-sizing: content-box;
+    width: 100%;
+    padding: 20px;
+    border: 5px solid; 
+    /* Result: 100% + 50px total width (Causes Scrollbar) */
+}
+
+/* The Architectural (Inclusive) */
+.modern-box {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px;
+    border: 5px solid;
+    /* Result: Exactly 100% total width (Perfect fit) */
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>The Universal Architect Reset</h2>
+        <p>
+            Because <code>content-box</code> is so prone to error, Senior Architects apply a universal reset at the very top of the stylesheet. We apply <code>border-box</code> to every element, including pseudo-elements (<code>::before</code> and <code>::after</code>).
+        </p>
+        <p>
+            In <strong>PROJECT ROSETTA</strong>, this reset ensures that our "Stone Cards" and grid layouts remain pixel-perfect across all screen sizes without complex math.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">global_reset.css</span>
+        </div>
+        <pre><code class="language-css">/* Apply to everything, including internal components */
+*, *::before, *::after {
+    box-sizing: border-box;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Why "Inherit" Box-Sizing?</h2>
+        <p>
+            There is an even more advanced version of the reset often used in complex systems. It applies <code>border-box</code> to the <code>html</code> element and makes everything else <strong>inherit</strong> it. 
+        </p>
+        <p>
+            This allows you to easily "opt-out" of the inclusive model for a specific third-party component if necessary, simply by changing the <code>box-sizing</code> on the parent of that component.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">advanced_reset.css</span>
+        </div>
+        <pre><code class="language-css">html {
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Impact on Layout Physics</h2>
+        <p>
+            With <code>border-box</code> enabled, the mathematical formula for the "Content Area" becomes:
+            <br>
+            <code>Content Width = Defined Width - (Left Padding + Right Padding) - (Left Border + Right Border)</code>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Performance Note:</strong> Switching to <code>border-box</code> does not negatively impact rendering speed. In fact, it can improve it slightly by reducing the number of unexpected overflow events that the browser's <em>Layout</em> engine has to handle.
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Critical Logic:</strong> Remember that <code>box-sizing</code> does <strong>not</strong> include the <strong>Margin</strong>. Even with <code>border-box</code>, margins are still added to the outside of the element and can still cause layout shifts or overlaps.
+        </div>
+    </div>
+
+</section>
