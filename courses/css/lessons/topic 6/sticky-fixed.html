@@ -1,0 +1,102 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.2 Fixed & Sticky Layouts</h1>
+    <p class="artifact-subtitle">Viewport Anchors: Managing persistent interfaces and conditional scroll-locking.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Persistence in the Interface</h2>
+        <p>
+            In high-end documentation systems like <strong>ROSETTA</strong>, the user often needs access to navigation or metadata regardless of their current scroll depth. To achieve this, we use two specialized positioning models that anchor elements not to the document flow, but to the viewport or a parent container.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Fixed: The Viewport Anchor</h2>
+        <p>
+            Applying <code>position: fixed</code> removes an element from the flow and pins it to a specific coordinate relative to the <strong>viewport</strong> (the browser window).
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Immobility:</strong> Fixed elements do not move when the page scrolls.</li>
+            <li><strong>Context:</strong> They are always positioned relative to the initial containing block (usually the <code>html</code> element).</li>
+            <li><strong>Zero Space:</strong> Like absolute elements, they take up no space in the document layout.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">fixed_navigation.css</span>
+        </div>
+        <pre><code class="language-css">.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: rgba(5, 5, 5, 0.95);
+    border-bottom: 1px solid #d4af37;
+    /* Ensure it stays above everything else */
+    z-index: 1000; 
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Sticky: The Conditional Hybrid</h2>
+        <p>
+            The <code>position: sticky</code> property is a hybrid of <code>relative</code> and <code>fixed</code>. It allows an element to flow normally until it reaches a specific scroll threshold, at which point it "sticks" to the specified edge.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Sticky Requirement:</strong> For sticky to function, two conditions must be met:
+                <ol>
+                    <li>You must define at least one threshold (e.g., <code>top: 0</code>).</li>
+                    <li><strong>None</strong> of the element's ancestors can have <code>overflow: hidden</code> or <code>overflow: auto</code> (as this "traps" the scroll container).</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">sticky_sidebar.css</span>
+        </div>
+        <pre><code class="language-css">.lesson-sidebar {
+    position: sticky;
+    top: 40px; /* Sticks when it is 40px from the top */
+    align-self: start; /* Critical for flex/grid parents */
+    height: fit-content;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Parent Constraint</h2>
+        <p>
+            Unlike fixed elements, a <strong>sticky</strong> element is "caged" by its parent container. It will only stick as long as its parent is still within the viewport. Once the parent container scrolls out of view, the sticky element scrolls with it.
+        </p>
+        <p>
+            This is an elegant architectural tool for creating "Section Headers" that follow the user through a long article but stop when the article ends.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Performance & The Compositor Layer</h2>
+        <p>
+            Fixed and Sticky elements are often promoted to their own <strong>Compositor Layer</strong> by the browser. 
+        </p>
+        <p>
+            <strong>Architect's Tip:</strong> If a fixed element causes "jank" (stuttering) during scroll, adding <code>will-change: transform;</code> tells the browser's engine to handle the element on the GPU (Graphics Processing Unit), ensuring a buttery-smooth 60fps experience for the ROSETTA interface.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Mobile Caveat:</strong> Using <code>position: fixed</code> on mobile can be hazardous when the virtual keyboard appears. It can often cover the input fields or cause the header to "jump" unpredictably. For mobile-heavy documentation, <code>sticky</code> is often the more robust architectural choice.
+        </div>
+    </div>
+
+</section>
