@@ -1,0 +1,107 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.4 Scope & Inheritance of Variables</h1>
+    <p class="artifact-subtitle">The Contextual Pivot: Leveraging the DOM hierarchy to orchestrate localized design systems.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Variable Sovereignty</h2>
+        <p>
+            Unlike variables in languages like C or Java, CSS Custom Properties are subject to the <strong>Cascade</strong>. They are scoped to the element on which they are defined and are inherited by all descendants of that element.
+        </p>
+        <p>
+            As an architect, this allows you to create <strong>Thematic Zones</strong>. You can define a design system at the <code>:root</code>, but "pivot" those values for a specific section of the page by simply redefining the variable names within a local class.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Global vs. Local Scope</h2>
+        <p>
+            The <code>:root</code> pseudo-class represents the global scope. However, any selector can act as a scope. When an element looks for a variable value via <code>var(--name)</code>, it searches upward through its ancestors until it finds the nearest definition.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS Architecture</span>
+            <span class="file-name">scoping_mechanics.css</span>
+        </div>
+        <pre><code class="language-css">:root {
+    --accent: #d4af37; /* Global Ancient Gold */
+}
+
+.artifact-card {
+    /* Inherits global --accent */
+    border: 1px solid var(--accent);
+}
+
+.special-edition-section {
+    /* Redefining the token for this branch only */
+    --accent: #f9f4e1; /* Ivory White */
+}
+
+/* All .artifact-card elements inside this section 
+   now automatically use Ivory White borders. */</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The "Contextual Component" Pattern</h2>
+        <p>
+            In ROSETTA, we use this to handle <strong>State-Based Theming</strong>. Instead of writing complex selectors like <code>.card.active .title</code>, we simply update the variable on the parent <code>.card.active</code>, and all children respond instantly.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Strategy:</strong> Define your components using generic variable names (e.g., <code>--comp-bg</code>, <code>--comp-text</code>). This makes the component "Variable-Agnostic"—it adopts the personality of whatever container it is dropped into.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">CSS</span>
+            <span class="file-name">context_aware_ui.css</span>
+        </div>
+        <pre><code class="language-css">.btn-artifact {
+    --btn-color: var(--gold-primary);
+    background: transparent;
+    border: 1px solid var(--btn-color);
+    color: var(--btn-color);
+}
+
+/* Redefining the scope on hover */
+.btn-artifact:hover {
+    --btn-color: #fff;
+    background: var(--gold-primary);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Circular Dependencies & Invalidity</h2>
+        <p>
+            The CSS engine has a safeguard against infinite loops. You cannot define a variable based on itself (e.g., <code>--size: calc(var(--size) + 1px)</code>). 
+        </p>
+        <p>
+            If the browser detects a circular dependency or a variable that is <code>undefined</code>, it sets the property to <strong>unset</strong> (or the fallback value provided in the <code>var()</code> function).
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Variables in the Shadow DOM</h2>
+        <p>
+            As discussed in Lesson 10.2 of the HTML course, the Shadow DOM provides strict encapsulation. However, <strong>CSS Variables pierce the Shadow Root</strong>. 
+        </p>
+        <p>
+            This is an intentional architectural "hole" that allows global design tokens (like brand colors) to flow into encapsulated Web Components while still protecting the component's internal structure from global CSS selectors.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Warning:</strong> Avoid redefining dozens of variables on high-frequency events (like <code>mousemove</code>) on the <code>:root</code>. Each update forces the browser to check every element on the page for inheritance changes. For high-performance interactions, scope the variable update to the smallest possible parent container.
+        </div>
+    </div>
+
+</section>
