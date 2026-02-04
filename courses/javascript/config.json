@@ -1,0 +1,117 @@
+{
+  "course_id": "javascript",
+  "title": "JavaScript Architecture",
+  "base_path": "courses/js/lessons",
+  "topics": [
+    {
+      "title": "Topic 1: Execution Context & Memory",
+      "folder": "topic 1",
+      "files": [
+        { "title": "1.1 The JS Execution Engine", "filename": "execution.html" },
+        { "title": "1.2 Hoisting & The TDZ", "filename": "hoisting.html" },
+        { "title": "1.3 Lexical Scoping & Shadowing", "filename": "scoping.html" },
+        { "title": "1.4 Var, Let, and Const", "filename": "variables.html" },
+        { "title": "1.5 The Global Object & This", "filename": "global-this.html" }
+      ]
+    },
+    {
+      "title": "Topic 2: Data Structures & Typing",
+      "folder": "topic 2",
+      "files": [
+        { "title": "2.1 Primitive vs. Reference Types", "filename": "types.html" },
+        { "title": "2.2 Object Mutation & Cloning", "filename": "objects.html" },
+        { "title": "2.3 Array Archetypes & Methods", "filename": "arrays.html" },
+        { "title": "2.4 Template Literals & Strings", "filename": "strings.html" },
+        { "title": "2.5 Coercion & Truthiness", "filename": "logic.html" }
+      ]
+    },
+    {
+      "title": "Topic 3: Functional Orchestration",
+      "folder": "topic 3",
+      "files": [
+        { "title": "3.1 Arrow vs. Declaration", "filename": "functions.html" },
+        { "title": "3.2 Closures & Private Scope", "filename": "closures.html" },
+        { "title": "3.3 Higher Order Functions", "filename": "hof.html" },
+        { "title": "3.4 Currying & Composition", "filename": "composition.html" },
+        { "title": "3.5 Recursion & The Call Stack", "filename": "recursion.html" }
+      ]
+    },
+    {
+      "title": "Topic 4: The Asynchronous Engine",
+      "folder": "topic 4",
+      "files": [
+        { "title": "4.1 The Event Loop & Task Queue", "filename": "event-loop.html" },
+        { "title": "4.2 Callbacks & Callback Hell", "filename": "callbacks.html" },
+        { "title": "4.3 Promise Lifecycle & States", "filename": "promises.html" },
+        { "title": "4.4 Async / Await Patterns", "filename": "async-await.html" },
+        { "title": "4.5 Microtasks vs Macrotasks", "filename": "tasks.html" }
+      ]
+    },
+    {
+      "title": "Topic 5: DOM Engineering",
+      "folder": "topic 5",
+      "files": [
+        { "title": "5.1 Traversal & Selection", "filename": "dom-traversal.html" },
+        { "title": "5.2 Event Bubbling & Capture", "filename": "events.html" },
+        { "title": "5.3 Event Delegation Logic", "filename": "delegation.html" },
+        { "title": "5.4 Fragment Injection & Perf", "filename": "fragments.html" },
+        { "title": "5.5 Mutation Observers", "filename": "observers.html" }
+      ]
+    },
+    {
+      "title": "Topic 6: The Fetch API & JSON",
+      "folder": "topic 6",
+      "files": [
+        { "title": "6.1 AJAX vs Fetch History", "filename": "fetch-history.html" },
+        { "title": "6.2 Response Objects & Parsing", "filename": "parsing.html" },
+        { "title": "6.3 Error Handling (Try/Catch)", "filename": "errors.html" },
+        { "title": "6.4 Header & Auth Strategies", "filename": "headers.html" },
+        { "title": "6.5 Caching & Performance", "filename": "caching.html" }
+      ]
+    },
+    {
+      "title": "Topic 7: State & Persistence",
+      "folder": "topic 7",
+      "files": [
+        { "title": "7.1 Web Storage API", "filename": "storage.html" },
+        { "title": "7.2 Cookies vs Session", "filename": "session.html" },
+        { "title": "7.3 URL Params & Routing", "filename": "routing.html" },
+        { "title": "7.4 State Objects & Proxies", "filename": "proxies.html" },
+        { "title": "7.5 Real-time Sync Logic", "filename": "sync.html" }
+      ]
+    },
+    {
+      "title": "Topic 8: Modular Architecture",
+      "folder": "topic 8",
+      "files": [
+        { "title": "8.1 Scripts vs Modules", "filename": "modules.html" },
+        { "title": "8.2 Export/Import Patterns", "filename": "imports.html" },
+        { "title": "8.3 Dynamic Imports", "filename": "dynamic-imports.html" },
+        { "title": "8.4 Tree Shaking Logic", "filename": "tree-shaking.html" },
+        { "title": "8.5 Module Bundling Theory", "filename": "bundling.html" }
+      ]
+    },
+    {
+      "title": "Topic 9: Reactive UI Patterns",
+      "folder": "topic 9",
+      "files": [
+        { "title": "9.1 Intersection Observer", "filename": "intersection.html" },
+        { "title": "9.2 Resize Observer API", "filename": "resize.html" },
+        { "title": "9.3 Custom Events & Dispatch", "filename": "custom-events.html" },
+        { "title": "9.4 Debouncing & Throttling", "filename": "throttling.html" },
+        { "title": "9.5 Building a Reactive Core", "filename": "reactive.html" }
+      ]
+    },
+    {
+      "title": "Topic 10: Performance & Memory",
+      "folder": "topic 10",
+      "files": [
+        { "title": "10.1 The V8 Garbage Collector", "filename": "gc.html" },
+        { "title": "10.2 Memory Leaks & Debugging", "filename": "leaks.html" },
+        { "title": "10.3 Web Workers (Threads)", "filename": "workers.html" },
+        { "title": "10.4 Chrome DevTools Profiling", "filename": "profiling.html" },
+        { "title": "10.5 Architectural Finalization", "filename": "final.html" }
+      ]
+    }
+  ]
+}

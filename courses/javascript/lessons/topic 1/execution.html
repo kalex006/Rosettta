@@ -1,0 +1,101 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.1 The JS Execution Engine</h1>
+    <p class="artifact-subtitle">The Ghost in the Machine: Deconstructing the Execution Context and the lifecycle of logic.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Engine's Internal Workflow</h2>
+        <p>
+            When the browser encounters a <code>&lt;script&gt;</code> tag, it doesn't simply read the text line-by-line. It hands the source code to a high-performance engine (such as <strong>V8</strong> in Chrome/Node or <strong>SpiderMonkey</strong> in Firefox).
+        </p>
+        <p>
+            The engine performs a two-pass operation known as the <strong>Execution Context Lifecycle</strong>. Understanding this is what separates a coder from a systems architect.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Creation Phase (Memory)</h2>
+        <p>
+            Before a single line of logic runs, the engine scans the code to set aside memory. This is called the <strong>Memory Creation Phase</strong>.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Variable Environment:</strong> Variables declared with <code>var</code> are set to <code>undefined</code>. Variables declared with <code>let</code> or <code>const</code> are left "uninitialized."</li>
+            <li><strong>Function Definitions:</strong> Function declarations are stored in their entirety.</li>
+            <li><strong>The Global Object:</strong> The engine creates the <code>window</code> object (in browsers) and the <code>this</code> keyword.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">creation_context.js</span>
+        </div>
+        <pre><code class="language-javascript">// At Phase 1 (Memory Creation):
+// artifactID: undefined
+// getStatus: [Entire Function Body]
+
+var artifactID = "ARV-01";
+
+function getStatus() {
+    return "Active";
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Execution Phase (Thread)</h2>
+        <p>
+            Once memory is allocated, the engine enters the <strong>Code Execution Phase</strong>. It runs the code line-by-line, synchronously, on a **Single Thread**.
+        </p>
+        <p>
+            In this phase, the <code>undefined</code> placeholders are replaced with actual values, and function calls trigger the creation of <strong>Functional Execution Contexts</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Call Stack</h2>
+        <p>
+            To manage the hierarchy of these contexts, the engine uses a <strong>Call Stack</strong> (a LIFO data structure: Last-In, First-Out). 
+        </p>
+        <ol class="artifact-list">
+            <li>The <strong>Global Execution Context</strong> is pushed to the bottom.</li>
+            <li>Each function call pushes a new context onto the stack.</li>
+            <li>When a function returns, its context is popped off, and its memory is eventually reclaimed by the <strong>Garbage Collector</strong>.</li>
+        </ol>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Insight:</strong> Because JavaScript is single-threaded, it can only execute one command at a time. If a function takes too long to run, it "blocks" the stack, making the UI unresponsive. This is why we must master Asynchronous Logic in later chapters.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>The Engine Pipeline</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Responsibility</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Parser</strong></td>
+                    <td>Converts code into an Abstract Syntax Tree (AST).</td>
+                </tr>
+                <tr>
+                    <td><strong>Interpreter</strong></td>
+                    <td>Generates and runs bytecode quickly.</td>
+                </tr>
+                <tr>
+                    <td><strong>Compiler (JIT)</strong></td>
+                    <td>Optimizes "Hot Code" into machine code for maximum speed.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
