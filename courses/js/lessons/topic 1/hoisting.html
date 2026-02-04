@@ -1,0 +1,131 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.2 Hoisting & The TDZ</h1>
+    <p class="artifact-subtitle">The Temporal Rift: Analyzing variable elevation and the safety mechanics of the Dead Zone.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Hoisting Illusion</h2>
+        <p>
+            To the untrained eye, **Hoisting** looks like the browser moving your code to the top of the file. In reality, the code stays exactly where you wrote it. 
+        </p>
+        <p>
+            As we learned in 1.1, the engine performs a "Memory Creation Phase" first. During this phase, the engine "lifts" or "hoists" the memory allocation for declarations. However, the <em>way</em> it allocates memory depends strictly on the keyword used.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Legacy Elevation: var</h2>
+        <p>
+            Variables declared with <code>var</code> are hoisted and immediately initialized with a value of <code>undefined</code>. This allows you to log a variable before its declaration without the program crashing.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">var_hoisting.js</span>
+        </div>
+        <pre><code class="language-javascript">console.log(artifactName); // Result: undefined
+
+var artifactName = "The Rosetta Stone";
+
+// The engine effectively saw this:
+// var artifactName; (Memory set to undefined)
+// console.log(artifactName);
+// artifactName = "The Rosetta Stone";</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Temporal Dead Zone (TDZ)</h2>
+        <p>
+            Variables declared with <code>let</code> and <code>const</code> are also hoisted, but they are <strong>not initialized</strong>. They exist in memory, but they are in a state of "purgatory" known as the <strong>Temporal Dead Zone</strong>.
+        </p>
+        <p>
+            The TDZ is the period between the start of the scope and the actual line where the variable is declared. If you try to access the variable during this time, the engine throws a <code>ReferenceError</code>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">tdz_error.js</span>
+        </div>
+        <pre><code class="language-javascript">console.log(status); // Uncaught ReferenceError: Cannot access 'status' before initialization
+
+let status = "Encrypted";</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Function Hoisting</h2>
+        <p>
+            Function <strong>Declarations</strong> are the most powerful form of hoisting. The entire function body is stored in memory during the creation phase. 
+        </p>
+        <p>
+            However, Function <strong>Expressions</strong> (assigning a function to a variable) follow the hoisting rules of the variable keyword used (<code>var</code>, <code>let</code>, or <code>const</code>).
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">fn_hoisting.js</span>
+        </div>
+        <pre><code class="language-javascript">decrypt(); // Works! Full function is hoisted.
+
+function decrypt() {
+    console.log("Access Granted");
+}
+
+/* ---------------------------------- */
+
+unlock(); // Error: unlock is not a function (it's currently undefined)
+
+var unlock = function() {
+    console.log("Vault Opened");
+};</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Command:</strong> The existence of the TDZ is a deliberate engineering choice to prevent the "silent bugs" caused by <code>var</code>. In the ROSETTA project, we embrace the TDZ by always declaring variables at the top of their logical block, ensuring clear and predictable data flow.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Comparison Summary</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Declaration Type</th>
+                    <th>Hoisted?</th>
+                    <th>Initial Value</th>
+                    <th>Result of early access</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>var</code></td>
+                    <td>Yes</td>
+                    <td><code>undefined</code></td>
+                    <td>Prints <code>undefined</code></td>
+                </tr>
+                <tr>
+                    <td><code>let / const</code></td>
+                    <td>Yes</td>
+                    <td>Uninitialized</td>
+                    <td><code>ReferenceError</code> (TDZ)</td>
+                </tr>
+                <tr>
+                    <td><code>function</code></td>
+                    <td>Yes</td>
+                    <td>The Body</td>
+                    <td>Executes perfectly</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>

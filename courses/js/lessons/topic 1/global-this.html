@@ -1,0 +1,101 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.5 The Global Object & This</h1>
+    <p class="artifact-subtitle">The Contextual Anchor: Understanding the execution environment's primary reference and the logic of dynamic binding.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Global Container</h2>
+        <p>
+            As we established in Lesson 1.1, the moment the JS engine starts, it creates a <strong>Global Execution Context</strong>. Along with this context, it creates a <strong>Global Object</strong>. 
+        </p>
+        <p>
+            In the browser environment, this object is <code>window</code>. In Node.js, it is <code>global</code>. To unify these across all environments, modern architecture uses the keyword <code>globalThis</code>. 
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Identity of 'this'</h2>
+        <p>
+            The <code>this</code> keyword is a pointer. It refers to the <strong>Object</strong> that is currently executing the code. Unlike variables, <code>this</code> is not static; its value changes based on <strong>how a function is called</strong>, not where it is defined.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Global Context:</strong> In the open script, <code>this</code> refers to the Global Object (<code>window</code>).</li>
+            <li><strong>Functional Context:</strong> Inside a regular function, <code>this</code> also refers to the Global Object (unless in 'strict mode').</li>
+            <li><strong>Method Context:</strong> When a function is called as a property of an object, <code>this</code> refers to that object.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">binding_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">// 1. Global Binding
+console.log(this === window); // true
+
+// 2. Implicit Binding (Methods)
+const artifact = {
+    id: "ARV-102",
+    display: function() {
+        console.log(this.id); // 'this' points to 'artifact'
+    }
+};
+
+artifact.display(); // Result: "ARV-102"</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Arrow Function Exception</h2>
+        <p>
+            Arrow functions (<code>=></code>) behave differently. They do not have their own <code>this</code> binding. Instead, they inherit <code>this</code> from their parent scope. This is known as <strong>Lexical Binding</strong>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Choice:</strong> Use arrow functions for callbacks (like <code>setTimeout</code> or <code>fetch</code>) to ensure the context remains tied to your component and doesn't "reset" to the window object.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Strict Mode Protection</h2>
+        <p>
+            In modern architecture, we use <code>"use strict";</code>. In strict mode, if a function is called without an owner, <code>this</code> remains <code>undefined</code> instead of defaulting to the <code>window</code>. This prevents accidental modification of the global state—a critical safeguard for the ROSETTA engine.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">strict_safety.js</span>
+        </div>
+        <pre><code class="language-javascript">"use strict";
+
+function showContext() {
+    console.log(this); 
+}
+
+showContext(); // Result: undefined (Protected)</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Explicit Binding (call, apply, bind)</h2>
+        <p>
+            As a Senior Architect, you can force <code>this</code> to point to any object you desire using explicit methods:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>.call() / .apply():</strong> Invokes the function immediately with a specified <code>this</code>.</li>
+            <li><strong>.bind():</strong> Returns a <strong>new function</strong> with <code>this</code> permanently locked to the specified object.</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Global Pollution Warning:</strong> Variables declared with <code>var</code> at the global level are automatically added as properties to the <code>window</code> object. Variables declared with <code>let</code> or <code>const</code> are NOT. This is another reason why <code>const</code> is the superior architectural choice.
+        </div>
+    </div>
+
+</section>

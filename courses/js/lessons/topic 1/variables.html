@@ -1,0 +1,122 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.4 Var, Let, and Const</h1>
+    <p class="artifact-subtitle">Structural Stability: Choosing the correct declaration keyword for memory and scope integrity.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Evolution of Declaration</h2>
+        <p>
+            In the early era of JavaScript (ES5 and below), <code>var</code> was the only tool available. Modern JavaScript (ES6+) introduced <code>let</code> and <code>const</code> to solve the architectural flaws inherent in <code>var</code>—specifically regarding scope leakage and unpredictable hoisting.
+        </p>
+        <p>
+            As a Senior Architect, your choice of keyword is a signal of <strong>Intent</strong>. It tells other developers (and the engine) how you expect the data to behave over time.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Legacy Keyword: var</h2>
+        <p>
+            The <code>var</code> keyword is <strong>Function-Scoped</strong>. It does not recognize blocks (if-statements, for-loops). It also allows for <strong>Redeclaration</strong>, which can lead to accidental variable overwriting in large codebases.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS Warning</span>
+                <span class="file-name">var_leakage.js</span>
+            </div>
+            <pre><code class="language-javascript">if (true) {
+    var artifact = "Stone";
+}
+// var 'leaks' out of the block
+console.log(artifact); // Result: "Stone"
+
+var artifact = "Dust"; // Redeclaration is allowed (Dangerous!)</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Modern Standard: let</h2>
+        <p>
+            The <code>let</code> keyword is <strong>Block-Scoped</strong>. It lives only within the <code>{ }</code> where it was born. It allows for <strong>Reassignment</strong> but strictly prohibits <strong>Redeclaration</strong> within the same scope.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Immutable Anchor: const</h2>
+        <p>
+            The <code>const</code> keyword is the most restrictive and therefore the most stable. Like <code>let</code>, it is block-scoped and prevents redeclaration. However, it also prevents <strong>Reassignment</strong>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>The Object Nuance:</strong> Using <code>const</code> on an object or array does not make the <em>contents</em> immutable. It only means the variable cannot be pointed to a <em>new</em> object. You can still modify the properties inside (Lesson 2.2 will explore this in depth).
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">const_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">const API_URL = "https://rosetta.dev/data";
+// API_URL = "new-url"; // Error: Assignment to constant variable.
+
+const registry = { id: 1 };
+registry.id = 2; // This WORKS. The reference didn't change, only the data.</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>Technical Comparison</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>var</th>
+                    <th>let</th>
+                    <th>const</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Scope</strong></td>
+                    <td>Function</td>
+                    <td>Block</td>
+                    <td>Block</td>
+                </tr>
+                <tr>
+                    <td><strong>Hoisting</strong></td>
+                    <td>Initialized (undefined)</td>
+                    <td>Uninitialized (TDZ)</td>
+                    <td>Uninitialized (TDZ)</td>
+                </tr>
+                <tr>
+                    <td><strong>Redeclare</strong></td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td><strong>Reassign</strong></td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Command:</strong> In the ROSETTA project, we follow the <strong>Strict Immutability Protocol</strong>: 
+            <ol>
+                <li>Use <code>const</code> by default for everything.</li>
+                <li>Use <code>let</code> only if you are certain the value must be reassigned (e.g., a counter in a loop).</li>
+                <li><strong>Never use <code>var</code>.</strong> It is an artifact of a legacy era and has no place in modern system architecture.</li>
+            </ol>
+        </div>
+    </div>
+
+</section>

@@ -1,0 +1,122 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">1.3 Lexical Scoping & Shadowing</h1>
+    <p class="artifact-subtitle">The Scope Chain: Mapping the hierarchical resolution of identifiers in the execution environment.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Definition of Lexical Scope</h2>
+        <p>
+            In JavaScript, "Lexical" refers to the physical location of the code within the source file. <strong>Lexical Scoping</strong> means that the scope of a variable is determined by where it is declared during the parsing phase, not where the function is eventually called.
+        </p>
+        <p>
+            This ensures that the logic of a function is predictable, regardless of how it is invoked.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Scope Chain (Identifier Resolution)</h2>
+        <p>
+            When the engine tries to find the value of a variable, it performs a search algorithm called the <strong>Scope Chain</strong>. It works from the inside out:
+        </p>
+        <ol class="artifact-list">
+            <li><strong>Local Scope:</strong> The immediate block or function where the variable is used.</li>
+            <li><strong>Outer Scope:</strong> The lexical parent of the current scope.</li>
+            <li><strong>Global Scope:</strong> The global execution context (<code>window</code> or <code>globalThis</code>).</li>
+        </ol>
+        <p>If the identifier is not found in any of these, the engine throws a <code>ReferenceError</code>.</p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">scope_chain.js</span>
+        </div>
+        <pre><code class="language-javascript">const globalArtifact = "Stone";
+
+function outer() {
+    const outerVar = "Gold";
+    
+    function inner() {
+        const innerVar = "Dust";
+        // The Engine searches: inner -> outer -> global
+        console.log(globalArtifact); // Found in Global
+        console.log(outerVar);       // Found in Outer
+        console.log(innerVar);       // Found in Inner
+    }
+    inner();
+}
+outer();</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Variable Shadowing</h2>
+        <p>
+            <strong>Shadowing</strong> occurs when a variable declared in a local scope has the same name as a variable in an outer scope. The inner variable "shadows" (blocks access to) the outer variable.
+        </p>
+        <p>
+            While syntactically valid, shadowing is considered an <strong>Architectural Anti-Pattern</strong>. It makes code difficult to reason about, as the same name refers to different data depending on where you are in the file.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Warning</span>
+            <span class="file-name">shadowing_example.js</span>
+        </div>
+        <pre><code class="language-javascript">let powerLevel = 10; // Global
+
+function runArtifact() {
+    let powerLevel = 50; // Shadows the global 'powerLevel'
+    console.log(powerLevel); // Prints 50
+}
+
+runArtifact();
+console.log(powerLevel); // Prints 10 (Global remains untouched)</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Block Scope vs. Function Scope</h2>
+        <p>
+            This distinction is crucial for the "Zero-Backend" stability of PROJECT ROSETTA.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>var:</strong> Function-scoped. It ignores <code>if</code> statements and <code>for</code> loops.</li>
+            <li><strong>let/const:</strong> Block-scoped. They are restricted to the <code>{ curly braces }</code> in which they are defined.</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Command:</strong> Always prefer <strong>Block Scoping</strong> (<code>let/const</code>). It allows you to reuse variable names (like <code>index</code> or <code>temp</code>) within different loops without the risk of them overwriting each other in the parent function scope.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Summary: The Rules of Resolution</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Scenario</th>
+                    <th>Engine Behavior</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Inner scope accesses outer variable</td>
+                    <td>Works (Scope Chain lookup).</td>
+                </tr>
+                <tr>
+                    <td>Outer scope accesses inner variable</td>
+                    <td>Fails (Scope is unreachable).</td>
+                </tr>
+                <tr>
+                    <td>Same name in Inner & Outer</td>
+                    <td>Shadowing (Inner takes priority).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
