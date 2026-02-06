@@ -1,269 +1,281 @@
-/* RESET */
-{
-box-sizing: border-box;
-margin: 0;
-padding: 0;
+/* ============================================================
+   PROJECT ROSETTA: OG STYLE RESTORED & FIXED
+   ============================================================ */
+
+/* 1. RESET - Fixed the missing '*' selector */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
 }
+
 body {
-background-color: #050505; /* Deepest Black */
-color: #e0e0e0;
-font-family: 'Inter', sans-serif;
-height: 100vh;
-overflow: hidden;
+    background-color: #050505; /* Deepest Black */
+    color: #e0e0e0;
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden; /* Keeps the main shell fixed */
 }
+
 /* --- ANIMATIONS & UTILS --- */
 .full-screen {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-background: #050505;
-transition: opacity 0.8s ease-in-out;
+    position: fixed; /* Changed to fixed for better screen locking */
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #050505;
+    transition: opacity 0.6s ease-in-out;
 }
+
 /* Logic to hide/show screens */
-.hidden-view {
-opacity: 0;
-pointer-events: none;
-z-index: -1;
-display: none;
+.hidden-view { 
+    display: none !important; 
+    opacity: 0; 
+    pointer-events: none; 
 }
-.active-view {
-opacity: 1;
-pointer-events: all;
-z-index: 10;
-display: flex;
+.active-view { 
+    display: flex !important; 
+    opacity: 1; 
+    pointer-events: all; 
 }
-.fade-in {
-animation: fadeIn 1.5s ease forwards;
-opacity: 0;
+
+.fade-in { 
+    animation: fadeIn 1.5s ease forwards; 
+    opacity: 0; 
 }
-.fade-in-delay {
-animation: fadeIn 1.5s ease forwards 0.8s;
-opacity: 0;
+.fade-in-delay { 
+    animation: fadeIn 1.5s ease forwards 0.8s; 
+    opacity: 0; 
 }
+
 @keyframes fadeIn { to { opacity: 1; } }
+
 /* --- SCREEN 1: ROSETTA BUTTON --- */
 .subtitle {
-font-size: 1.2rem;
-letter-spacing: 4px;
-color: #888;
-margin-bottom: 20px;
-text-transform: uppercase;
+    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    letter-spacing: 4px;
+    color: #888;
+    margin-bottom: 20px;
+    text-transform: uppercase;
 }
+
 .rosetta-btn {
-font-family: 'Cinzel', serif;
-font-size: 4rem;
-background: transparent;
-color: #e0e0e0;
-border: 1px solid transparent;
-cursor: pointer;
-letter-spacing: 8px;
-transition: all 0.5s ease;
-text-shadow: 0 0 10px rgba(255,255,255,0.1);
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 10vw, 4rem); /* Responsive text */
+    background: #000; /* Solid Black */
+    color: #e0e0e0;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 8px;
+    transition: all 0.5s ease;
+    text-shadow: 0 0 10px rgba(255,255,255,0.1);
 }
+
 .rosetta-btn:hover {
-color: #d4af37; /* Ancient Gold */
-text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-transform: scale(1.05);
+    color: #d4af37; /* Ancient Gold */
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    transform: scale(1.05);
 }
+
 /* --- SCREEN 2: PROGRAMMING BUTTON --- */
 .category-btn {
-font-family: 'Cinzel', serif;
-font-size: 2.5rem;
-background: transparent;
-color: #fff;
-border: 1px solid #333;
-padding: 20px 60px;
-cursor: pointer;
-transition: 0.3s;
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.2rem, 4vw, 2.5rem);
+    background: #000; /* Solid Black */
+    color: #fff;
+    border: 1px solid #333;
+    padding: 20px 60px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 .category-btn:hover {
-border-color: #d4af37;
-color: #d4af37;
-background: rgba(212, 175, 55, 0.05);
+    border-color: #d4af37;
+    color: #d4af37;
+    background: #0a0a0a;
 }
-/* --- SCREEN 3: ARTIFACT GRID --- */
-.select-title {
-font-family: 'Cinzel', serif;
-font-size: 1.5rem;
-margin-bottom: 50px;
-color: #666;
-letter-spacing: 5px;
-text-transform: uppercase;
-opacity: 0.8;
-}
-.grid-container {
-display: grid;
-grid-template-columns: repeat(5, 1fr); /* 5 cols */
-gap: 25px;
-max-width: 1100px;
-}
-.lang-card {
-position: relative;
-height: 120px;
-width: 180px; /* Fixed width for better look */
-background: linear-gradient(145deg, #111, #0a0a0a);
-border: 1px solid #333;
-color: #888;
-code
-Code
-/* Typography */
-font-family: 'Cinzel', serif;
-font-size: 1.1rem;
-font-weight: 700;
-letter-spacing: 2px;
 
-display: flex;
-justify-content: center;
-align-items: center;
-cursor: pointer;
-transition: all 0.4s ease-out;
-box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-overflow: hidden;
+/* --- SCREEN 3: ARTIFACT GRID (FIXED FOR ALL DEVICES) --- */
+.select-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    margin-bottom: 50px;
+    color: #666;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    text-align: center;
 }
+
+.grid-container {
+    display: grid;
+    /* This makes it 5 columns on desktop and 1-2 on mobile automatically */
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+    gap: 25px;
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.lang-card {
+    position: relative;
+    height: 120px;
+    background: #000; /* Fixed: Solid Black */
+    border: 1px solid #333;
+    color: #888;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.4s ease-out;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
 /* The "Inner Light" Effect */
 .lang-card::before {
-content: '';
-position: absolute;
-top: 0;
-left: -100%;
-width: 100%;
-height: 100%;
-background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-transition: 0.5s;
+    content: '';
+    position: absolute;
+    top: 0; 
+    left: -100%;
+    width: 100%; 
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    transition: 0.5s;
 }
-/* HOVER STATE */
+
 .lang-card:hover {
-border-color: #d4af37;
-color: #d4af37;
-transform: translateY(-5px) scale(1.02);
-background: linear-gradient(145deg, #1a1a1a, #0e0e0e);
-box-shadow: 0 0 15px rgba(212, 175, 55, 0.1), inset 0 0 10px rgba(212, 175, 55, 0.05);
+    border-color: #d4af37;
+    color: #d4af37;
+    transform: translateY(-5px);
+    background: #0a0a0a;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
 }
-.lang-card:hover::before {
-left: 100%;
-}
+
+.lang-card:hover::before { left: 100%; }
+
 /* --- SCREEN 4: MAIN LAYOUT --- */
 .main-layout {
-height: 100vh;
-flex-direction: column;
-width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
+
 .navbar {
-background: #0a0a0a;
-border-bottom: 1px solid #222;
-padding: 15px 30px;
-display: flex;
-justify-content: space-between;
-align-items: center;
+    background: #0a0a0a;
+    border-bottom: 1px solid #222;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
 }
-.nav-logo {
-font-family: 'Cinzel', serif;
-letter-spacing: 2px;
-cursor: pointer;
-color: #d4af37; }
-#current-lang-display {
-color: #888;
-border: 1px solid #333;
-padding: 2px 10px;
-font-size: 0.8rem;
-}
+
+.nav-logo { font-family: 'Cinzel', serif; letter-spacing: 2px; cursor: pointer; color: #d4af37; }
+
 .container {
-display: flex;
-flex: 1;
-overflow: hidden;
+    display: flex;
+    flex: 1;
+    overflow: hidden; /* Prevents whole page scroll */
 }
+
 #sidebar {
-width: 260px;
-background: #0a0a0a;
-border-right: 1px solid #222;
-padding: 20px;
-overflow-y: auto;
+    width: 260px;
+    background: #0a0a0a;
+    border-right: 1px solid #222;
+    padding: 20px;
+    overflow-y: auto; /* Independent scroll */
 }
+
 #content-area {
-flex: 1;
-padding: 50px;
-overflow-y: auto;
-background: #0e0e0e;
+    flex: 1;
+    padding: clamp(20px, 5vw, 50px);
+    overflow-y: auto; /* Independent scroll */
+    background: #0e0e0e;
+    padding-bottom: 80px; /* Buffer for footer */
 }
+
 /* Lesson Buttons */
-details {
-margin-bottom: 15px;
-}
-summary {
-color: #888;
-cursor: pointer;
-transition: 0.3s;
-font-family: 'Cinzel', serif;
-}
-summary:hover {
-color: #fff;
-}
 .lesson-btn {
-display: block;
-width: 100%;
-text-align: left;
-background: none;
-border: none;
-color: #666;
-padding: 8px 15px;
-cursor: pointer;
-margin-top: 5px;
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #000; /* Solid Black */
+    border: 1px solid transparent;
+    color: #666;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: 0.3s;
 }
 .lesson-btn:hover {
-color: #d4af37;
-border-left: 2px solid #d4af37;
-background: #111;
+    color: #d4af37;
+    border-left: 2px solid #d4af37;
+    background: #111;
 }
-/* Code Blocks /
+
+/* Code Blocks */
 pre {
-background: #000;
-padding: 20px;
-border: 1px solid #333;
-color: #ccc;
-border-radius: 4px;
-overflow-x: auto;
+    background: #000;
+    padding: 20px;
+    border: 1px solid #333;
+    color: #ccc;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 20px 0;
 }
-/ --- UNIVERSAL KALEX FOOTER --- /
+
+/* --- UNIVERSAL KALEX FOOTER (FIXED) --- */
 #kalex-footer {
-position: fixed !important;  / Force it to stay */
-bottom: 0 !important;
-left: 0 !important;
-width: 100% !important;
-height: 40px;
-code
-Code
-/* Layer Logic: This number is huge to ensure NOTHING goes above it */
-z-index: 2147483647 !important; 
-
-background-color: #000; /* Solid Black Background */
-border-top: 1px solid #333;
-
-display: flex;
-justify-content: center;
-align-items: center;
-gap: 15px;
-
-/* Shadow to separate it from content */
-box-shadow: 0 -5px 15px rgba(0,0,0,0.9);
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 40px;
+    z-index: 999999; 
+    background-color: #000; 
+    border-top: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.9);
 }
+
 .copyright {
-font-family: 'Inter', sans-serif;
-font-size: 0.75rem;
-color: #666;
-text-transform: uppercase;
-letter-spacing: 1px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
-.separator { color: #333; }
+
 .project-name {
-font-family: 'Cinzel', serif;
-font-size: 0.8rem;
-color: #d4af37; /* Gold */
-font-weight: 700;
-letter-spacing: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    color: #d4af37;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+/* --- MOBILE RESPONSIVE FIXES --- */
+@media (max-width: 850px) {
+    .container { flex-direction: column; }
+    #sidebar { width: 100%; height: 200px; border-right: none; border-bottom: 1px solid #222; }
+    .grid-container { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .grid-container { grid-template-columns: 1fr; }
+    .navbar { padding: 10px 15px; }
 }
