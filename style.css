@@ -1,290 +1,232 @@
-/* RESET */
+/* --- DESIGN TOKENS & VARIABLES --- */
+:root {
+    --bg-deep: #050505;
+    --bg-panel: #0a0a0a;
+    --gold: #d4af37;
+    --gold-faint: rgba(212, 175, 55, 0.1);
+    --text-main: #e0e0e0;
+    --text-dim: #888;
+    --border: #222;
+    
+    /* Fluid Sizing */
+    --sidebar-width: 280px;
+    --font-h1: clamp(2.5rem, 8vw, 4rem);
+    --font-h2: clamp(1.5rem, 4vw, 2.2rem);
+}
+
+/* RESET & BASE */
 * { 
     box-sizing: border-box; 
     margin: 0; 
     padding: 0; 
 }
 
-body {
-    background-color: #050505; /* Deepest Black */
-    color: #e0e0e0;
-    font-family: 'Inter', sans-serif;
-    height: 100vh;
-    overflow: hidden;
+html {
+    scroll-behavior: smooth;
 }
 
-/* --- ANIMATIONS & UTILS --- */
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden; /* Prevent horizontal shake on mobile */
+}
+
+/* --- UTILITIES --- */
 .full-screen {
-    position: absolute;
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
+    position: fixed; /* Fixed is better for screen transitions */
+    top: 0; left: 0; width: 100%; height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #050505;
-    transition: opacity 0.8s ease-in-out;
+    background: var(--bg-deep);
+    transition: opacity 0.6s ease-in-out, visibility 0.6s;
 }
 
-/* Logic to hide/show screens */
 .hidden-view { 
     opacity: 0; 
+    visibility: hidden;
     pointer-events: none; 
-    z-index: -1; 
-    display: none; 
 }
+
 .active-view { 
     opacity: 1; 
+    visibility: visible;
     pointer-events: all; 
-    z-index: 10; 
-    display: flex; 
 }
 
-.fade-in { 
-    animation: fadeIn 1.5s ease forwards; 
-    opacity: 0; 
-}
-.fade-in-delay { 
-    animation: fadeIn 1.5s ease forwards 0.8s; 
-    opacity: 0; 
-}
-
-@keyframes fadeIn { to { opacity: 1; } }
-
-/* --- SCREEN 1: ROSETTA BUTTON --- */
-.subtitle {
-    font-size: 1.2rem;
-    letter-spacing: 4px;
-    color: #888;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-}
-
+/* --- SCREEN 1: LANDING --- */
 .rosetta-btn {
     font-family: 'Cinzel', serif;
-    font-size: 4rem;
+    font-size: var(--font-h1);
     background: transparent;
-    color: #e0e0e0;
-    border: 1px solid transparent;
+    color: var(--text-main);
+    border: none;
     cursor: pointer;
-    letter-spacing: 8px;
+    letter-spacing: 12px;
     transition: all 0.5s ease;
-    text-shadow: 0 0 10px rgba(255,255,255,0.1);
+    text-align: center;
+    padding: 0 20px;
 }
 
 .rosetta-btn:hover {
-    color: #d4af37; /* Ancient Gold */
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-    transform: scale(1.05);
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+    transform: scale(1.02);
 }
 
-/* --- SCREEN 2: PROGRAMMING BUTTON --- */
-.category-btn {
-    font-family: 'Cinzel', serif;
-    font-size: 2.5rem;
-    background: transparent;
-    color: #fff;
-    border: 1px solid #333;
-    padding: 20px 60px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.category-btn:hover {
-    border-color: #d4af37;
-    color: #d4af37;
-    background: rgba(212, 175, 55, 0.05);
-}
-
-/* --- SCREEN 3: ARTIFACT GRID --- */
-.select-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1.5rem;
-    margin-bottom: 50px;
-    color: #666;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    opacity: 0.8;
-}
-
+/* --- SCREEN 3: ARTIFACT GRID (Fully Responsive) --- */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 cols */
-    gap: 25px;
+    /* This logic creates as many columns as fit, but never smaller than 140px */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+    gap: 20px;
+    width: 90%;
     max-width: 1100px;
+    margin: 0 auto;
+    padding-bottom: 60px; /* Space for footer */
 }
 
 .lang-card {
     position: relative;
-    height: 120px;
-    width: 180px; /* Fixed width for better look */
+    aspect-ratio: 3 / 2; /* Maintains consistent shape on all screens */
     background: linear-gradient(145deg, #111, #0a0a0a);
-    border: 1px solid #333;
-    color: #888;
-    
-    /* Typography */
+    border: 1px solid var(--border);
+    color: var(--text-dim);
     font-family: 'Cinzel', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: all 0.4s ease-out;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
+    text-align: center;
 }
 
-/* The "Inner Light" Effect */
-.lang-card::before {
-    content: '';
-    position: absolute;
-    top: 0; 
-    left: -100%;
-    width: 100%; 
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-    transition: 0.5s;
-}
-
-/* HOVER STATE */
 .lang-card:hover {
-    border-color: #d4af37;
-    color: #d4af37;
-    transform: translateY(-5px) scale(1.02);
-    background: linear-gradient(145deg, #1a1a1a, #0e0e0e);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.1), inset 0 0 10px rgba(212, 175, 55, 0.05);
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
 }
 
-.lang-card:hover::before { 
-    left: 100%; 
-}
-
-/* --- SCREEN 4: MAIN LAYOUT --- */
-.main-layout { 
-    height: 100vh; 
-    flex-direction: column; 
-    width: 100%; 
+/* --- SCREEN 4: MAIN CONTENT LAYOUT --- */
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .navbar {
-    background: #0a0a0a;
-    border-bottom: 1px solid #222;
-    padding: 15px 30px;
+    height: 60px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.nav-logo { 
-    font-family: 'Cinzel', serif; 
-    letter-spacing: 2px; 
-    cursor: pointer; 
-    color: #d4af37; }
-#current-lang-display { 
-    color: #888; 
-    border: 1px solid #333; 
-    padding: 2px 10px; 
-    font-size: 0.8rem; 
+    flex-shrink: 0;
 }
 
-.container { 
-    display: flex; 
-    flex: 1; 
-    overflow: hidden; 
-}
-#sidebar { 
-    width: 260px; 
-    background: #0a0a0a; 
-    border-right: 1px solid #222; 
-    padding: 20px;
-    overflow-y: auto; 
-}
-#content-area { 
-    flex: 1; 
-    padding: 50px; 
-    overflow-y: auto; 
-    background: #0e0e0e; 
+.container {
+    display: flex;
+    flex: 1;
+    overflow: hidden; /* Keeps scrollbars internal to sidebar/content */
+    position: relative;
 }
 
-/* Lesson Buttons */
-details { 
-    margin-bottom: 15px; 
-}
-summary { 
-    color: #888; 
-    cursor: pointer; 
-    transition: 0.3s; 
-    font-family: 'Cinzel', serif; 
-}
-summary:hover { 
-    color: #fff; 
-}
-.lesson-btn { 
-    display: block; 
-    width: 100%; 
-    text-align: left; 
-    background: none; 
-    border: none; 
-    color: #666; 
-    padding: 8px 15px; 
-    cursor: pointer; 
-    margin-top: 5px; 
-}
-.lesson-btn:hover { 
-    color: #d4af37; 
-    border-left: 2px solid #d4af37; 
-    background: #111; 
+/* SIDEBAR: Responsive Logic */
+#sidebar {
+    width: var(--sidebar-width);
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    padding: 30px 20px;
+    overflow-y: auto;
+    transition: transform 0.4s ease;
 }
 
-/* Code Blocks */
+#content-area {
+    flex: 1;
+    padding: clamp(20px, 5vw, 60px);
+    overflow-y: auto;
+    background: #080808;
+    padding-bottom: 100px; /* Space for fixed footer */
+}
+
+/* MOBILE SIDEBAR ADJUSTMENT */
+@media (max-width: 900px) {
+    #sidebar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 50;
+        transform: translateX(-100%); /* Hidden by default on mobile */
+    }
+    
+    /* Class to trigger via JS for mobile menu */
+    #sidebar.mobile-open {
+        transform: translateX(0);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+    }
+}
+
+/* --- TYPOGRAPHY & ARTIFACT CONTENT --- */
+.artifact-title {
+    font-family: 'Cinzel', serif;
+    font-size: var(--font-h2);
+    color: var(--gold);
+    margin-bottom: 20px;
+}
+
+.content-block p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+/* Code Blocks (Scrollable on small screens) */
 pre { 
     background: #000; 
     padding: 20px; 
-    border: 1px solid #333; 
+    border: 1px solid var(--border); 
     color: #ccc; 
     border-radius: 4px; 
     overflow-x: auto;
+    font-size: 0.9rem;
+    margin: 20px 0;
 }
-/* --- UNIVERSAL KALEX FOOTER --- */
+
+/* --- UNIVERSAL FOOTER --- */
 #kalex-footer {
-    position: fixed !important;  /* Force it to stay */
-    bottom: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 40px;
-    
-    /* Layer Logic: This number is huge to ensure NOTHING goes above it */
-    z-index: 2147483647 !important; 
-    
-    background-color: #000; /* Solid Black Background */
-    border-top: 1px solid #333;
-    
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 45px;
+    z-index: 2000; 
+    background: #000;
+    border-top: 1px solid #1a1a1a;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    
-    /* Shadow to separate it from content */
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.9);
+    gap: 10px;
 }
-
-.copyright {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.separator { color: #333; }
 
 .project-name {
     font-family: 'Cinzel', serif;
-    font-size: 0.8rem;
-    color: #d4af37; /* Gold */
-    font-weight: 700;
+    color: var(--gold);
     letter-spacing: 2px;
+    font-size: 0.75rem;
+}
+
+/* TABLET/MOBILE OPTIMIZATION */
+@media (max-width: 600px) {
+    .rosetta-btn { font-size: 2.5rem; letter-spacing: 6px; }
+    .category-btn { font-size: 1.5rem; padding: 15px 30px; }
+    .select-title { font-size: 1rem; margin-bottom: 30px; }
+    #content-area { padding: 30px 15px; }
 }
