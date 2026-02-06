@@ -1,0 +1,105 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.4 Template Literals & Strings</h1>
+    <p class="artifact-subtitle">Syntactic Templating: Engineering dynamic text and HTML fragments through modern interpolation.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Evolution of the String</h2>
+        <p>
+            In the legacy era of JavaScript, strings were defined using single (<code>'</code>) or double (<code>"</code>) quotes. Building complex HTML strings required tedious concatenation using the <code>+</code> operator. This often led to unreadable "spaghetti code" and difficult-to-track syntax errors.
+        </p>
+        <p>
+            Modern architecture utilizes <strong>Template Literals</strong> (enclosed by backticks: <code>`</code>). They provide two revolutionary features: <strong>Multi-line support</strong> and <strong>String Interpolation</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Multi-line Architecture</h2>
+        <p>
+            Before template literals, creating a multi-line string required escape characters like <code>\n</code> or manual concatenation. Now, the whitespace you type inside the backticks is preserved exactly as it appears. This makes them the perfect tool for writing HTML blueprints directly inside your <code>main.js</code>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">template_ui.js</span>
+        </div>
+        <pre><code class="language-javascript">// Generating a ROSETTA component fragment
+const htmlFragment = `
+    &lt;div class="artifact-card"&gt;
+        &lt;h2&gt;New Module Loaded&lt;/h2&gt;
+        &lt;p&gt;Status: Active&lt;/p&gt;
+    &lt;/div&gt;
+`;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. String Interpolation: ${expression}</h2>
+        <p>
+            Interpolation allows you to inject any valid JavaScript expression directly into the string. This is not limited to simple variables; you can perform math, call functions, or even nest other template literals.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Logic:</strong> Interpolation acts as a <strong>Live Bridge</strong>. During the Execution Phase, the engine evaluates everything inside the <code>${ }</code> and converts the result into a string fragment before finalizing the output.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">dynamic_interpolation.js</span>
+        </div>
+        <pre><code class="language-javascript">const artifact = { id: 101, title: "Execution Engine" };
+const difficulty = 5;
+
+const summary = `Artifact #${artifact.id}: ${artifact.title.toUpperCase()} 
+Level: ${difficulty > 3 ? "Advanced" : "Standard"}`;
+
+console.log(summary); // "Artifact #101: EXECUTION ENGINE Level: Advanced"</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Escaping & Special Characters</h2>
+        <p>
+            Because backticks are the delimiter, you can use single and double quotes inside the string without escaping them. However, if you need to use a literal backtick, you must use the backslash: <code>\`</code>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Advanced Tier: Tagged Templates</h2>
+        <p>
+            A <strong>Tagged Template</strong> is a more advanced architectural pattern where you precede the backtick with a function name. The function (the "tag") can then process the string and the expressions before returning the final result.
+        </p>
+        <p>
+            This is used in premium libraries (like <em>Styled Components</em> or <em>lit-html</em>) to sanitize HTML, handle translations, or perform syntax highlighting.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">tagged_templates.js</span>
+        </div>
+        <pre><code class="language-javascript">function highlightGold(strings, ...values) {
+    // Process the string fragments and inject custom logic
+    return strings.reduce((acc, str, i) => 
+        `${acc}${str}&lt;span class="gold"&gt;${values[i] || ""}&lt;/span&gt;`, "");
+}
+
+const name = "Muhammad";
+const msg = highlightGold`Welcome, ${name}, to the Archive.`;</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Security Warning (XSS):</strong> While template literals are powerful for generating HTML, never inject unsanitized user input directly into them. An attacker could provide a string like <code>&lt;script&gt;fetch(...)&lt;/script&gt;</code>, which would then be executed in your application. Always sanitize data before rendering.
+        </div>
+    </div>
+
+</section>

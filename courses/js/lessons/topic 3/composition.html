@@ -1,0 +1,137 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.4 Currying & Composition</h1>
+    <p class="artifact-subtitle">Functional Legos: Engineering complex behavioral chains through partial application and pipe orchestration.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Modular Imperative</h2>
+        <p>
+            In a high-end system like ROSETTA, we avoid "Monolithic Functions" that try to do everything at once. Instead, we follow the <strong>Unix Philosophy</strong>: write functions that do one thing and do it well. 
+        </p>
+        <p>
+            <strong>Currying</strong> and <strong>Composition</strong> are the two primary tools used by architects to glue these small, atomic functions together into sophisticated workflows.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Currying: The Transformation of Arity</h2>
+        <p>
+            <strong>Currying</strong> is the technique of taking a function that accepts multiple arguments and transforming it into a sequence of functions that each take a <strong>single argument</strong>.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Architect's Math:</strong> <br>
+                Standard: <code>f(a, b, c)</code> <br>
+                Curried: <code>f(a)(b)(c)</code>
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">currying_mechanics.js</span>
+        </div>
+        <pre><code class="language-javascript">// Standard multi-arg function
+const add = (a, b) => a + b;
+
+// Curried version
+const curriedAdd = a => b => a + b;
+
+// Partial Application: Creating a specialized function
+const addTen = curriedAdd(10);
+
+console.log(addTen(5)); // 15
+console.log(curriedAdd(1)(2)); // 3</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Use Case: Configuration Pre-loading</h2>
+        <p>
+            In the ROSETTA engine, we use currying to "Pre-load" a function with configuration data (like a course ID or a security token) before it is sent to the UI layer to handle user input.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">config_currying.js</span>
+        </div>
+        <pre><code class="language-javascript">const logger = (prefix) => (message) => console.log(`[${prefix}] ${message}`);
+
+// Pre-configuring different loggers for ROSETTA modules
+const htmlLog = logger("HTML-MODULE");
+const cssLog = logger("CSS-MODULE");
+
+htmlLog("Loading Lesson 3.4..."); // [HTML-MODULE] Loading Lesson 3.4...</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Function Composition: The Pipeline</h2>
+        <p>
+            <strong>Composition</strong> is the act of combining multiple functions to create a new one. The output of one function becomes the input of the next. It is mathematically defined as <code>f(g(x))</code>.
+        </p>
+        <p>
+            Composition allows us to read logic from <strong>bottom-to-top</strong> or <strong>right-to-left</strong>, representing a data transformation pipeline.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">manual_composition.js</span>
+        </div>
+        <pre><code class="language-javascript">const trim = str => str.trim();
+const wrapInSpan = str => `&lt;span&gt;${str}&lt;/span&gt;`;
+const toGold = str => str.toUpperCase();
+
+// Manual composition (Hard to read)
+const result = toGold(wrapInSpan(trim("  artifact  ")));</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Compose Utility</h2>
+        <p>
+            To avoid "Parentheses Hell," architects use a <code>compose</code> or <code>pipe</code> utility. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Compose:</strong> Executes functions right-to-left (Mathematical standard).</li>
+            <li><strong>Pipe:</strong> Executes functions left-to-right (Developer readability standard).</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Tool</span>
+            <span class="file-name">pipe_utility.js</span>
+        </div>
+        <pre><code class="language-javascript">const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x);
+
+const processTitle = pipe(
+    trim,
+    toGold,
+    wrapInSpan
+);
+
+console.log(processTitle("   intro to dom   ")); 
+// Result: "&lt;span&gt;INTRO TO DOM&lt;/span&gt;"</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architecture Note:</strong> For Composition to work, every function in the chain <strong>must be Unary</strong> (accept exactly one argument). This is why Currying is the essential partner to Composition—it transforms multi-arg functions into unary ones that can fit into the pipeline.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Summary: Functional LEGOs</h2>
+        <p>
+            By mastering these patterns, you treat the ROSETTA codebase as a collection of <strong>interchangeable logic blocks</strong>. You can swap, reorder, and enhance your data processing without ever having to touch the core "Heavy" functions.
+        </p>
+    </div>
+
+</section>

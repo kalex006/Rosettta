@@ -1,0 +1,118 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.2 Object Mutation & Cloning</h1>
+    <p class="artifact-subtitle">The Forge of Duplication: Mastering state integrity through controlled data replication.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Mutation Problem</h2>
+        <p>
+            As established in the previous lesson, Reference Types point to a specific address in memory. <strong>Mutation</strong> is the act of changing the data at that address.
+        </p>
+        <p>
+            In a complex system like ROSETTA, mutation is dangerous. If you pass a "Lesson" object to a sidebar component and that component changes a property, it changes it for the <em>entire application</em>. This leads to unpredictable state bugs. To prevent this, architects use <strong>Immutability Patterns</strong>—creating new copies of data instead of modifying the original.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Shallow Cloning (The Surface Copy)</h2>
+        <p>
+            A <strong>Shallow Clone</strong> creates a new object and copies the top-level properties. In modern architecture, we use the <strong>Spread Operator</strong> (<code>...</code>) or <code>Object.assign()</code>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">shallow_clone.js</span>
+        </div>
+        <pre><code class="language-javascript">const original = { id: "ARV-1", status: "Active" };
+
+// 1. Spread Operator (Standard)
+const clone = { ...original };
+
+// 2. Object.assign (Legacy/Functional)
+const clone2 = Object.assign({}, original);
+
+clone.status = "Modified";
+
+console.log(original.status); // "Active" (Safe!)
+console.log(clone.status);    // "Modified"</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Shallow Trap: Nested Objects</h2>
+        <p>
+            The danger of a shallow clone is that it only copies the <strong>first level</strong>. If an object contains another object (nested), the clone will still point to the <em>same memory address</em> for that nested object.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Warning:</strong> If you use the spread operator on a nested object, you haven't fully decoupled the data. Changing a nested property in the clone will still mutate the original.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Danger</span>
+            <span class="file-name">nested_mutation.js</span>
+        </div>
+        <pre><code class="language-javascript">const artifact = {
+    id: "ARV-2",
+    meta: { author: "Kalex" }
+};
+
+const badClone = { ...artifact };
+
+badClone.meta.author = "Unknown"; 
+
+// DISASTER: Both have been changed!
+console.log(artifact.meta.author); // "Unknown"</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Deep Cloning (The Full Decouple)</h2>
+        <p>
+            A <strong>Deep Clone</strong> recursively copies every level of the object tree, ensuring total isolation. Historically, this was difficult, but modern browsers now provide a native global function: <code>structuredClone()</code>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">Modern JS</span>
+            <span class="file-name">deep_clone.js</span>
+        </div>
+        <pre><code class="language-javascript">const artifact = {
+    id: "ARV-3",
+    meta: { version: 1.0 }
+};
+
+// Total decoupling
+const deepClone = structuredClone(artifact);
+
+deepClone.meta.version = 2.0;
+
+console.log(artifact.meta.version); // 1.0 (Success!)
+console.log(deepClone.meta.version); // 2.0</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Prevent Mutation: Object.freeze()</h2>
+        <p>
+            If you want to ensure an artifact is <strong>Read-Only</strong>, you can use <code>Object.freeze()</code>. This prevents any properties from being added, removed, or changed. 
+        </p>
+        <p>
+            <em>Note:</em> Like the spread operator, <code>freeze</code> is shallow. It only protects the first level.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Senior Design Pattern:</strong> In the ROSETTA project, we treat the course <code>config.json</code> as an <strong>Immutable Source</strong>. Whenever we filter or sort lessons, we use the spread operator or <code>.map()</code> to create a fresh array/object for the UI, keeping the raw data pristine.
+        </div>
+    </div>
+
+</section>

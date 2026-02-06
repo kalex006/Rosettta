@@ -1,0 +1,124 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.5 Coercion & Truthiness</h1>
+    <p class="artifact-subtitle">Logic of Transmutation: Navigating the engine's heuristic type conversion and boolean evaluation rules.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Concept of Coercion</h2>
+        <p>
+            JavaScript is a <strong>Dynamically Typed</strong> and <strong>Weakly Typed</strong> language. This means variables can change types at runtime, and the engine will often try to "help" you by automatically converting types to make an operation work. This automatic conversion is called <strong>Implicit Coercion</strong>.
+        </p>
+        <p>
+            As a systems architect, your goal is <strong>Determinism</strong>. You want the code to behave exactly as predicted. Relying on implicit coercion is a primary source of technical debt and "silent" bugs.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Implicit vs. Explicit</h2>
+        <ul class="artifact-list">
+            <li><strong>Implicit:</strong> The engine forces a type change (e.g., <code>"5" - 2</code> results in the number <code>3</code>).</li>
+            <li><strong>Explicit:</strong> The developer intentionally converts the type (e.g., <code>Number("5")</code>). This is the preferred architectural standard.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">coercion_examples.js</span>
+        </div>
+        <pre><code class="language-javascript">// 1. The Addition Paradox (String wins)
+console.log("5" + 2); // "52" (String)
+
+// 2. The Subtraction Logic (Number wins)
+console.log("5" - 2); // 3 (Number)
+
+// 3. Boolean Coercion
+if ("Artifact") { 
+    console.log("This runs because non-empty strings are Truthy");
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Rules of Truthiness</h2>
+        <p>
+            In an <code>if</code> statement or logical operation, JavaScript doesn't require a strict boolean. It evaluates any value as either <strong>Truthy</strong> or <strong>Falsy</strong>. 
+        </p>
+        <p>
+            To be an architect, you must memorize the <strong>Seven Falsy Values</strong>. Everything else in the language is Truthy.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Value</th>
+                    <th>Type</th>
+                    <th>Logic State</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><code>false</code></td><td>Boolean</td><td>Falsy</td></tr>
+                <tr><td><code>0</code>, <code>-0</code>, <code>0n</code></td><td>Number / BigInt</td><td>Falsy</td></tr>
+                <tr><td><code>""</code> (Empty)</td><td>String</td><td>Falsy</td></tr>
+                <tr><td><code>null</code></td><td>Null</td><td>Falsy</td></tr>
+                <tr><td><code>undefined</code></td><td>Undefined</td><td>Falsy</td></tr>
+                <tr><td><code>NaN</code></td><td>Number</td><td>Falsy</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Strict Equality (===) vs. Loose Equality (==)</h2>
+        <p>
+            The double-equals operator (<code>==</code>) performs <strong>Implicit Coercion</strong> before comparing. This leads to absurd results like <code>0 == ""</code> being true.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Mandate:</strong> Always use the triple-equals <code>===</code> (Strict Equality). It compares both <strong>Value</strong> and <strong>Type</strong>. If the types are different, it returns false immediately without attempting to "fix" the data.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">equality_comparison.js</span>
+        </div>
+        <pre><code class="language-javascript">console.log(0 == "");   // true (Loose - Dangerous!)
+console.log(0 === "");  // false (Strict - Correct)
+
+const input = "10";
+if (Number(input) === 10) {
+    // Explicit conversion + Strict equality = Safe Architecture
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Nullish Coalescing Operator (??)</h2>
+        <p>
+            A modern architectural tool for setting default values. Unlike the <code>||</code> (OR) operator, which returns the fallback for <em>any</em> falsy value (like 0 or ""), the <code>??</code> operator only triggers if the value is <strong>null</strong> or <strong>undefined</strong>.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">Modern JS</span>
+                <span class="file-name">defaults.js</span>
+            </div>
+            <pre><code class="language-javascript">let userScore = 0;
+
+// Logical OR (Fails here)
+let score1 = userScore || 10; // Result: 10 (Wrong! 0 is a valid score)
+
+// Nullish Coalescing (Correct)
+let score2 = userScore ?? 10; // Result: 0 (Correct!)</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The ! Paradox:</strong> Using the <code>!</code> (NOT) operator forces an immediate coercion to a boolean and then inverts it. Using <code>!!</code> (Double NOT) is a common architectural shorthand to convert any value into its literal boolean equivalent.
+        </div>
+    </div>
+
+</section>

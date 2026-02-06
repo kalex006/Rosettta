@@ -1,0 +1,168 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.5 Recursion & The Call Stack</h1>
+    <p class="artifact-subtitle">Iterative Self-Reference: Mastering recursive logic and the physical limits of the Execution Stack.</p>
+</header>
+
+<section class="lesson-contentg., categories within categories). To process these, an architect must understand how a function can call itself to "drill" into the data, and how the browser's Call Stack manages the resulting memory pressure.
+
+### File Path: `courses/js/lessons/topic-03/recursion.html`
+
+**Objective:** To master **Self-Referential Logic**. You will learn the mechanics of the Base Case and the Recursive Step, analyze the Call Stack's depth limitations, and implement a recursive search algorithm to traverse the ROSETTA course tree.
+
+```html
+<header class="lesson-header">
+    <h1 class="artifact-title">3.5 Recursion & The Call Stack</h1>
+    <p class="artifact-subtitle">The Eternal Echo: Engineering self-referential logic to navigate complex, nested data hierarchies.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Concept of Self-Reference</h2>
+        <p>
+            <strong>Recursion</strong> is a functional pattern where a function calls itself to solve a smaller version of the same problem. In the eyes of a Senior Architect, recursion is not just a "fancy loop"; it is the most elegant way to process <strong>Recursive Data Structures</strong>—trees, graphs, and nested JSON objects.
+        </p>
+        <p>
+            While powerful, recursion is "expensive" in terms of memory. Every time a function calls itself, a new <strong>Execution Context</strong> is pushed onto the Call Stack.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Two Pillars of Recursion</h2>
+        <p>
+            A recursive function without a boundary is a memory leak in waiting. To be valid, every recursive artifact must have:header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">recursion_anatomy.js</span>
+        </div>
+        <pre><code class="language-javascript">function countdown(n) {
+    // 1. Base Case
+    if (n <= 0) {
+        console.log("Artifact Unlocked");
+        return;
+    }
+
+    // 2. Recursive Step
+    console.log(n);
+    countdown(n - 1); 
+}
+
+countdown(3); 
+// Output: 3, 2, 1, "Artifact Unlocked"</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Call Stack Mechanics</h2>
+        <p>
+            As we learned in Lesson 1.1, JavaScript uses a <strong>Call Stack</strong> to track execution. When a function calls itself, it doesn't "loop"; it pushes a <strong>new frame</strong> onto the stack.
+        </p>
+        <p>
+            In the <code>countdown(3)</code> example above, the stack grows to 4 layers deep (countdown 3, 2, 1,">
+    
+    <div class="content-block">
+        <h2>The Recursive Loop</h2>
+        <p>
+            <strong>Recursion</strong> is a programming technique where a function calls itself to resolve a task. While any recursive problem can be solved with a standard <code>for</code> or <code>while</code> loop, recursion is often the superior architectural choice for navigating <strong>Hierarchical Data</strong> (like nested folders, DOM trees, or JSON objects).
+        </p>
+        <p>
+            An architect views recursion as a "Deep Dive" into a data structure, where the function continues to descend until it hits a solid floor.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Two Pillars of Recursion</h2>
+        <p>
+            Every stable recursive function must have two distinct components to prevent an infinite loop:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>The Base Case (The Exit):</strong> The condition under which the function stops calling itself and returns a value.</li>
+            <li><strong>The Recursive
+        </p>
+        <ul class="artifact-list">
+            <li><strong>The Base Case (The Anchor):</strong> The condition under which the function stops calling itself. It returns a fixed value.</li>
+            <li><strong>The Recursive Step:</strong> The logic that calls the function again, but with a "smaller" or "closer" version of the input data.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">basic_recursion.js</span>
+        </div>
+        <pre><code class="language-javascript">function countdown(n) {
+    // 1. Base Case
+    if (n <= 0) {
+        console.log("Transmission Complete.");
+        return;
+    }
+
+    // 2. Recursive Step
+    console.log(`Signal Strength: ${n}`);
+    countdown(n - 1); // Calling itself with smaller input
+}
+
+countdown(3);</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Visualizing the Call Stack</h2>
+        <p>
+            As established in Topic 1.1, the <strong>Call Stack</strong> tracks and 0) before the base case is hit and the engine begins "popping" the frames off.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Use Case: Traversing the Syllabus</h2>
+        <p>
+            In ROSETTA, our <code>config.json</code> is a tree. To find a specific lesson by its ID, we don't know how deep the folders go. Recursion allows us to "crawl" through every branch until the ID is found.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">tree_traversal.js</span>
+        </div>
+        <pre><code class="language-javascript">const syllabus = [
+    { title: "Topic 1", files: [{ id: "1.1" }, { id: "1.2" }] },
+    { title: "Topic 2", files: [{ id: "2.1" }] }
+];
+
+function findLesson(id, items) {
+    for (const item of items) {
+        if (item.id === id) return item; // Found it!
+        
+        // If item has children (nested files/topics), crawl deeper
+        if (item.files) {
+            const result = findLesson(id, item.files);
+            if (result) return result;
+        }
+    }
+    return null;
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Stack Overflow:</strong> If a recursive function never hits a base case (an infinite recursion), the stack exceeds its memory limit. The browser will throw a <code>RangeError: Maximum call stack size exceeded</code>. Always test your base cases with "Edge Case" inputs (like empty arrays or null values).
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Tail Call Optimization (TCO)</h2>
+        <p>
+            In some advanced languages, if the recursive call is the <em>very last action</em> of a function, the engine can reuse the same stack frame to save memory. While part of the ES6 spec, support for <strong>TCO</strong> is inconsistent in browsers. 
+        </p>
+        <p>
+            As a Senior Architect, assume TCO is <strong>not</strong> available and keep your recursions shallow (under 1,000 calls) to ensure stability on mobile devices.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Verdict:</strong> Recursion is mathematically elegant but memory-expensive. Use it for <strong>Structural Logic</strong> (like parsing JSON or the DOM tree), but use standard <code>for</code> or <code>while</code> loops for <strong>Heavy Computation</strong> where performance and memory footprints are critical.
+        </div>
+    </div>
+
+</section>

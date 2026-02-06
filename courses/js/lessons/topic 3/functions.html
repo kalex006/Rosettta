@@ -1,0 +1,216 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.1 Arrow vs. Declaration</h1>
+    <p class="artifact-subtitle">Functional Archetypes: Analyzing the structural and contextual divide between traditional and fat-arrow syntax.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Evolution of Logic</h2>
+        <p>
+            In JavaScript, functions are "First-Class Citizens." They can be stored in variables, passed as arguments, and returned from other functions. However, modern architecture provides two primary ways to define them, each with fundamentally different behaviors in the engine's <strong>Execution Context</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Function Declarations (The Blueprints)</h2>
+        <p>
+            Traditional declarations use the <code>function</code> keyword. They are the also create their own <code>this</code> binding based on how they are called.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">declaration.js</span>
+        </div>
+        <pre><code class="language-javascript">// Hoisted: Can be called here
+initializeUI(); 
+
+function initializeUI() {
+    console.log("ROSETTA System Online");
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Arrow Functions (The Lexical Stream)</h2>
+        <p>
+            Introduced in ES6, Arrow Functions (<code>=></code>) provide a more concise syntax. Architecturally, their most significant feature is that <strong>they do not have their own 'this'</strong>. They inherit <code>this</code> from the scope in which they were defined (Lexical Binding).
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Conciseness:</strong> Implicit returns for single-line logic.</li>
+            <li><strong>Non-Constructible:</strong> Cannot be used with the <code>new</code> keyword.</li>
+            <li><strong>No Arguments Object:</strong> They do not have the legacy <code>arguments</code> array.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">arrow_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">// Function Expression with Arrow Syntax
+const addArtifact = (id, name) => ({ id, name });
+
+// Lexical 'this' example
+const timer = {
+    seconds: 0,
+    start() {
+        // Arrow function inherits 'this' from start()
+        setInterval(() => {
+            this.seconds++;
+            console.log(this.seconds);
+        }, 1000);
+    }
+};</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The 'this' Context War</h2>
+        <p>
+            The choice between types often comes down to context management.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Declaration</th>
+                    <th>Arrow Function</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>this Binding</strong></td>
+                    <td>Dynamic (depends on caller)</td>
+                    <td>Lexical (inherited)</td>
+                </tr>
+                <tr>
+                    <td><strong>Hoisting</strong></td>
+                    <td>Full</td>
+                    <td>No (assigned to variable)</td>
+                </tr>
+                <tr>
+                    <td><strong>Use Case</strong></td>
+                    <td>Global logic, Methods</td>
+                    <td>Callbacks, Helpers, Closures</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Command:</strong> In ROSETTA's component-based logic, use <strong>Arrow Functions</strong> for all internal callbacks (like <code>.map()</code> or event listeners) to prevent "Context Loss." Use <strong>Function Declarations</strong> for top-level module logic that requires hoisting or when defining object methods that need to access the object's properties via <code>this</code>.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Implicit vs. Explicit Return</h2>
+        <p>
+            Arrow functions allow most robust archetype and follow the "Blueprint" model.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Full Hoisting:</strong> The entire function is available before the code execution phase (Lesson 1.2).</li>
+            <li><strong>Dynamic 'this':</strong> The value of <code>this</code> is determined by <em>how</em> the function is called.</li>
+            <li><strong>Arguments Object:</strong> They have access to a local <code>arguments</code> object containing all passed parameters.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">declaration_blueprint.js</span>
+        </div>
+        <pre><code class="language-javascript">// Hoisted: can be called before definition
+const status = getVaultStatus(); 
+
+function getVaultStatus() {
+    console.log(arguments); // Accesses all passed args
+    return "Secure";
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Arrow Functions (The Fat Arrow)</h2>
+        <p>
+            Introduced in ES6, Arrow Functions (<code>=></code>) provide a more concise syntax but, more importantly, they change the <strong>Contextual Physics</strong> of the function.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Lexical 'this':</strong> They do not have their own <code>this</code>. They inherit it from the surrounding scope.</li>
+            <li><strong>No Hoisting:</strong> They are stored in variables (<code>const/let</code>) and remain in the TDZ until initialized.</li>
+            <li><strong>Implicit Return:</strong> If the function is a single expression, the <code>return</code> keyword and curly braces are optional.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">arrow_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">// Concise Syntax
+const multiply = (a, b) => a * b;
+
+// Lexical Binding Example
+const artifact = {
+    id: "ARV-9",
+    unlock: function() {
+        // Arrow inherits 'this' from 'unlock'
+        setTimeout(() => {
+            console.log(`Unlocking: ${this.id}`); 
+        }, 1000);
+    }
+};</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. When to use Which?</h2>
+        <p>
+            As a Senior Architect, your choice should be based on <strong>Context Preservation</strong>:
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Scenario</th>
+                    <th>Recommended</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Object Methods</td>
+                    <td>Declaration</td>
+                    <td>Needs its own <code>this</code> context to access properties.</td>
+                </tr>
+                <tr>
+                    <td>Callbacks (setTimeout/Fetch)</td>
+                    <td>Arrow</td>
+                    <td>Needs to preserve the <code>this</code> of the parent component.</td>
+                </tr>
+                <tr>
+                    <td>Constructors</td>
+                    <td>Declaration</td>
+                    <td>Arrow functions <strong>cannot</strong> be used with the <code>new</code> keyword.</td>
+                </tr>
+             you to omit the <code>return</code> keyword and the curly braces if the function is a single expression. This leads to cleaner "Functional Pipelines."
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS Pipeline</span>
+                <span class="file-name">functional_pipeline.js</span>
+            </div>
+            <pre><code class="language-javascript">const lessons = [{id: 1, title: "Engine"}, {id: 2, title: "DOM"}];
+
+// Concise mapping
+const titles = lessons.map(l => l.title);</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Memory Note:</strong> Function declarations are slightly more memory-efficient when used as methods in large classes, as they are part of the prototype. Arrow functions assigned to properties are re-created for every instance.
+        </div>
+    </div>
+
+</section>

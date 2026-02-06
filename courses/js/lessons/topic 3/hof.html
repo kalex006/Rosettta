@@ -1,0 +1,106 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.3 Higher-Order Functions</h1>
+    <p class="artifact-subtitle">Logic Orchestration: Mastering the abstraction of behavior by treating functions as first-class data.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Abstraction Layer</h2>
+        <p>
+            A <strong>Higher-Order Function (HOF)</strong> is defined by a simple mathematical criteria: it is a function that either <strong>takes one or more functions as arguments</strong>, or <strong>returns a function</strong> as its result.
+        </p>
+        <p>
+            In the ROSETTA architecture, HOFs allow us to separate the <em>mechanism</em> of a task (like looping through a list) from the <em>logic</em> of that task (what to do with each item). This is the foundation of <strong>Declarative Programming</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Functions as Arguments (Callbacks)</h2>
+        <p>
+            Passing a function into another function allows the receiver to "call back" to the provided logic at the appropriate time. This is the standard pattern for event handling and asynchronous orchestration.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">callback_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">// A generic executor (The HOF)
+const processArtifact = (data, action) => {
+    console.log("Analyzing data structure...");
+    return action(data); // Executing the passed logic
+};
+
+const encrypt = (text) => `[ENC]-${text}`;
+const summarize = (text) => text.slice(0, 5) + "...";
+
+// Reusing the same executor for different logic
+console.log(processArtifact("Stone Tablet", encrypt));
+console.log(processArtifact("Ancient Script", summarize));</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Functions as Returns (Factories)</h2>
+        <p>
+            HOFs can also generate new functions tailored to specific configurations. This allows the architect to create "Logic Blueprints" that are instantiated based on the application's current state.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">function_factory.js</span>
+        </div>
+        <pre><code class="language-javascript">// Creating a specialized filter factory
+const createFilter = (property, value) => {
+    return (list) => list.filter(item => item[property] === value);
+};
+
+const getDrafts = createFilter("status", "draft");
+const getCompleted = createFilter("status", "completed");
+
+const courses = [
+    { id: 1, status: "completed" },
+    { id: 2, status: "draft" }
+];
+
+console.log(getDrafts(courses)); // Returns course #2</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Built-in Architectural HOFs</h2>
+        <p>
+            Modern JavaScript provides a suite of high-performance HOFs for data processing (as seen in Topic 2.3). Every Senior Architect must know these by heart:
+        </p>
+        <ul class="artifact-list">
+            <li><code>.map()</code>: Transforms every element in an array.</li>
+            <li><code>.filter()</code>: Selects elements based on a predicate function.</li>
+            <li><code>.reduce()</code>: Distills a collection into a single value.</li>
+            <li><code>.sort()</code>: Orders a collection based on a comparator function.</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Command:</strong> Favor HOFs over <code>for</code> loops. HOFs reduce "Surface Area" for bugs by hiding the management of the loop counter and array boundaries, allowing you to focus purely on the <strong>Business Logic</strong> of the transformation.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Power of Abstraction</h2>
+        <p>
+            By using HOFs, you create a "Pluggable" architecture. In ROSETTA, our sidebar component doesn't need to know how to filter lessons—it just receives a <code>filterLogic</code> function as an argument. This makes our components truly independent and testable.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Cognitive Load Warning:</strong> While HOFs are powerful, over-nesting them (e.g., a function that returns a function that returns a function) can make the code "voodoo" to other developers. Keep your abstractions shallow and well-named.
+        </div>
+    </div>
+
+</section>

@@ -1,0 +1,118 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">3.2 Closures & Private Scope</h1>
+    <p class="artifact-subtitle">The Persistent Memory: Mastering the structural mechanism of data encapsulation and lexical survival.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Definition of Closure</h2>
+        <p>
+            In the architectural hierarchy of JavaScript, a <strong>Closure</strong> is the combination of a function bundled together with references to its surrounding state (the lexical environment). 
+        </p>
+        <p>
+            Simply put: A closure gives an inner function access to an outer function's scope. In JavaScript, closures are created every time a function is created, at function creation time.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Survival of Scope</h2>
+        <p>
+            Normally, when a function finishes executing, its local variables are wiped from memory (Garbage Collection). However, if an inner function is still "alive" (e.g., returned or stored), it keeps a <strong>Live Link</strong> to the outer function's variables.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Logic:</strong> The outer function's execution context is popped off the stack, but its <em>Lexical Environment</em> stays in the Heap because the inner function still holds a reference to it. This is how we achieve "Persistence" without global variables.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">closure_mechanics.js</span>
+        </div>
+        <pre><code class="language-javascript">function createVault() {
+    let secret = "Gold Fragment"; // Private variable
+
+    return function() {
+        // This inner function has a closure over 'secret'
+        console.log(`Accessing: ${secret}`);
+    };
+}
+
+const access = createVault();
+access(); // Result: "Accessing: Gold Fragment"
+// The variable 'secret' survived even though createVault() is finished.</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Engineering Private State</h2>
+        <p>
+            The primary use case for closures in high-end systems is <strong>Encapsulation</strong>. It allows you to create "Private" data that cannot be accessed or modified from the outside world (the console or other scripts).
+        </p>
+        <p>
+            In the ROSETTA engine, we use this pattern to manage user progress or security tokens—keeping the "Source of Truth" hidden behind controlled access functions.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">encapsulation_pattern.js</span>
+        </div>
+        <pre><code class="language-javascript">const counter = (function() {
+    let _count = 0; // The underscore denotes a private variable
+
+    return {
+        increment: () => ++_count,
+        decrement: () => --_count,
+        getValue: () => _count
+    };
+})();
+
+console.log(counter.getValue()); // 0
+counter.increment();
+console.log(counter._count); // undefined (Total Privacy)</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Practical Use: Factory Functions</h2>
+        <p>
+            Closures allow for the creation of <strong>Function Factories</strong>—functions that return other functions customized with specific data.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">factory_logic.js</span>
+            </div>
+            <pre><code class="language-javascript">function createLogger(prefix) {
+    return (message) => console.log(`[${prefix}] ${message}`);
+}
+
+const infoLog = createLogger("INFO");
+const errorLog = createLogger("SECURITY");
+
+infoLog("Artifact Loaded"); // [INFO] Artifact Loaded
+errorLog("Unauthorized Access"); // [SECURITY] Unauthorized Access</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Memory Warning:</strong> Because closures prevent variables from being garbage-collected, overusing them or holding large objects in a closure can lead to <strong>Memory Leaks</strong>. As a Senior Architect, ensure you nullify references to closure-heavy functions when they are no longer needed.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Summary: The Closure Protocol</h2>
+        <ul class="artifact-list">
+            <li><strong>Protection:</strong> Keeps variables out of the global scope.</li>
+            <li><strong>Persistence:</strong> Variables live as long as the closure exists.</li>
+            <li><strong>Security:</strong> Creates a "Read-Only" or "Controlled-Write" interface for your data.</li>
+        </ul>
+    </div>
+
+</section>

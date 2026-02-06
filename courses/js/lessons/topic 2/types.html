@@ -1,0 +1,106 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.1 Primitive vs. Reference Types</h1>
+    <p class="artifact-subtitle">The Memory Divide: Analyzing the structural difference between value-based and address-based data storage.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Binary Categorization</h2>
+        <p>
+            In JavaScript, every piece of data falls into one of two architectural categories. This distinction determines how the engine handles the data during assignment, passing to functions, and equality checks.
+        </p>
+        <p>
+            To build a stable "Zero-Backend" engine like ROSETTA, you must know when you are creating a <strong>New Copy</strong> of data and when you are merely creating a <strong>New Pointer</strong> to existing data.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Primitive Types (Atomic Values)</h2>
+        <p>
+            Primitives are the simplest units of data. They are <strong>Immutable</strong> (cannot be changed) and are stored directly on the <strong>Stack</strong>—a fast, small memory region.
+        </p>
+        <ul class="artifact-list">
+            <li><code>String</code>, <code>Number</code>, <code>Boolean</code></li>
+            <li><code>Null</code>, <code>Undefined</code></li>
+            <li><code>Symbol</code>, <code>BigInt</code></li>
+        </ul>
+        <p>
+            When you assign a primitive to a new variable, JavaScript performing a <strong>Copy by Value</strong>. The two variables are completely independent.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">copy_by_value.js</span>
+        </div>
+        <pre><code class="language-javascript">let artifactA = "Gold";
+let artifactB = artifactA; // A new copy is made
+
+artifactB = "Silver";
+
+console.log(artifactA); // Result: "Gold" (Unchanged)
+console.log(artifactB); // Result: "Silver"</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Reference Types (Objects)</h2>
+        <p>
+            Reference types (Objects, Arrays, Functions) are complex structures. Because they can grow to massive sizes, they are stored on the <strong>Heap</strong>—a large, unordered memory region. 
+        </p>
+        <p>
+            The variable on the Stack does not hold the data itself; it holds a <strong>Memory Address</strong> (a pointer) that tells the engine where to find the object on the Heap.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Trap:</strong> When you assign an object to a new variable, you are performing a <strong>Copy by Reference</strong>. You are copying the "Map," not the "Building." Both variables now point to the exact same data in memory.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Warning</span>
+            <span class="file-name">copy_by_reference.js</span>
+        </div>
+        <pre><code class="language-javascript">const vaultA = { status: "Locked" };
+const vaultB = vaultA; // Both point to the same object
+
+vaultB.status = "Open";
+
+console.log(vaultA.status); // Result: "Open" (Accidental modification!)
+console.log(vaultA === vaultB); // Result: true (They share the same identity)</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Equality Logic</h2>
+        <p>
+            The comparison operator (<code>===</code>) behaves differently based on the type:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Primitives:</strong> Compared by <strong>Value</strong>. <code>5 === 5</code> is true because the numbers are the same.</li>
+            <li><strong>Reference Types:</strong> Compared by <strong>Reference</strong>. Two objects are only equal if they are the <em>exact same instance</em> in memory. Even if two objects look identical, they are not equal if they sit at different addresses.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">identity_check.js</span>
+        </div>
+        <pre><code class="language-javascript">const obj1 = { id: 1 };
+const obj2 = { id: 1 };
+
+console.log(obj1 === obj2); // Result: false (Different memory addresses)</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Senior Architecture Hint:</strong> In ROSETTA, we often deal with large JSON objects. Understanding reference types allows us to "Pass by Reference" into functions, which is highly memory-efficient because we aren't duplicating large datasets. However, we must use <strong>Immutability Patterns</strong> (Topic 2.2) to prevent unintended side effects.
+        </div>
+    </div>
+
+</section>

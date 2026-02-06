@@ -1,0 +1,126 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">2.3 Array Archetypes & Methods</h1>
+    <p class="artifact-subtitle">Data Fluidity: Mastering functional transformation and the orchestration of complex data collections.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Array as a Data Structure</h2>
+        <p>
+            In JavaScript, an <code>Array</code> is technically a specialized object with an auto-updating <code>length</code> property and integer-based keys. Architecturally, we use arrays to represent ordered sequences—such as the list of lessons in a ROSETTA module.
+        </p>
+        <p>
+            Modern architecture favors <strong>Declarative Programming</strong>. Instead of telling the computer <em>how</em> to loop (using <code>for</code> or <code>while</code>), we use high-order methods to describe <em>what</em> we want the data to become.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Transformation Pillar: .map()</h2>
+        <p>
+            The <code>.map()</code> method creates a <strong>new array</strong> by applying a function to every element in the original. It is the primary tool for converting raw JSON data into UI components.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">data_to_ui.js</span>
+            </div>
+            <pre><code class="language-javascript">const rawLessons = ["DOM", "CSSOM", "CRP"];
+
+// Transforming strings into HTML strings
+const lessonLinks = rawLessons.map(lesson => `&lt;li&gt;${lesson}&lt;/li&gt;`);
+
+console.log(lessonLinks); // ["&lt;li&gt;DOM&lt;/li&gt;", ...]</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Selection Pillar: .filter()</h2>
+        <p>
+            The <code>.filter()</code> method creates a <strong>new array</strong> containing only the elements that pass a specific logical test. 
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">search_logic.js</span>
+            </div>
+            <pre><code class="language-javascript">const courses = [
+    { name: "HTML", status: "complete" },
+    { name: "JS", status: "draft" }
+];
+
+// Selecting only the complete artifacts
+const finished = courses.filter(item => item.status === "complete");</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Aggregation Pillar: .reduce()</h2>
+        <p>
+            The <code>.reduce()</code> method is the most powerful and complex. It executes a "reducer" function on each element, resulting in a <strong>single output value</strong> (a number, a string, or even a combined object).
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Use Case:</strong> Use <code>reduce</code> to calculate the total reading time of an entire course by summing the "minutes" property of every lesson object.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">reducer_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">const times = [10, 15, 20];
+
+const totalTime = times.reduce((accumulator, current) => {
+    return accumulator + current;
+}, 0); // 0 is the starting point</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Mutation vs. Purity</h2>
+        <p>
+            A Senior Architect must know which methods are <strong>Safe (Pure)</strong> and which are <strong>Dangerous (In-place)</strong>.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Method Type</th>
+                    <th>Examples</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Pure (Recommended)</strong></td>
+                    <td><code>.map</code>, <code>.filter</code>, <code>.slice</code>, <code>.concat</code></td>
+                    <td>Returns a <strong>new</strong> array. Original is untouched.</td>
+                </tr>
+                <tr>
+                    <td><strong>Impure (Avoid)</strong></td>
+                    <td><code>.push</code>, <code>.pop</code>, <code>.sort</code>, <code>.splice</code></td>
+                    <td><strong>Mutates</strong> the original array in memory.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Sort Trap:</strong> The <code>.sort()</code> method mutates the original array. If you need to sort your lessons but keep the original order elsewhere, always use the spread operator first: <code>const sorted = [...original].sort();</code>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Search & Locality</h2>
+        <ul class="artifact-list">
+            <li><code>.find()</code>: Returns the <strong>first</strong> element that matches the condition. Efficient for ID lookups.</li>
+            <li><code>.some()</code>: Returns true if <strong>at least one</strong> item matches.</li>
+            <li><code>.every()</code>: Returns true if <strong>all</strong> items match.</li>
+        </ul>
+    </div>
+
+</section>
