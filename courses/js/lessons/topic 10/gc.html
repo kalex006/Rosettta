@@ -1,0 +1,109 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.1 The V8 Garbage Collector</h1>
+    <p class="artifact-subtitle">The Ghost in the Engine: Deconstructing the automated lifecycle of memory reclamation.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Finite Resource</h2>
+        <p>
+            In low-level languages like C, the architect must manually allocate and free memory. In JavaScript, this process is automated by the <strong>Garbage Collector (GC)</strong>. However, automation is not an excuse for ignorance. 
+        </p>
+        <p>
+            The V8 engine (used in Chrome and Node.js) treats memory as a biological system. It constantly scans your objects to see which ones are still "alive" (reachable) and which ones have become "trash" (orphaned from the root).
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Reachability: The Root Logic</h2>
+        <p>
+            The GC uses a concept called <strong>Reachability</strong>. An object is reachable if it can be found starting from a "Root" (the global <code>window</code> object or currently executing function frames).
+        </p>
+        <ul class="artifact-list">
+            <li>If an object is reachable, it stays in memory.</li>
+            <li>If there is no path from the root to the object, it is marked for deletion.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">reachability_audit.js</span>
+        </div>
+        <pre><code class="language-javascript">let artifact = { id: "ARV-1001", data: "..." };
+
+// The object is reachable via the variable 'artifact'
+artifact = null; 
+
+// The 'pointer' is removed. 
+// The object { id: "ARV-1001"... } is now unreachable.
+// The Ghost (GC) will reclaim this space in the next cycle.</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Generational Hypothesis</h2>
+        <p>
+            V8 optimizes performance using the <strong>Generational Hypothesis</strong>: "Most objects die young." To exploit this, the engine splits the memory (The Heap) into two distinct zones:
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Generation</th>
+                    <th>Description</th>
+                    <th>Reclamation Speed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>New Space</strong></td>
+                    <td>Where new objects are born. Small (1MB - 8MB).</td>
+                    <td>Extremely Fast (Scavenge).</td>
+                </tr>
+                <tr>
+                    <td><strong>Old Space</strong></td>
+                    <td>Where survivors move. Large and persistent.</td>
+                    <td>Slow (Mark-Sweep-Compact).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Mark-and-Sweep Algorithm</h2>
+        <p>
+            When the Old Space becomes full, V8 performs a <strong>Major GC</strong> using the Mark-and-Sweep algorithm:
+        </p>
+        <ol class="artifact-list">
+            <li><strong>Mark:</strong> The GC walks the tree and "paints" every reachable object.</li>
+            <li><strong>Sweep:</strong> It scans the memory and identifies unpainted gaps.</li>
+            <li><strong>Compact:</strong> It moves the surviving objects together to eliminate "fragmentation" (empty holes in memory).</li>
+        </ol>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Insight: Stop-The-World.</strong><br>
+            Historically, GC caused the browser to "freeze" (Stop-The-World). Modern V8 uses <strong>Incremental Marking</strong>—breaking the work into tiny slices—to ensure that the ROSETTA animations remain smooth and 60fps even while the engine is cleaning up data.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Why this matters for ROSETTA</h2>
+        <p>
+            Every time a user switches between the HTML course and the CSS course, <code>main.js</code> fetches new JSON files. If you keep global references to old course data, that data will be moved to the <strong>Old Space</strong> and stay there forever, slowly eating the user's RAM. 
+        </p>
+        <p>
+            <strong>Standard Protocol:</strong> Ensure that when a course is closed, all local variables pointing to its data are set to <code>null</code> or go out of scope.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Memory Hint:</strong> Large arrays and long strings are often allocated directly into a special "Large Object Space" in the Old Space to avoid the cost of moving them during Scavenging. Treat large data sets with extra care.
+        </div>
+    </div>
+
+</section>

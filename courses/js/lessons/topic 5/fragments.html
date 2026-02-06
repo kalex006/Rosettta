@@ -1,0 +1,124 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.4 Fragment Injection & Performance</h1>
+    <p class="artifact-subtitle">The Buffer Protocol: Optimizing DOM mutation speed through off-screen document fragments.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Cost of Change</h2>
+        <p>
+            Every time you use <code>appendChild()</code> or <code>prepend()</code> on an element that is already on the screen, the browser must perform a <strong>Reflow</strong> (calculating geometry) and a <strong>Repaint</strong> (drawing pixels). 
+        </p>
+        <p>
+            If you are injecting 50 lesson links into the ROSETTA sidebar inside a <code>forEach</code> loop, you are forcing the browser to recalculate the entire page layout 50 times. On mobile devices, this results in visible "Jank" and slow load times.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The DocumentFragment: A Phantom Container</h2>
+        <p>
+            The <code>DocumentFragment</code> is a minimal DOM object that exists entirely in memory. It has no parent and is not part of the active document tree. 
+        </p>
+        <p>
+            Think of it as an <strong>Architectural Staging Area</strong>. You build your complex HTML structure inside the fragment first, and then you perform a <strong>single injection</strong> into the live DOM.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Optimization</span>
+            <span class="file-name">fragment_pattern.js</span>
+        </div>
+        <pre><code class="language-javascript">const list = document.querySelector('.lesson-list');
+const lessons = ["Execution", "Hoisting", "Scoping", "Closures"];
+
+// 1. Create the off-screen buffer
+const fragment = document.createDocumentFragment();
+
+lessons.forEach(title => {
+    const li = document.createElement('li');
+    li.className = 'artifact-item';
+    li.textContent = title;
+    
+    // 2. Append to the fragment (Zero performance cost)
+    fragment.appendChild(li);
+});
+
+// 3. Single Reflow: Append the entire batch at once
+list.appendChild(fragment);</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Automatic Extraction</h2>
+        <p>
+            A unique property of the <code>DocumentFragment</code> is that when it is appended to the DOM, only its <strong>children</strong> are added. The fragment itself "dissolves" and becomes empty again. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Efficiency:</strong> Because the fragment doesn't have a wrapper tag (like a <code>&lt;div&gt;</code>), it doesn't add unnecessary "DOM weight." It is the cleanest way to batch-inject nodes.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Fragment vs. innerHTML</h2>
+        <p>
+            As a Senior Architect, you must choose the right tool for the job.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Pros</th>
+                    <th>Cons</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>innerHTML</code></td>
+                    <td>Very fast for large strings of text.</td>
+                    <td><strong>XSS Security Risk;</strong> Wipes existing event listeners.</td>
+                </tr>
+                <tr>
+                    <td><code>DocumentFragment</code></td>
+                    <td><strong>Secure;</strong> Preserves existing listeners; logic-friendly.</td>
+                    <td>Slightly more verbose to write.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Avoiding Layout Thrashing</h2>
+        <p>
+            In ROSETTA, we often need to calculate the height of an element after injecting it. <strong>Layout Thrashing</strong> occurs when you alternate between "Writing" to the DOM (injecting) and "Reading" from the DOM (measuring <code>offsetHeight</code>).
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>The Golden Sequence:</strong> Always perform <strong>all reads first</strong>, then <strong>all writes</strong>. By using a Fragment for your writes, you ensure the browser engine stays in "Creation Mode" rather than "Correction Mode."
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">batch_mutation.js</span>
+        </div>
+        <pre><code class="language-javascript">// ❌ BAD: Read-Write-Read-Write (Slow)
+items.forEach(item => {
+    const h = container.offsetHeight; // READ
+    item.style.height = h + 'px';     // WRITE
+});
+
+// ✅ GOOD: Read once, Write in batch
+const h = container.offsetHeight; // READ
+const fragment = document.createDocumentFragment();
+// ... build all items in fragment ...
+container.appendChild(fragment); // WRITE</code></pre>
+    </div>
+
+</section>

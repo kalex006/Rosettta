@@ -1,0 +1,106 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.4 Tree Shaking Logic</h1>
+    <p class="artifact-subtitle">Pruning the Monolith: Leveraging static module analysis to eliminate redundant logic and minimize the payload.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Dead Code Problem</h2>
+        <p>
+            In a modular system, we often import utility libraries that contain hundreds of functions. If we only use <strong>two</strong> of those functions, but the browser downloads all <strong>hundred</strong>, we have committed an architectural failure of efficiency.
+        </p>
+        <p>
+            <strong>Tree Shaking</strong> is the process of removing unused code from your final bundle. Think of your application as a tree: the "living" code represents green leaves, and the "unused" code represents brown, dead leaves. By "shaking" the tree, we let the dead leaves fall away.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Static Requirement</h2>
+        <p>
+            Tree Shaking only works with <strong>ES Modules</strong> (Lesson 8.1). Why? Because <code>import</code> and <code>export</code> are <strong>Static</strong>. The engine can determine which code is needed just by reading the file, without actually running it.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>The CommonJS Conflict:</strong> Legacy systems (Node's <code>require()</code>) are <strong>Dynamic</strong>. You can put a require inside an <code>if</code> statement. This makes it impossible for the engine to know what code is needed until the program is already running. Therefore, CommonJS cannot be tree-shaken.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS: math-vault.js</span>
+        </div>
+        <pre><code class="language-javascript">// This file has multiple exports
+export const add = (a, b) => a + b;
+export const subtract = (a, b) => a - b;
+export const complexAlgorithm = (data) => { 
+    /* 500 lines of heavy code */ 
+};</code></pre>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS: main.js</span>
+        </div>
+        <pre><code class="language-javascript">// We ONLY import 'add'
+import { add } from './math-vault.js';
+
+console.log(add(5, 5));
+
+// During the 'Shake', complexAlgorithm and subtract 
+// are deleted from the final production file.</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Named vs. Default Exports</h2>
+        <p>
+            For a Senior Architect, <strong>Named Exports</strong> are superior for Tree Shaking. When you use a Default Export (exporting one big object), the engine often struggles to see which properties of that object are actually used, and may end up including the entire object "just in case."
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Command:</strong> Prefer <code>export const functionName</code> over <code>export default { ... }</code>. This ensures your utility modules are as "shakeable" as possible.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Side Effects: The Shaker's Enemy</h2>
+        <p>
+            The engine is cautious. If it thinks a piece of unused code might have a <strong>Side Effect</strong> (like modifying a global variable or printing to the console), it will refuse to shake it off.
+        </p>
+        <p>
+            In a professional ROSETTA build, we use the <code>"sideEffects": false</code> flag in our <code>package.json</code> to tell the bundler: "None of my modules do anything weird globally; feel free to delete anything that isn't imported."
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JSON: package.json</span>
+        </div>
+        <pre><code class="language-json">{
+  "name": "rosetta-engine",
+  "sideEffects": false
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Why it matters for Zero-Backend</h2>
+        <p>
+            Since we host ROSETTA on GitHub Pages, we want the "Time to Interactive" (TTI) to be near-instant. Tree shaking ensures that the browser spends zero time downloading or parsing "Ghost Logic"—code that exists in our repository but serves no purpose in the current version of the application.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>Summary: Pruning Protocol</h2>
+        <ul class="artifact-list">
+            <li><strong>Use ESM:</strong> Stick to <code>import/export</code>.</li>
+            <li><strong>Be Specific:</strong> Import only the artifacts you need.</li>
+            <li><strong>Avoid Globals:</strong> Keep functions "Pure" (Topic 3.3) so they are safe to prune.</li>
+            <li><strong>Audit:</strong> Use tools like "Webpack Bundle Analyzer" or "Rollup Visualizer" to see if dead code is sneaking into your production build.</li>
+        </ul>
+    </div>
+
+</section>

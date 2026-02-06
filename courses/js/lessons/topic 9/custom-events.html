@@ -1,0 +1,113 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.3 Custom Events & Dispatch</h1>
+    <p class="artifact-subtitle">Synthetic Signaling: Engineering a bespoke communication vocabulary for decoupled component orchestration.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Semantic Event Layer</h2>
+        <p>
+            Standard events describe <em>user actions</em> (e.g., <code>mousedown</code>). **Custom Events** describe <em>application states</em>. As an architect, you use custom events to move logic away from specific DOM nodes and into the realm of abstract system messaging.
+        </p>
+        <p>
+            This allows one component (like the Course Engine) to shout "I have finished loading!" without needing to know which other components (like the Progress Bar or the Sidebar) are listening.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The CustomEvent Constructor</h2>
+        <p>
+            A custom event is an object created using the <code>new CustomEvent()</code> constructor. It takes two arguments: the <strong>Event Name</strong> (a string) and an <strong>Options Object</strong>.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>detail:</strong> The primary architectural feature. This is an object where you store the custom data payload.</li>
+            <li><strong>bubbles:</strong> If true, the event travels up the DOM tree (Lesson 5.2).</li>
+            <li><strong>cancelable:</strong> If true, other scripts can stop the event using <code>preventDefault()</code>.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">event_creation.js</span>
+        </div>
+        <pre><code class="language-javascript">// Creating a high-level ROSETTA signal
+const discoveryEvent = new CustomEvent('artifactDiscovery', {
+    detail: {
+        id: "ARV-903",
+        rarity: "Legendary",
+        timestamp: Date.now()
+    },
+    bubbles: true,
+    cancelable: true
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Dispatching the Signal</h2>
+        <p>
+            Once created, the event must be "Fired" or <strong>Dispatched</strong> from a DOM element. Any ancestor of that element can listen for the event if <code>bubbles</code> is set to true.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS Architecture</span>
+                <span class="file-name">dispatch_logic.js</span>
+            </div>
+            <pre><code class="language-javascript">const vault = document.querySelector('.artifact-vault');
+
+// Broadcasting the signal to the entire document
+vault.dispatchEvent(discoveryEvent);</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Handling the Payload</h2>
+        <p>
+            When catching a custom event, the data you sent is found inside the <code>event.detail</code> property. This provides a type-safe way to transmit state across the ROSETTA interface.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Reactive</span>
+            <span class="file-name">listener_orchestration.js</span>
+        </div>
+        <pre><code class="language-javascript">// The Global Progress Tracker listens for the discovery
+document.addEventListener('artifactDiscovery', (e) => {
+    const { id, rarity } = e.detail;
+    console.log(`System Alert: ${rarity} artifact ${id} added to collection.`);
+    
+    updateUIGlow(rarity); // Reactive UI update
+});</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The Pub/Sub Alternative:</strong> While we built a manual Pub/Sub in Lesson 7.5, using **Native Custom Events** is often superior for UI work because it integrates with the browser's existing event loop and can be inspected directly in the "Event Listeners" tab of the DevTools.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Architectural Use Case: The Navigation Lock</h2>
+        <p>
+            In ROSETTA, imagine a "Quiz" lesson. We can dispatch a <code>lessonLock</code> event when the quiz starts. Our <code>main.js</code> listens for this and disables the sidebar links. When the quiz is passed, we dispatch <code>lessonUnlock</code>, and the sidebar reactivates. The Sidebar and the Quiz never need to talk to each other directly; they only talk to the **Document**.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Naming Convention:</strong> To avoid collisions with native events or third-party libraries, prefix your custom events. Instead of <code>load</code>, use <code>rosetta:load</code> or <code>artifact:load</code>.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Comparison: Event vs. CustomEvent</h2>
+        <p>
+            Standard <code>new Event()</code> does not support the <code>detail</code> property. Always use <code>new CustomEvent()</code> when you need to pass data, which is 100% of the time in a professional architecture.
+        </p>
+    </div>
+
+</section>

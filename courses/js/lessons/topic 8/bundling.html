@@ -1,0 +1,121 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.5 Module Bundling Theory</h1>
+    <p class="artifact-subtitle">The Final Consolidation: Orchestrating the transformation of fragmented logic into high-performance production artifacts.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Production Paradox</h2>
+        <p>
+            As a Senior Architect, you face a conflict: 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Development:</strong> You want hundreds of small, clean, isolated modules (Lesson 8.1).</li>
+            <li><strong>Production:</strong> You want the user to make as few HTTP requests as possible to ensure the ROSETTA UI loads instantly.</li>
+        </ul>
+        <p>
+            <strong>Bundling</strong> is the process of resolving the "Dependency Tree" of your application and merging those hundreds of files into a single (or a few) optimized JavaScript files.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Dependency Graph</h2>
+        <p>
+            A bundler starts at your <strong>Entry Point</strong> (usually <code>main.js</code>). It looks at every <code>import</code> statement, then follows those to the next files, and so on. 
+        </p>
+        <p>
+            It builds a mathematical map called a <strong>Dependency Graph</strong>. This graph allows the bundler to know exactly which files are needed and in what order they must be executed to prevent "ReferenceErrors."
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">Process</span>
+            <span class="file-name">bundling_pipeline.log</span>
+        </div>
+        <pre><code class="language-bash">Scanning main.js...
+  -> Found import { init } from './vault.js'
+  -> Found import { theme } from './styles.js'
+Building Graph...
+Resolving 42 modules...
+Consolidating into artifact.bundle.js...</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Minification & Mangling</h2>
+        <p>
+            Once the code is bundled, it is still human-readable. To reduce file size, the bundler performs <strong>Minification</strong>:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Whitespace Removal:</strong> Stripping all tabs, spaces, and newlines.</li>
+            <li><strong>Dead Code Elimination:</strong> Applying "Tree Shaking" (Lesson 8.4).</li>
+            <li><strong>Mangling:</strong> Renaming long variables (e.g., <code>const artifactDiscoveryStatus</code>) to single letters (<code>const a</code>).</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Metric:</strong> Minification can reduce the size of the ROSETTA engine by up to 70%, significantly improving the "Time to Interactive" on mobile devices.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Modern Tooling: Vite & Rollup</h2>
+        <p>
+            In 2026, the industry has shifted away from complex configurations (Webpack) toward <strong>Native ESM Tooling</strong>. 
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Tool</th>
+                    <th>Philosophy</th>
+                    <th>Best Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Vite</strong></td>
+                    <td>Instant start; leverages native browser ESM during development.</td>
+                    <td>Modern SPAs / ROSETTA Core.</td>
+                </tr>
+                <tr>
+                    <td><strong>Rollup</strong></td>
+                    <td>Focuses on clean, tree-shaken bundles.</td>
+                    <td>Utility Libraries / Fragmented Modules.</td>
+                </tr>
+                <tr>
+                    <td><strong>esbuild</strong></td>
+                    <td>Written in Go; extremely fast (10-100x faster than JS bundlers).</td>
+                    <td>Massive data-heavy applications.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Transpilation (Babel)</h2>
+        <p>
+            Not all browsers support the latest JavaScript features (like the Nullish Coalescing we learned in 2.5). A bundler can also act as a <strong>Transpiler</strong>, converting modern ESNext code into "Safe" ES5 code that runs on older hardware.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The "Zero-Backend" Rule:</strong> While our ROSETTA project uses native ESM in its current state (GitHub Pages supports <code>type="module"</code>), as your code grows, you should consider using <strong>Vite</strong>. It will automate the bundling process for you, ensuring your "Ancient Gold" aesthetic is backed by modern performance standards.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Summary: The Deployment Protocol</h2>
+        <ol class="artifact-list">
+            <li><strong>Source:</strong> Clean, readable, modular logic artifacts.</li>
+            <li><strong>Bundle:</strong> Resolve dependencies into a unified stream.</li>
+            <li><strong>Prune:</strong> Shake the tree to remove dead logic.</li>
+            <li><strong>Compress:</strong> Mangle and minify for minimal byte footprint.</li>
+            <li><strong>Deploy:</strong> Serve the optimized artifact to the global archive.</li>
+        </ol>
+    </div>
+
+</section>

@@ -1,0 +1,225 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.1 Traversal & Selection</h1>
+    <p class="artifact-subtitle">The Vision of the Machine: Mastering the spatial navigation of the Document Object Model.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Bridge to the Physical</h2>
+        <p>
+            The DOM is not just HTML; it is a live <strong>Object-Oriented Representation</strong> of your document. As a Senior Architect, you must treat the DOM as a high-performance database. 
+        </p>
+        <p>
+            In the ROSETTA engine, we use selection to find the "Injection Zone" for our lessons and traversal to identify which sidebar link needs the "Ancient Gold" active state.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Modern Selector API</h2>
+        <p>
+            While legacy methods like <code>getElementById</code> are technically faster, modern architecture favors the <strong>QuerySelector API</strong> for its flexibility. It allows you to use standard CSS syntax to find any element.
+        </p>
+        <ul class="artifact-list">
+            <li><code>querySelector()</code>: Returns the <strong>first</strong> match.</li>
+            <li><code>querySelectorAll()</code>: Returns a <strong>Static NodeList</strong> of all matches.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">selection_engine.js</span>
+        </div>
+        <pre><code class="language-javascript">// Selecting the main viewport
+const viewport = document.querySelector('main#content-view');
+
+// Selecting all active sidebar items
+const activeLinks = document.querySelectorAll('.nav-link[data-status="active"]');</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The "Live vs. Static" Paradox</h2>
+        <p>
+            A common architectural pitfall is misunderstanding the collection type returned by a selector.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Returns</th>
+                    <th>Behavior</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>getElementsByTagName</code></td>
+                    <td>HTMLCollection</td>
+                    <td><strong>Live:</strong> Updates automatically if the DOM changes.</td>
+                </tr>
+                <tr>
+                    <td><code>querySelectorAll</code></td>
+                    <td>NodeList</td>
+                    <td><strong>Static:</strong> A "snapshot" in time. Does not update.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                ="lesson-header">
+    <h1 class="artifact-title">5.1 Traversal & Selection</h1>
+    <p class="artifact-subtitle">Navigational Geometry: Mastering the surgical selection and traversal of the live Document Object Model.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The DOM as an API</h2>
+        <p>
+            The **Document Object Model (DOM)** is the language-agnostic interface that represents the HTML document as a tree of objects. In the ROSETTA architecture, JavaScript acts as the "Hands" of the engine, reaching into this tree to read states, update content, and inject new artifacts.
+        </p>
+        <p>
+            Efficiency in the DOM is the hallmark of a Senior Architect. Every time you touch the DOM, you are communicating with the browser's C++ core—an expensive operation that must be minimized and optimized.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Selection Protocols</h2>
+        <p>
+            There are two primary modern methods for selecting artifacts. As an architect, your choice should be based on <strong>Consistency</strong> and <strong>Performance</strong>.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>querySelector / querySelectorAll:</strong> The industry standard. They use CSS selectors, allowing you to use the same logic in JS as you do in your <code>style.css</code>.</li>
+            <li><strong>getElementById:</strong> The fastest possible selection method. Because IDs are unique and indexed by the engine, this method performs a direct hash-map lookup.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">selection_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">// Surgical selection via ID (Fastest)
+const mainView = document.getElementById('main-content');
+
+// Selection via CSS Logic (Most flexible)
+const activeArtifact = document.querySelector('.card--active');
+
+// Group selection (Returns a Static NodeList)
+const allChapters = document.querySelectorAll('.sidebar__link');</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Nodes vs. Elements</h2>
+        <p>
+            A common architectural error is confusing a <strong>Node</strong> with an <strong>Element</strong>. 
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Node:</strong> Every single thing in the tree (Tags, Comments, Text, Whitespace).</li>
+            <li><strong>Element:</strong> Specifically the HTML tags (Type 1 Nodes).</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Command:</strong> Always prefer **Element-based** traversal properties (e.g., <code>children</code>, <code>nextElementSibling</code>). This ensures your logic skips over the "ghost" whitespace text nodes that the browser inserts between your HTML tags.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Walking the Tree</h2>
+        <p>
+            Traversal allows you to find related artifacts without performing a new search from the root <code>document</code>. 
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Direction</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>parentElement</code></td>
+                    <td>Up</td>
+                    <td>Finds the immediate container.</td>
+                </tr>
+                <tr>
+                    <td><code>children</code></td>
+                    <td>Down</td>
+                    <td>Returns an HTMLCollection of direct element children.</td>
+                </tr>
+                <tr>
+                    <td><code>nextElementSibling</code></td>
+                    <td>Sideways</td>
+                    <td>Finds the next sibling tag.</td>
+                </tr>
+                <tr>
+                    <td><code>closest('.selector')</code></td>
+                    <td>Upward Search</td>
+                    <td>Finds the nearest ancestor matching the selector (or<strong>Architect's Preference:</strong> Always favor <code>querySelectorAll</code>. Live collections (HTMLCollections) can lead to infinite loops if you are adding elements while looping through them. Static NodeLists are safer and support modern <code>.forEach()</code> iteration.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Walking the Tree (Traversal)</h2>
+        <p>
+            Once you have selected an element, you often need to move relative to it. We distinguish between <strong>Node Traversal</strong> (includes text/comments) and <strong>Element Traversal</strong> (only actual tags). In ROSETTA, we strictly use Element Traversal.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Upward:</strong> <code>parentElement</code> or <code>.closest('.selector')</code>.</li>
+            <li><strong>Downward:</strong> <code>children</code>, <code>firstElementChild</code>, <code>lastElementChild</code>.</li>
+            <li><strong>Sideways:</strong> <code>nextElementSibling</code>, <code>previousElementSibling</code>.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">traversal_chain.js</span>
+        </div>
+        <pre><code class="language-javascript">const currentLink = document.querySelector('.active');
+
+// Find the parent Topic container (Climbing up)
+const topicContainer = currentLink.closest('. itself).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">traversal_patterns.js</span>
+        </div>
+        <pre><code class="language-javascript">const link = document.querySelector('.sidebar__link');
+
+// Finding the parent module of a clicked link
+const moduleContainer = link.closest('.module-wrapper');
+
+// Finding the next lesson artifact
+const nextLesson = link.parentElement.nextElementSibling;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Live vs. Static Collections</h2>
+        <p>
+            Understanding the "Vibe" of your collection is critical for loop stability:
+        </p>
+        <ul class="artifact-list">
+            <li><code>getElementsByClassName</code> returns a <strong>Live HTMLCollection</strong>. If you delete an element from the DOM, it disappears from the array automatically. This can lead to bugs in <code>for</code> loops.</li>
+            <li><code>querySelectorAll</code> returns a <strong>Static NodeList</strong>. It is a snapshot of the DOM at that specific microsecond. <strong>(Recommended for ROSETTA)</strong>.</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Warning:</strong> Avoid "Deep Selection" in loops. Instead of writing <code>document.querySelector</code> inside a loop of 1,000 items, select the parent once and use <code>parent.children</code> to access the nodes. This reduces the work the browser engine has to do by orders of magnitude.
+        </div>
+    </div>
+
+</section>

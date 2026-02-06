@@ -1,0 +1,88 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.1 The Event Loop & Task Queue</h1>
+    <p class="artifact-subtitle">Temporal Orchestration: Mastering the non-blocking concurrency model of the JavaScript runtime.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Single-Threaded Paradox</h2>
+        <p>
+            As established in Topic 1, JavaScript is <strong>Single-Threaded</strong>. It has one Call Stack and can execute exactly one command at a time. However, the modern web requires us to handle multiple things simultaneously: listening for clicks, fetching artifacts, and running animations.
+        </p>
+        <p>
+            The engine solves this through the <strong>Event Loop</strong>. It doesn't actually do two things at once; it cleverly delegates "waiting" to the browser and manages a queue of tasks to be executed only when the stack is clear.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Four Pillars of Concurrency</h2>
+        <ul class="artifact-list">
+            <li><strong>The Call Stack:</strong> Tracks where we are in the program (LIFO).</li>
+            <li><strong>Web APIs:</strong> Features provided by the browser (not the JS engine), such as <code>fetch</code>, <code>setTimeout</code>, and DOM events. These run in the background.</li>
+            <li><strong>The Task Queue:</strong> A line of "Callback" functions waiting to be executed after a Web API finishes its job.</li>
+            <li><strong>The Event Loop:</strong> The supervisor. Its only job is to look at the Call Stack and the Task Queue. If the stack is <strong>empty</strong>, it pushes the first task from the queue onto the stack.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Visualizing the Sequence</h2>
+        <p>
+            Consider the "Zero-Second Timer" paradox. Even with a delay of <code>0ms</code>, the code inside a <code>setTimeout</code> will always run <strong>after</strong> the synchronous code.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">event_loop_test.js</span>
+        </div>
+        <pre><code class="language-javascript">console.log("1. Stack Start");
+
+setTimeout(() => {
+    console.log("2. Task Queue Executed");
+}, 0);
+
+console.log("3. Stack End");
+
+// OUTPUT:
+// 1. Stack Start
+// 3. Stack End
+// 2. Task Queue Executed</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Blocking the Main Thread</h2>
+        <p>
+            Because the Event Loop can only push tasks when the stack is empty, <strong>Synchronous "Heavy" Logic</strong> is dangerous. If you run a massive <code>for</code> loop that takes 5 seconds, the Event Loop is "blocked." The browser cannot process clicks or update the UI, leading to the "Page Unresponsive" error.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Rule:</strong> "Don't Block the Event Loop." Any operation that takes more than 16ms (the frame budget for 60fps) should be broken into smaller tasks or moved to a <strong>Web Worker</strong> (Lesson 10.3).
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Kitchen Analogy</h2>
+        <p>
+            Think of the JS Engine as a <strong>Chef</strong> (Single Thread) in a restaurant:
+        </p>
+        <ol class="artifact-list">
+            <li>The Chef receives an order for a steak (Call Stack).</li>
+            <li>Instead of standing over the grill for 20 minutes, the Chef tells the <strong>Oven</strong> (Web API) to handle it.</li>
+            <li>The Chef continues to chop vegetables (Sync Code).</li>
+            <li>When the Oven "dings," the Steak is placed on the <strong>Counter</strong> (Task Queue).</li>
+            <li>The Chef only plates the steak (Event Loop) when they are finished chopping and have nothing else in their hands.</li>
+        </ol>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Critical Priority:</strong> There are actually multiple queues. The <strong>Microtask Queue</strong> (used by Promises) has a higher priority than the standard <strong>Task Queue</strong>. We will deconstruct this "Priority War" in Lesson 4.5.
+        </div>
+    </div>
+
+</section>

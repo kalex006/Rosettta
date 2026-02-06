@@ -1,0 +1,108 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.1 Intersection Observer</h1>
+    <p class="artifact-subtitle">Viewport Surveillance: Orchestrating high-performance reactive triggers based on element visibility.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The End of Scroll-Jank</h2>
+        <p>
+            In the legacy era, if we wanted to trigger an animation when a user scrolled to a specific "Stone Card," we had to attach a listener to the <code>window.onscroll</code> event. This was an architectural disaster: the browser had to run your code 60 times per second, even when nothing was happening, leading to "Jank" and battery drain.
+        </p>
+        <p>
+            The <strong>Intersection Observer API</strong> provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or the top-level document's viewport.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Observer Blueprint</h2>
+        <p>
+            An Intersection Observer is composed of a <strong>Callback Function</strong> and an <strong>Options Object</strong>.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Root:</strong> The element used as the viewport. (Null = the browser viewport).</li>
+            <li><strong>RootMargin:</strong> A "buffer zone" around the root (e.g., "100px" to trigger before the item appears).</li>
+            <li><strong>Threshold:</strong> A number (0 to 1.0) indicating what percentage of the target must be visible before the callback fires.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">observer_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">const options = {
+    root: null, // Use Viewport
+    threshold: 0.2 // Trigger when 20% is visible
+};
+
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            // The Artifact is now in view
+            entry.target.classList.add('artifact--reveal');
+            
+            // Optimization: Stop watching after it's revealed
+            observer.unobserve(entry.target);
+        }
+    });
+}, options);
+
+// Start watching all artifact cards
+document.querySelectorAll('.artifact-card').forEach(card => {
+    observer.observe(card);
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Use Case: Cinematic Entry Animations</h2>
+        <p>
+            In the ROSETTA project, we use this to create the "Archive Discovery" feel. Instead of all content appearing instantly, elements subtly fade and slide up as the user descends into the documentation.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Performance Note:</strong> Intersection Observers run on the browser's <strong>Internal Thread</strong>, not the Main Thread. This means your scroll remains buttery smooth (60fps) even if you are observing hundreds of elements simultaneously.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Lazy-Loading High-Res Artifacts</h2>
+        <p>
+            If a lesson contains a heavy 4K render of a "C++ Memory Map," we shouldn't download it until the user is close to it. By using an observer, we can swap a <code>data-src</code> attribute to a real <code>src</code> only when the image is about to enter the viewport.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">lazy_load_pattern.js</span>
+        </div>
+        <pre><code class="language-javascript">const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src; // Materialize the image
+            imageObserver.unobserve(img);
+        }
+    });
+}, { rootMargin: "200px" }); // Start loading 200px before it enters</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Sticky Header Logic</h2>
+        <p>
+            A Senior Architect uses Intersection Observers to create "Self-Aware" headers. By placing a tiny, invisible 1px pixel at the top of the page, we can observe when that pixel exits the top. When it does, we know the user has scrolled down, and we can apply a "shrunken" or "frosted-glass" effect to the ROSETTA navigation bar.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Threshold Pitfall:</strong> Be careful with <code>threshold: 1.0</code>. If an element is larger than the viewport (e.g., a very long code block), it can <em>never</em> be 100% visible, so the callback will never fire. For large artifacts, use a smaller threshold or multiple thresholds (an array: <code>[0, 0.5, 1]</code>).
+        </div>
+    </div>
+
+</section>

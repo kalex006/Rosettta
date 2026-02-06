@@ -1,0 +1,104 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.2 Event Bubbling & Capture</h1>
+    <p class="artifact-subtitle">The Propagation Path: Mastering the lifecycle of an event through the Document Object Model.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Lifecycle of an Interaction</h2>
+        <p>
+            When a user interacts with a deeply nested element—for example, clicking a <code>&lt;span&gt;</code> inside a <code>&lt;button&gt;</code> inside a <code>&lt;nav&gt;</code>—the event does not just occur on that single point. It travels through the entire lineage of the document.
+        </p>
+        <p>
+            Standard DOM events follow a strict three-phase sequence:
+        </p>
+        <ol class="artifact-list">
+            <li><strong>Capture Phase:</strong> The event "trickles down" from the Window to the Target.</li>
+            <li><strong>Target Phase:</strong> The event reaches the intended element.</li>
+            <li><strong>Bubbling Phase:</strong> The event "bubbles up" from the Target back to the Window.</li>
+        </ol>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Bubbling Phase (Default)</h2>
+        <p>
+            By default, almost all event listeners you attach using <code>addEventListener</code> listen during the <strong>Bubbling Phase</strong>. This means if you click a child, the parent's click event will also fire immediately after.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">bubbling_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">const outer = document.querySelector('.topic-group');
+const inner = document.querySelector('.lesson-link');
+
+outer.addEventListener('click', () => console.log("Outer Triggered"));
+inner.addEventListener('click', () => console.log("Inner Triggered"));
+
+// Result of clicking 'inner':
+// 1. "Inner Triggered"
+// 2. "Outer Triggered" (The event bubbled up)</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Capture Phase (Inverse Flow)</h2>
+        <p>
+            Sometimes an architect needs to "intercept" an event before it reaches its target. By passing <code>true</code> or <code>{ capture: true }</code> as the third argument to <code>addEventListener</code>, the listener will trigger during the descent.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">capture_intercept.js</span>
+        </div>
+        <pre><code class="language-javascript">window.addEventListener('click', () => {
+    console.log("Global Intercept");
+}, { capture: true });
+
+// This runs BEFORE any specific element listeners</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Control Mechanisms</h2>
+        <p>
+            To prevent an event from continuing its journey through the tree, we use specific methods on the <strong>Event Object</strong>:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>stopPropagation():</strong> Stops the event from moving to the next element (up or down). Other listeners on the *same* element will still fire.</li>
+            <li><strong>stopImmediatePropagation():</strong> Stops the event and prevents any other listeners on the *current* element from firing.</li>
+            <li><strong>preventDefault():</strong> Does not stop propagation, but prevents the browser's default action (like a link navigating or a form submitting).</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The Architect's Distinction: target vs. currentTarget</strong><br>
+            - <code>event.target</code>: The element that was actually clicked (The source of the impact).<br>
+            - <code>event.currentTarget</code>: The element currently handling the event (where the listener is attached).<br>
+            In the ROSETTA engine, we use <code>currentTarget</code> to ensure our logic remains tied to the component container, not the decorative span inside it.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Why this matters for ROSETTA</h2>
+        <p>
+            In our "Zero-Backend" system, we have thousands of links in the sidebar. Attaching a listener to every single link is a waste of memory. Instead, we use <strong>Event Delegation</strong>—attaching a single listener to the parent <code>&lt;nav&gt;</code> and catching the events as they bubble up. 
+        </p>
+        <p>
+            <em>We will explore the implementation of this technique in Lesson 5.3.</em>
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architecture Note:</strong> Not all events bubble. For example, <code>focus</code>, <code>blur</code>, <code>mouseenter</code>, and <code>mouseleave</code> do NOT bubble. To catch these on a parent, you must use the Capture phase.
+        </div>
+    </div>
+
+</section>

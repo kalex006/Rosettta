@@ -1,0 +1,120 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.3 Promise Lifecycle & States</h1>
+    <p class="artifact-subtitle">The Future Placeholder: Mastering the finite state machine of asynchronous value management.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Trust Contract</h2>
+        <p>
+            A <strong>Promise</strong> is an object representing the eventual completion (or failure) of an asynchronous operation and its resulting value. Unlike a callback, which you give to someone else to execute, a Promise is a <strong>Voucher</strong> that you hold onto. 
+        </p>
+        <p>
+            In the ROSETTA engine, we use Promises to handle every network fetch. It provides a reliable "contract" that the engine will notify us once the JSON artifact has been successfully retrieved or if the connection has failed.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Finite State Machine</h2>
+        <p>
+            A Promise is always in one of three mutually exclusive states. Once a Promise leaves the "Pending" state, it is <strong>Settled</strong> and can never change state again.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Pending:</strong> The initial state. The operation has started but hasn't finished yet.</li>
+            <li><strong>Fulfilled:</strong> The operation completed successfully. The "Resolve" function was triggered.</li>
+            <li><strong>Rejected:</strong> The operation failed. The "Reject" function was triggered.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">promise_producer.js</span>
+        </div>
+        <pre><code class="language-javascript">// Creating (Producing) a Promise
+const vaultRequest = new Promise((resolve, reject) => {
+    const success = true;
+
+    console.log("Accessing Digital Vault...");
+
+    setTimeout(() => {
+        if (success) {
+            resolve("Ancient Manuscript Found"); // Moves to Fulfilled
+        } else {
+            reject("Security Breach: Access Denied"); // Moves to Rejected
+        }
+    }, 2000);
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Consuming the Promise</h2>
+        <p>
+            We don't "wait" for the promise to finish in the synchronous sense. We "register" handlers that will be executed by the <strong>Microtask Queue</strong> once the promise settles.
+        </p>
+        <ul class="artifact-list">
+            <li><code>.then()</code>: Runs if the promise is <strong>fulfilled</strong>.</li>
+            <li><code>.catch()</code>: Runs if the promise is <strong>rejected</strong>.</li>
+            <li><code>.finally()</code>: Runs regardless of the outcome (perfect for hiding loading spinners).</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">promise_consumption.js</span>
+        </div>
+        <pre><code class="language-javascript">vaultRequest
+    .then((data) => {
+        console.log("Success:", data);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    })
+    .finally(() => {
+        console.log("Transmission Terminated.");
+    });</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Flattening the Pyramid: Chaining</h2>
+        <p>
+            The most significant architectural benefit of Promises is <strong>Chaining</strong>. Every <code>.then()</code> call returns a <strong>New Promise</strong>. This allows us to pipe data through a vertical sequence instead of nesting callbacks.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Secret:</strong> If you return a value inside a <code>.then()</code>, it becomes the resolved value of the next Promise in the chain. If you return another Promise, the chain waits for that new Promise to resolve before moving forward.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">artifact_chain.js</span>
+        </div>
+        <pre><code class="language-javascript">// Transforming the Pyramid into a Pipeline
+fetchArtifact(101)
+    .then(data => decrypt(data))         // Returns a new promise
+    .then(secret => validate(secret))    // Returns a new promise
+    .then(final => renderToUI(final))    // Final step
+    .catch(err => handleGlobalError(err)); // Catches error from ANY step above</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Immutability Guarantee</h2>
+        <p>
+            A Promise provides <strong>Immutable Resolution</strong>. If you attach a <code>.then()</code> to a promise that has already resolved ten minutes ago, it will still trigger immediately with the exact same data. This makes them significantly safer than Event Listeners for tracking state.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Warning:</strong> Avoid "Floating Promises." Always attach a <code>.catch()</code> to the end of your chain. An unhandled rejection is a silent failure that can leave your ROSETTA UI in a permanent "Loading" state.
+        </div>
+    </div>
+
+</section>

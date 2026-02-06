@@ -1,0 +1,121 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.1 Web Storage API</h1>
+    <p class="artifact-subtitle">The Local Registry: Mastering persistent data storage in a decentralized architecture.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Persistence Without a Server</h2>
+        <p>
+            In traditional software, "State" (user progress, preferences, settings) is stored in a database. In the ROSETTA <strong>Zero-Backend</strong> model, we shift this responsibility to the client. The <strong>Web Storage API</strong> provides a simple, synchronous mechanism for storing key-value pairs directly in the user's browser.
+        </p>
+        <p>
+            This allows us to create a personalized experience—such as remembering which lesson a user was last reading or saving their "Gold vs. Silver" theme preference—without ever needing a login or a database.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Two Pillars: Local vs. Session</h2>
+        <p>
+            The API is divided into two storage objects. As an architect, your choice depends on the <strong>Temporal Requirement</strong> of the data.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>localStorage:</strong> Persistent. Data survives browser restarts and computer reboots. It remains until explicitly cleared by the user or the script.</li>
+            <li><strong>sessionStorage:</strong> Volatile. Data is scoped to a single tab. If the user closes the tab or the browser, the data is purged.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">storage_basics.js</span>
+        </div>
+        <pre><code class="language-javascript">// 1. Storing data
+localStorage.setItem('rosetta_theme', 'ancient-gold');
+
+// 2. Retrieving data
+const currentTheme = localStorage.getItem('rosetta_theme');
+
+// 3. Removing data
+localStorage.removeItem('rosetta_theme');
+
+// 4. Atomic Clear (Wipe everything)
+localStorage.clear();</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Serialization Bridge: JSON</h2>
+        <p>
+            The Web Storage API has a major architectural constraint: <strong>it can only store strings.</strong> If you try to store an object or an array, the browser will convert it to the string <code>"[object Object]"</code>, rendering the data useless.
+        </p>
+        <p>
+            To store complex artifacts (like a list of completed lesson IDs), we must use <strong>JSON Serialization</strong>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">state_persistence.js</span>
+        </div>
+        <pre><code class="language-javascript">const userState = {
+    completedLessons: ["html-1.1", "html-1.2"],
+    lastVisited: Date.now()
+};
+
+// Encoding: Object -> String
+localStorage.setItem('rosetta_user_progress', JSON.stringify(userState));
+
+// Decoding: String -> Object
+const savedData = JSON.parse(localStorage.getItem('rosetta_user_progress'));
+
+console.log(savedData.completedLessons[0]); // "html-1.1"</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Storage Events & Synchronization</h2>
+        <p>
+            If a user has ROSETTA open in two different tabs, changing a setting in Tab A should ideally update Tab B. The browser triggers a <code>storage</code> event on the <code>window</code> whenever a change is made to <code>localStorage</code> from another tab of the same origin.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS Reactive</span>
+                <span class="file-name">sync_engine.js</span>
+            </div>
+            <pre><code class="language-javascript">window.addEventListener('storage', (event) => {
+    if (event.key === 'rosetta_theme') {
+        applyNewTheme(event.newValue);
+        console.log("State synchronized from another tab.");
+    }
+});</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The 5MB Boundary:</strong> Most modern browsers limit <code>localStorage</code> to approximately <strong>5 Megabytes</strong> per origin. While this is plenty for text-based progress tracking, it is not suitable for caching large images or raw video files.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Privacy & Security</h2>
+        <p>
+            As a Senior Architect, you must remember that Web Storage is <strong>Insecure</strong>. 
+        </p>
+        <ul class="artifact-list">
+            <li>Any script on the page (including third-party analytics) can read all data in <code>localStorage</code>.</li>
+            <li>Never store sensitive information like passwords, encryption keys, or private user data here.</li>
+            <li>Data is not encrypted; it is stored as plain text in the browser's internal folders.</li>
+        </ul>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> Always wrap your <code>JSON.parse()</code> calls in a <code>try...catch</code> block. If the data in storage becomes corrupted or is modified manually by a user, <code>JSON.parse</code> will crash your entire application logic.
+        </div>
+    </div>
+
+</section>

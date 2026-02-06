@@ -1,0 +1,119 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.1 Scripts vs. Modules</h1>
+    <p class="artifact-subtitle">The Encapsulation Shift: Mastering the transition from monolithic global scripts to isolated modular logic.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Monolith vs. The Fragment</h2>
+        <p>
+            In the early web, every JavaScript file was a "Classic Script." Any variable declared at the top level was automatically added to the <code>window</code> object. This created a high risk of <strong>Global Collision</strong>—where two different scripts accidentally overwrite the same variable.
+        </p>
+        <p>
+            <strong>EcmaScript Modules (ESM)</strong>, introduced in ES6, provide a native way to isolate logic. A module is a self-contained environment. Variables inside a module stay inside the module unless they are explicitly exported.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Implementation Divide</h2>
+        <p>
+            To activate modular logic in the browser, you must explicitly use the <code>type="module"</code> attribute in your HTML script tag. This tells the browser's engine to use the modern execution pipeline.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">HTML Architecture</span>
+            <span class="file-name">index.html</span>
+        </div>
+        <pre><code class="language-html">&lt;!-- 1. Classic Script (Legacy/Global) --&gt;
+&lt;script src="legacy-script.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. ES Module (Modern/Isolated) --&gt;
+&lt;script type="module" src="engine-core.js"&gt;&lt;/script&gt;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Behavioral Alterations</h2>
+        <p>
+            When you switch to <code>type="module"</code>, the JavaScript engine changes several fundamental behaviors:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Implicit Strict Mode:</strong> All modules are executed in "Strict Mode" (<code>'use strict'</code>) by default. You cannot opt out.</li>
+            <li><strong>Deferred by Default:</strong> Modules behave as if the <code>defer</code> attribute is present. They download in parallel and execute only after the HTML is fully parsed.</li>
+            <li><strong>Top-Level 'this':</strong> In a classic script, <code>this</code> at the top level is <code>window</code>. In a module, top-level <code>this</code> is <code>undefined</code>.</li>
+            <li><strong>CORS Requirements:</strong> Modules are subject to strict CORS checks. They cannot be loaded from the local file system (<code>file://</code>) without a server.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Comparison of Behavior</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Classic Script</th>
+                    <th>ES Module</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Scope</strong></td>
+                    <td>Global</td>
+                    <td>Module-level (Isolated)</td>
+                </tr>
+                <tr>
+                    <td><strong>Execution</strong></td>
+                    <td>Immediate/Synchronous</td>
+                    <td>Deferred/Asynchronous</td>
+                </tr>
+                <tr>
+                    <td><strong>Strict Mode</strong></td>
+                    <td>Optional</td>
+                    <td>Mandatory</td>
+                </tr>
+                <tr>
+                    <td><strong>Deduplication</strong></td>
+                    <td>Runs every time it's loaded</td>
+                    <td>Runs only once (Singleton)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Singleton Principle</h2>
+        <p>
+            Modules are <strong>Singletons</strong>. If you import the same module into five different files in ROSETTA, the code inside that module only executes <strong>once</strong>. This is highly efficient for initializing shared state or configuration objects.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">singleton_demo.js</span>
+        </div>
+        <pre><code class="language-javascript">// In config-loader.js
+console.log("Vault Initialized"); // This will only print ONCE
+export const config = { theme: 'gold' };
+
+// Even if imported in 10 different artifacts
+import { config } from './config-loader.js';</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Recommendation:</strong> In the ROSETTA project, use <code>type="module"</code> for all your primary engine files (<code>main.js</code>, <code>router.js</code>, <code>fetcher.js</code>). This ensures a clean global namespace and allows you to use the <code>import</code> syntax to manage dependencies elegantly.
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Warning:</strong> Loading hundreds of small modules can cause a "Waterfall" delay on slow networks. While fine for development, a Senior Architect uses a **Bundler** (Lesson 8.5) to package these fragments into a single optimized file for production.
+        </div>
+    </div>
+
+</section>

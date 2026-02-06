@@ -1,0 +1,123 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.3 Error Handling (Try/Catch)</h1>
+    <p class="artifact-subtitle">Defensive Transmission: Engineering robust mechanisms to mitigate network failures and logical corruption.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Fragility of the Network</h2>
+        <p>
+            In the ROSETTA architecture, a missing file or a dropped Wi-Fi connection is not just a minor glitch—it is a structural threat. If a script fails while fetching a <code>config.json</code>, the entire sidebar might vanish, leaving the user in a digital void.
+        </p>
+        <p>
+            As a Senior Architect, you must assume that <strong>every network request will eventually fail</strong>. Your job is to ensure the application "fails gracefully" by providing meaningful feedback instead of a frozen screen.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Fetch Paradox (Review)</h2>
+        <p>
+            The most dangerous characteristic of the <code>fetch()</code> API is that it <strong>does not reject</strong> a promise on HTTP error states like <code>404</code> (Not Found) or <code>500</code> (Internal Server Error). It only rejects if the network itself is unreachable (e.g., DNS failure or no internet).
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Solution:</strong> You must manually convert "unsuccessful" responses into errors using the <code>response.ok</code> property. This allows the <code>catch</code> block to handle both network and logic failures.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">defensive_fetch.js</span>
+        </div>
+        <pre><code class="language-javascript">async function getArtifact(url) {
+    try {
+        const response = await fetch(url);
+
+        // Manually handling 404s/500s
+        if (!response.ok) {
+            throw new Error(`Vault Access Denied: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        // This catches network failures AND our manual error above
+        console.error("Transmission Interrupted:", error.message);
+        displayErrorToUser("Artifact could not be retrieved.");
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The 'finally' Block: Resetting State</h2>
+        <p>
+            When an artifact is being fetched, we often show a "Loading..." state (a spinner or a gold glow). If an error occurs, we must ensure that the spinner stops even if the data never arrives.
+        </p>
+        <p>
+            The <code>finally</code> block is an architectural guarantee. It runs <strong>no matter what</strong> happened in the <code>try</code> or <code>catch</code> blocks.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">ui_cleanup.js</span>
+        </div>
+        <pre><code class="language-javascript">async function loadLesson(id) {
+    showSpinner(); // UI state change
+    
+    try {
+        const content = await fetchLessonContent(id);
+        renderContent(content);
+    } catch (err) {
+        renderErrorState();
+    } finally {
+        // Crucial: The spinner must be hidden regardless of success or failure
+        hideSpinner(); 
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Categorizing Failures</h2>
+        <p>
+            Not all errors require the same response. A Senior Architect distinguishes between:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Network Errors:</strong> (User is offline). <em>Action:</em> Ask user to check connection.</li>
+            <li><strong>Data Errors:</strong> (Malformed JSON). <em>Action:</em> Log to internal registry; show fallback content.</li>
+            <li><strong>Missing Artifacts:</strong> (404 Error). <em>Action:</em> Redirect to the main course gallery.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Handling JSON Parsing Errors</h2>
+        <p>
+            Even if the network succeeds, the <code>.json()</code> method can fail if the file contains a syntax error (like a missing comma). This will trigger an error that must be caught separately to prevent the script from terminating.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">parse_guard.js</span>
+            </div>
+            <pre><code class="language-javascript">try {
+    const data = await response.json();
+} catch (parseError) {
+    console.error("Corrupted Artifact detected: JSON is malformed.");
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The "Silent Fail" Warning:</strong> Never write an empty catch block (<code>catch(e) {}</code>). Doing so "swallows" the error, making it impossible to debug. At a minimum, always log the error to the console for the "Digital Architect" to investigate.
+        </div>
+    </div>
+
+</section>

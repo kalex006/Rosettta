@@ -1,0 +1,120 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.2 Response Objects & Parsing</h1>
+    <p class="artifact-subtitle">The Metadata Envelope: Mastering the inspection and consumption of network-delivered data streams.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Response Wrapper</h2>
+        <p>
+            When a <code>fetch()</code> promise resolves, it does not provide the raw data immediately. Instead, it returns a <strong>Response Object</strong>. This object is a "wrapper" that contains the metadata about the transaction—such as headers and status codes—and a pointer to the data stream.
+        </p>
+        <p>
+            As a Senior Architect, you must first inspect the envelope (the metadata) before you attempt to read the letter (the data).
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Metadata Inspection (The Guard Logic)</h2>
+        <p>
+            The Response object provides several read-only properties to verify the integrity of the fetch:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>status:</strong> The HTTP status code (e.g., <code>200</code> for success, <code>404</code> for missing artifact).</li>
+            <li><strong>statusText:</strong> The status message from the server (e.g., "OK" or "Not Found").</li>
+            <li><strong>ok:</strong> A boolean that is <code>true</code> if the status is in the 200-299 range.</li>
+            <li><strong>headers:</strong> A <code>Headers</code> object containing the server's response metadata.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">response_audit.js</span>
+        </div>
+        <pre><code class="language-javascript">async function auditFetch(url) {
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+        throw new Error(`Transmission Failure: ${response.status} ${response.statusText}`);
+    }
+
+    console.log("Artifact located. Content-Type:", response.headers.get("Content-Type"));
+    return response;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Consuming the Body (The Stream)</h2>
+        <p>
+            The data inside a response is handled as a <strong>ReadableStream</strong>. To convert this stream into a usable JavaScript format, you must call one of the "Body Mixin" methods. These methods are also asynchronous and return a Promise.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Result Type</th>
+                    <th>ROSETTA Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>.json()</code></td>
+                    <td>Object / Array</td>
+                    <td>Parsing <code>config.json</code> files.</td>
+                </tr>
+                <tr>
+                    <td><code>.text()</code></td>
+                    <td>String</td>
+                    <td>Fetching <code>.html</code> lesson fragments.</td>
+                </tr>
+                <tr>
+                    <td><code>.blob()</code></td>
+                    <td>File-like Object</td>
+                    <td>Loading raw images or binary artifacts.</td>
+                </tr>
+                <tr>
+                    <td><code>.arrayBuffer()</code></td>
+                    <td>Raw Binary Buffer</td>
+                    <td>Advanced cryptographic processing.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The "One-Time Use" Rule:</strong> A response body can only be read <strong>once</strong>. Because it is a stream, the data is "consumed" as it is parsed. If you call <code>response.json()</code> and then immediately try to call <code>response.text()</code>, the engine will throw a <em>TypeError: body stream already read</em>.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Cloning the Artifact</h2>
+        <p>
+            If your architecture requires you to use the response data in two different places (e.g., logging the raw text AND parsing the JSON), you must use the <code>.clone()</code> method before reading the body. This creates an identical copy of the response object in memory.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">clone_pattern.js</span>
+        </div>
+        <pre><code class="language-javascript">const response = await fetch('courses/js/config.json');
+const duplicate = response.clone(); // Duplicate the envelope
+
+// Now we can read both streams independently
+const data = await response.json(); 
+const raw = await duplicate.text(); </code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Tip:</strong> In the <code>main.js</code> of ROSETTA, we use <code>.text()</code> for lesson files. This allows us to treat the incoming HTML as a simple string, which we can then "sanitize" before injecting it into our <code>&lt;main&gt;</code> view area.
+        </div>
+    </div>
+
+</section>

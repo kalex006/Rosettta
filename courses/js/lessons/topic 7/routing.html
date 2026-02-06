@@ -1,0 +1,118 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.3 URL Params & Routing</h1>
+    <p class="artifact-subtitle">The Navigational Spine: Synchronizing application state with the browser's address bar for persistent entry points.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The URL as a State Container</h2>
+        <p>
+            In a high-end Single Page Application (SPA), the URL is not just an address; it is a <strong>Global State Object</strong>. It allows users to share a specific view, bookmark a lesson, or refresh the page and return to the exact same artifact.
+        </p>
+        <p>
+            Since ROSETTA has no backend to handle routing, we must manage the URL entirely through JavaScript. We do this using two primary mechanisms: <strong>Query Parameters</strong> for data and the <strong>History API</strong> for navigation flow.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The URLSearchParams API</h2>
+        <p>
+            Parsing a URL string manually with Regex is an architectural anti-pattern. Modern JavaScript provides the <code>URLSearchParams</code> interface to surgically extract key-value pairs from the <code>?search</code> portion of the URL.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">param_extraction.js</span>
+        </div>
+        <pre><code class="language-javascript">// Assume URL: rosetta.dev/?course=js&lesson=7.3
+
+const params = new URLSearchParams(window.location.search);
+
+const course = params.get('course'); // "js"
+const lesson = params.get('lesson'); // "7.3"
+
+if (course && lesson) {
+    console.log(`Initializing Vault: ${course} | Artifact: ${lesson}`);
+    loadArtifact(course, lesson);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The History API: pushState</h2>
+        <p>
+            To change the URL <strong>without triggering a page reload</strong>, we use <code>history.pushState()</code>. This allows the ROSETTA engine to update the address bar as the user clicks through the sidebar, creating a seamless, "app-like" experience.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>State Object:</strong> A JSON object associated with the new history entry.</li>
+            <li><strong>Title:</strong> Currently ignored by most browsers (pass an empty string).</li>
+            <li><strong>URL:</strong> The new address to display in the bar.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">router_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">function navigateToLesson(courseId, lessonId) {
+    const newUrl = `?course=${courseId}&lesson=${lessonId}`;
+    
+    // Updates the URL without reloading the page
+    window.history.pushState({ courseId, lessonId }, "", newUrl);
+    
+    // Trigger the actual data fetch
+    renderLesson(courseId, lessonId);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Handling the Back Button: popstate</h2>
+        <p>
+            When a user clicks the browser's "Back" button, the URL changes, but the DOM does not update automatically. An architect must listen for the <code>popstate</code> event to re-sync the UI with the new (old) URL.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS Reactive</span>
+                <span class="file-name">history_sync.js</span>
+            </div>
+            <pre><code class="language-javascript">window.addEventListener('popstate', (event) => {
+    // If we stored state in pushState, it is available here
+    if (event.state) {
+        renderLesson(event.state.courseId, event.state.lessonId);
+    } else {
+        // Fallback: Read from the URL directly
+        const params = new URLSearchParams(window.location.search);
+        renderLesson(params.get('course'), params.get('lesson'));
+    }
+});</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Hash Routing vs. Path Routing</h2>
+        <p>
+            Because PROJECT ROSETTA is hosted on <strong>GitHub Pages</strong> (Static Hosting), standard path routing (e.g., <code>rosetta.dev/js/7.3</code>) will fail if the user refreshes the page, because the server looks for a folder that doesn't exist.
+        </p>
+        <p>
+            <strong>Architect's Recommendation:</strong> For ROSETTA, use <strong>Hash Routing</strong> (<code>#js/7.3</code>) or <strong>Query Parameters</strong> (<code>?lesson=7.3</code>). These are safer for static environments because the browser always hits <code>index.html</code> first.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The "Zero-Jump" Rule:</strong> Use <code>history.replaceState()</code> instead of <code>pushState()</code> if you are updating the URL for minor changes (like a search filter or a theme toggle) that shouldn't create a new entry in the user's "Back" button history.
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Security Note:</strong> Always validate URL parameters before using them to fetch data. A malicious user could modify the URL to <code>?course=../../secrets</code>. Ensure your <code>main.js</code> only allows fetching from your approved <code>courses/</code> whitelist.
+        </div>
+    </div>
+
+</section>

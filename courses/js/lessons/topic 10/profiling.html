@@ -1,0 +1,106 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.4 Chrome DevTools Profiling</h1>
+    <p class="artifact-subtitle">The Vision of the Engine: Mastering the forensic observation of the CPU and the rendering pipeline.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Forensic Performance Analysis</h2>
+        <p>
+            In the ROSETTA project, "Performance" is a core design requirement. To ensure our 60fps standard is met across all devices, we must look beyond the source code and into the <strong>Runtime Timeline</strong>.
+        </p>
+        <p>
+            The <strong>Performance Tab</strong> in Chrome DevTools is the architect's most powerful diagnostic tool. It provides a millisecond-by-millisecond record of everything the browser engine does: from parsing the initial <code>config.json</code> to calculating the final CSS layout.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Profiling Workflow</h2>
+        <p>
+            To capture a meaningful profile of the ROSETTA engine, follow the <strong>Record-Interact-Analyze</strong> protocol:
+        </p>
+        <ol class="artifact-list">
+            <li><strong>Preparation:</strong> Open an Incognito window to ensure browser extensions don't interfere with the data.</li>
+            <li><strong>CPU Throttling:</strong> Set the CPU to "4x slowdown" or "6x slowdown." This simulates the experience of a user on a mid-range mobile device.</li>
+            <li><strong>Recording:</strong> Hit the record button, perform a specific action (like clicking a new language course), and then stop.</li>
+        </ol>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Tip:</strong> Use the <strong>"Screenshots"</strong> checkbox. This allows you to see exactly what the user was looking at during every frame of the JavaScript execution, making it easy to identify which script caused a visual delay.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Deconstructing the Flame Chart</h2>
+        <p>
+            The <strong>Main Thread</strong> section displays a "Flame Chart." This is a top-down visualization of the Call Stack.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Width of a block:</strong> Represents the duration of the function execution.</li>
+            <li><strong>Depth of blocks:</strong> Represents the nesting of function calls (which function called which).</li>
+            <li><strong>Yellow Blocks:</strong> JavaScript execution.</li>
+            <li><strong>Purple Blocks:</strong> Layout and Reflow calculations.</li>
+            <li><strong>Green Blocks:</strong> Painting and Compositing.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">Diagnosis</span>
+            <span class="file-name">performance_audit.log</span>
+        </div>
+        <pre><code class="language-bash">[Event: Click] 
+  -> [Task: 120ms] (RED FLAG: > 50ms)
+    -> [Function: loadCourseData] (80ms)
+      -> [Function: JSON.parse] (30ms)
+    -> [Function: updateSidebarDOM] (40ms)</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Identifying "Long Tasks"</h2>
+        <p>
+            The browser flags any task that takes longer than <strong>50ms</strong> with a red triangle. These are known as "Long Tasks."
+        </p>
+        <p>
+            <strong>Why 50ms?</strong> Because the browser needs time to respond to user input within 100ms. If a single task takes 120ms, and the user clicks a button at the 10ms mark, the click event will be queued for 110ms, making the UI feel "broken" or laggy.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Bottom-Up View</h2>
+        <p>
+            While the Flame Chart is visual, the <strong>Bottom-Up</strong> tab provides the hard math. It lists which functions consumed the most "Total Time" and "Self Time."
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Self Time:</strong> Time spent inside the function itself (doing math, loops).</li>
+            <li><strong>Total Time:</strong> Time spent inside the function <em>plus</em> all the functions it called.</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Optimization Target:</strong> If a function in ROSETTA has high <em>Self Time</em>, it's a logic bottleneck. If it has high <em>Total Time</em> but low <em>Self Time</em>, it's likely waiting on an expensive API like a DOM query or a complex fetch.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Network/Main Thread Correlation</h2>
+        <p>
+            In a Zero-Backend app, the relationship between <strong>Network Waterfall</strong> and <strong>Script Execution</strong> is vital.
+        </p>
+        <p>
+            Look for gaps where the Network is idle but the Main Thread is busy. This is where the ROSETTA engine is processing data. Conversely, look for long network bars that block the script from continuing—this indicates that we should use <strong>Prefetching</strong> (HTML Lesson 2.4) to pull the JSON early.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Final Audit Standard:</strong> A Senior Architect aims for a <strong>Total Blocking Time (TBT)</strong> of less than 200ms and a <strong>Cumulative Layout Shift (CLS)</strong> of 0. If your performance trace shows large purple bars while you are scrolling the sidebar, you are performing "Layout Thrashing" and must reflow your logic.
+        </div>
+    </div>
+
+</section>

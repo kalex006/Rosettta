@@ -1,0 +1,106 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.5 Microtasks vs Macrotasks</h1>
+    <p class="artifact-subtitle">The Priority War: Navigating the hierarchical queue system of the JavaScript Event Loop.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Hierarchical Queue</h2>
+        <p>
+            In Lesson 4.1, we discussed the Event Loop and the Task Queue. However, the browser actually manages <strong>multiple queues</strong> with different levels of authority. 
+        </p>
+        <p>
+            As a Senior Architect, you must realize that not all asynchronous actions are equal. The engine categorizes them into <strong>Microtasks</strong> and <strong>Macrotasks</strong>. The rules governing their execution are strict and determine the perceived speed of the ROSETTA interface.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Microtasks (The VIP Queue)</h2>
+        <p>
+            Microtasks are high-priority tasks that must be executed <strong>immediately after</strong> the current synchronous code finishes, but <strong>before</strong> the browser allows any other work (like rendering or macrotasks).
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Primary Sources:</strong> <code>Promises</code> (.then, .catch, .finally), <code>MutationObserver</code>, and <code>queueMicrotask()</code>.</li>
+            <li><strong>The Rule:</strong> The engine will not move on until the Microtask Queue is <strong>completely empty</strong>. If a microtask schedules another microtask, it will also run in the same cycle.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Macrotasks (The Standard Queue)</h2>
+        <p>
+            Also simply called "Tasks," these are lower-priority operations. The engine executes <strong>exactly one</strong> macrotask from the queue, then checks if there are any new microtasks to handle before picking up the next macrotask.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Primary Sources:</strong> <code>setTimeout</code>, <code>setInterval</code>, <code>setImmediate</code>, I/O tasks, and UI rendering events.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">Execution Test</span>
+            <span class="file-name">priority_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">console.log("1. Sync Start");
+
+setTimeout(() => {
+    console.log("2. Macrotask (Timeout)");
+}, 0);
+
+Promise.resolve().then(() => {
+    console.log("3. Microtask (Promise)");
+});
+
+console.log("4. Sync End");
+
+/* 
+  OUTPUT ORDER:
+  1. Sync Start
+  4. Sync End
+  3. Microtask (Promise)  <-- VIP Priority
+  2. Macrotask (Timeout)  <-- Standard Priority
+*/</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Rendering Gap</h2>
+        <p>
+            The browser's "Paint" operation (updating the screen) usually happens <strong>after</strong> the microtask queue is cleared and <strong>before</strong> the next macrotask is processed.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's UI Tip:</strong> If you perform a massive data transformation in a <strong>Microtask</strong>, the user will see a freeze because the browser cannot "Paint" the screen until that microtask (and any it creates) is finished. If you want to give the browser a chance to breathe and update the loading spinner, move the logic into a <strong>Macrotask</strong> (<code>setTimeout</code>).
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Infinite Microtask Trap</h2>
+        <p>
+            Because the Event Loop is required to empty the entire microtask queue before continuing, you can accidentally create a <strong>Non-Visual Infinite Loop</strong>. 
+        </p>
+        <p>
+            If a promise constantly resolves another promise, the engine will stay stuck in the Microtask phase forever. The UI will never update, and the tab will become completely frozen, even though the "Call Stack" technically remains empty.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Warning</span>
+            <span class="file-name">memory_freeze.js</span>
+        </div>
+        <pre><code class="language-javascript">// ❌ DANGEROUS: Blocks UI Rendering forever
+function infiniteMicro() {
+    Promise.resolve().then(infiniteMicro);
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Conclusion:</strong> Use <strong>Microtasks</strong> for state updates that must happen immediately after an action (like updating the ROSETTA search index). Use <strong>Macrotasks</strong> for non-critical background work or to break up heavy processing to keep the frame rate stable.
+        </div>
+    </div>
+
+</section>

@@ -1,0 +1,131 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.5 Real-time Sync Logic</h1>
+    <p class="artifact-subtitle">State Orchestration: Engineering the communication infrastructure between decoupled UI components.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Decoupling Challenge</h2>
+        <p>
+            As the ROSETTA engine grows, your components—such as the <strong>Progress Tracker</strong> and the <strong>Sidebar Navigation</strong>—should not be directly linked to each other. This is called <strong>Loose Coupling</strong>.
+        </p>
+        <p>
+            If the Sidebar "knows" too much about the Progress Tracker, changing one breaks the other. Instead, we use a <strong>Message-Based Architecture</strong> where components broadcast their changes to the environment, and anyone interested simply listens.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Publish-Subscribe (Pub/Sub) Pattern</h2>
+        <p>
+            Pub/Sub is the gold standard for component synchronization. A central "Event Bus" manages a list of subscribers for different topics. When a "Publish" event occurs, the bus notifies all "Subscribers" assigned to that topic.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">event_bus.js</span>
+        </div>
+        <pre><code class="language-javascript">const RosettaBus = {
+    events: {},
+    // 1. Component subscribes to a topic
+    subscribe(event, callback) {
+        if (!this.events[event]) this.events[event] = [];
+        this.events[event].push(callback);
+    },
+    // 2. Component broadcasts a change
+    publish(event, data) {
+        if (this.events[event]) {
+            this.events[event].forEach(fn => fn(data));
+        }
+    }
+};
+
+// --- Implementation ---
+// Sidebar listens for progress updates
+RosettaBus.subscribe('lesson_complete', (id) => {
+    updateSidebarCheckmark(id);
+});
+
+// Main view triggers the event
+function completeLesson(id) {
+    RosettaBus.publish('lesson_complete', id);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Native Synchronization: Custom Events</h2>
+        <p>
+            The browser provides a native way to implement the Pub/Sub pattern using <code>CustomEvent</code>. By dispatching events from the <code>window</code> object, we leverage the DOM's built-in event system to sync our artifacts.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">native_dispatch.js</span>
+            </div>
+            <pre><code class="language-javascript">// Dispatching a system-wide update
+const syncEvent = new CustomEvent('rosettaSync', { 
+    detail: { lessonId: "7.5", timestamp: Date.now() } 
+});
+window.dispatchEvent(syncEvent);
+
+// Listening from any other component
+window.addEventListener('rosettaSync', (e) => {
+    console.log("Syncing Artifact:", e.detail.lessonId);
+});</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Multi-Tab Sync: The BroadcastChannel</h2>
+        <p>
+            A common problem in web architecture: a user opens ROSETTA in two tabs. They finish a lesson in Tab A, but Tab B still looks incomplete. To fix this in a Zero-Backend model, we use the <strong>BroadcastChannel API</strong>.
+        </p>
+        <p>
+            This creates a private communication pipe between all tabs and windows under the same origin. It is faster and cleaner than the <code>storage</code> event (Lesson 7.1).
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">Advanced JS</span>
+            <span class="file-name">broadcast_sync.js</span>
+        </div>
+        <pre><code class="language-javascript">// Join the ROSETTA communication pipe
+const channel = new BroadcastChannel('rosetta_vault');
+
+// Broadcast state change to ALL tabs
+channel.postMessage({ type: 'UPDATE_PROGRESS', id: '7.5' });
+
+// Receive updates from other tabs
+channel.onmessage = (event) => {
+    if (event.data.type === 'UPDATE_PROGRESS') {
+        refreshUI(event.data.id);
+        console.log("Tab synchronized via Broadcast API.");
+    }
+};</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Recommendation:</strong> Use <strong>Proxies</strong> (Lesson 7.4) to trigger your <strong>Pub/Sub</strong> broadcasts. This creates a "Seamless Loop": Data changes -> Proxy detects change -> Proxy publishes event -> All UI components update simultaneously.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Conflict Resolution</h2>
+        <p>
+            When syncing in real-time, you must handle <strong>Race Conditions</strong>. If two messages arrive at the same time, which one wins? A Senior Architect uses <strong>Timestamps</strong>. Every state change should carry a <code>Date.now()</code> payload. The application should only accept an update if its timestamp is newer than the current local state.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Security Limit:</strong> <code>BroadcastChannel</code> only works within the <strong>same origin</strong> (same domain). You cannot use it to sync data between your Archive Portfolio and the ROSETTA project if they are in different repositories on GitHub, unless they share a top-level domain.
+        </div>
+    </div>
+
+</section>

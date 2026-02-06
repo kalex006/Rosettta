@@ -1,0 +1,121 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.3 Event Delegation Logic</h1>
+    <p class="artifact-subtitle">Structural Efficiency: Implementing centralized event orchestration to minimize memory consumption and handle dynamic artifacts.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Scalability Problem</h2>
+        <p>
+            Imagine a documentation sidebar with 500 lesson links. If you use a <code>forEach</code> loop to attach an <code>addEventListener</code> to every link, the browser must allocate memory for 500 separate function references. 
+        </p>
+        <p>
+            Furthermore, if you dynamically inject a 501st link via JavaScript (as we do in ROSETTA when switching courses), that new link will have no listener. You would have to manually attach one—leading to "Spaghetti Code."
+        </p>
+        <p>
+            <strong>Event Delegation</strong> solves both problems. You attach <strong>one</strong> listener to the parent container and use logic to determine which child was clicked.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Delegation Algorithm</h2>
+        <p>
+            The pattern relies on three steps:
+        </p>
+        <ol class="artifact-list">
+            <li>Attach the listener to a stable <strong>Ancestor</strong> (like the <code>&lt;nav&gt;</code> or <code>&lt;main&gt;</code>).</li>
+            <li>In the callback, check <code>event.target</code> to see which element actually triggered the event.</li>
+            <li>Use the <code>.matches()</code> or <code>.closest()</code> method to verify if the target is an artifact we care about.</li>
+        </ol>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">delegation_engine.js</span>
+        </div>
+        <pre><code class="language-javascript">// 1. Single listener on the parent sidebar
+const sidebar = document.querySelector('.rosetta-sidebar');
+
+sidebar.addEventListener('click', (event) => {
+    // 2. The 'closest' pattern: finds the link even if the user clicks an icon inside it
+    const link = event.target.closest('.nav-link');
+
+    // 3. The Logic Gate: If the click wasn't on a link, ignore it
+    if (!link) return;
+
+    // Execute logic based on the artifact's metadata
+    const lessonID = link.dataset.lessonId;
+    loadLesson(lessonID);
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Handling Dynamic Content</h2>
+        <p>
+            This is the "Secret Sauce" of the ROSETTA Zero-Backend model. Because the listener is on the <strong>parent</strong>, it doesn't matter when the children are created. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The "Future-Proof" Guarantee:</strong> You can wipe the sidebar clean and inject 100 new HTML links from a fresh JSON fetch. Because of delegation, the click logic will "just work" for the new links immediately, without needing to re-attach any listeners.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. target vs. currentTarget</h2>
+        <p>
+            In a delegation pattern, these two properties of the <code>event</code> object serve very different architectural purposes:
+        </p>
+        <ul class="artifact-list">
+            <li><code>event.target</code>: The specific element the user touched (e.g., the <code>&lt;span&gt;</code> icon inside the button).</li>
+            <li><code>event.currentTarget</code>: The element holding the listener (e.g., the <code>&lt;nav&gt;</code> container).</li>
+        </ul>
+        <p>
+            As a Senior Architect, you almost always use <code>target</code> combined with <code>.closest()</code> to find the semantic "Artifact" (the button/link) that encapsulates the click.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Performance Metrics</h2>
+        <p>
+            In high-fidelity interfaces, delegation reduces **Memory Pressure** and **Garbage Collection** activity.
+        </p>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Individual Listeners</th>
+                    <th>Event Delegation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Memory Usage</td>
+                    <td>O(n) - Grows with items</td>
+                    <td><strong>O(1) - Constant</strong></td>
+                </tr>
+                <tr>
+                    <td>Dynamic Support</td>
+                    <td>Manual Re-binding</td>
+                    <td><strong>Automatic</strong></td>
+                </tr>
+                <tr>
+                    <td>Code Complexity</td>
+                    <td>High (loops required)</td>
+                    <td><strong>Low (centralized)</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The "Non-Bubbling" Pitfall:</strong> Remember from Lesson 5.2 that events like <code>focus</code>, <code>blur</code>, and <code>scroll</code> do not bubble. You cannot delegate these using standard bubbling. To delegate these, you must set the <code>capture</code> option to <code>true</code>.
+        </div>
+    </div>
+
+</section>

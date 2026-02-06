@@ -1,0 +1,134 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.4 State Objects & Proxies</h1>
+    <p class="artifact-subtitle">Reactive Orchestration: Implementing the Proxy pattern to enable automated state tracking and UI synchronization.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Interception Layer</h2>
+        <p>
+            In a standard object, when you change a property (e.g., <code>state.score = 10</code>), the engine performs the update silently. The rest of your application has no way of knowing the change occurred unless you manually trigger a render function.
+        </p>
+        <p>
+            The <strong>Proxy</strong> object allows an architect to define a custom behavior for fundamental operations (e.g. property lookup, assignment, enumeration). It acts as a <strong>Middleman</strong> or a "Security Gate" that intercepts interactions with your state artifacts.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Proxy Anatomy: Target & Handler</h2>
+        <p>
+            A Proxy is constructed from two components:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Target:</strong> The original object you want to wrap.</li>
+            <li><strong>Handler:</strong> An object containing "Traps"—functions that intercept operations.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">proxy_basics.js</span>
+        </div>
+        <pre><code class="language-javascript">const rawState = { currentLesson: "7.3" };
+
+const handler = {
+    // The 'set' trap intercepts assignments
+    set(target, prop, value) {
+        console.log(`State Transition: ${prop} changing to ${value}`);
+        target[prop] = value; // Perform the actual update
+        return true; // Success indicator
+    }
+};
+
+const state = new Proxy(rawState, handler);
+
+state.currentLesson = "7.4"; 
+// Result: Logs "State Transition..." and updates rawState.</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Reactive UI with the 'set' Trap</h2>
+        <p>
+            This is the core of "Framework-less Reactivity" in the ROSETTA project. By placing UI rendering logic inside the <code>set</code> trap, we ensure the screen is always a perfect reflection of the underlying data.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Pattern:</strong> Use Proxies to build a <strong>Single Source of Truth</strong>. When you update the <code>state</code> object, the Proxy automatically updates <code>localStorage</code>, changes the CSS variables, and re-paints the navigation menu simultaneously.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">reactive_engine.js</span>
+        </div>
+        <pre><code class="language-javascript">const appState = new Proxy({ theme: 'dark' }, {
+    set(target, key, value) {
+        target[key] = value;
+        
+        // Automated Side Effects
+        if (key === 'theme') {
+            document.body.setAttribute('data-theme', value);
+            localStorage.setItem('theme', value);
+        }
+        
+        return true;
+    }
+});
+
+// Changing one value now triggers multiple system updates
+appState.theme = 'ancient-gold';</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Reflect API</h2>
+        <p>
+            When writing Proxy traps, a Senior Architect uses the <strong>Reflect</strong> object. It provides methods for interceptable JavaScript operations that match the Proxy traps exactly. Using <code>Reflect.set()</code> is safer than <code>target[key] = value</code> because it handles complex inheritance and returns a boolean status.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">reflect_integration.js</span>
+        </div>
+        <pre><code class="language-javascript">const handler = {
+    get(target, prop, receiver) {
+        console.log(`Reading property: ${prop}`);
+        return Reflect.get(target, prop, receiver);
+    },
+    set(target, prop, value, receiver) {
+        // More robust assignment
+        return Reflect.set(target, prop, value, receiver);
+    }
+};</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Validation via Proxies</h2>
+        <p>
+            Proxies are also excellent for <strong>Data Validation</strong>. You can prevent a state change if the new data doesn't meet your architectural standards (e.g., preventing a "Lesson ID" from being anything other than a string).
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Performance Constraint:</strong> Proxies introduce a small overhead to every object interaction. For standard variables, use <code>const/let</code>. Use Proxies only for <strong>Global Application State</strong> or complex data artifacts that require synchronization across multiple UI components.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Summary: The Reactive Protocol</h2>
+        <ul class="artifact-list">
+            <li><strong>Traps:</strong> Intercept <code>get</code>, <code>set</code>, <code>has</code>, and <code>deleteProperty</code>.</li>
+            <li><strong>Automation:</strong> State changes trigger UI updates automatically.</li>
+            <li><strong>Stability:</strong> Use Reflect to maintain standard engine behavior inside traps.</li>
+        </ul>
+    </div>
+
+</section>

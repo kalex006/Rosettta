@@ -1,0 +1,147 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.5 Building a Reactive Core</h1>
+    <p class="artifact-subtitle">The Grand Synthesis: Engineering a unified state-to-UI orchestration layer for decentralized artifacts.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Unified Heartbeat</h2>
+        <p>
+            Throughout Topic 09, we have mastered individual reactive tools: Observers for the environment, Custom Events for communication, and Debouncing for performance. In this final chapter, we synthesize these into a <strong>Reactive Core</strong>.
+        </p>
+        <p>
+            A Reactive Core ensures that the ROSETTA interface follows the <strong>Unidirectional Data Flow</strong> principle: 
+            <br>
+            <code>State Change → Core Logic → Event Broadcast → UI Reactivity.</code>
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Core Architecture Pattern</h2>
+        <p>
+            Our core is built on three architectural pillars:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>The State Proxy:</strong> Intercepts data changes (Lesson 7.4).</li>
+            <li><strong>The Event Dispatcher:</strong> Broadcasts the intent (Lesson 9.3).</li>
+            <li><strong>The Performance Guard:</strong> Throttles UI updates to 60fps (Lesson 9.4).</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS: RosettaCore.js</span>
+            <span class="file-name">core_engine.js</span>
+        </div>
+        <pre><code class="language-javascript">/**
+ * ROSETTA Reactive Core
+ * The central nervous system of the archive.
+ */
+const RosettaCore = (() => {
+    // Private internal state
+    const _rawState = {
+        currentLesson: null,
+        theme: 'dark',
+        progress: 0
+    };
+
+    // The Reactive Proxy
+    const state = new Proxy(_rawState, {
+        set(target, prop, value) {
+            if (target[prop] === value) return true; // No change
+            
+            target[prop] = value;
+
+            // Broadcast the change to the system
+            const event = new CustomEvent(`rosetta:${prop}`, {
+                detail: { value, timestamp: Date.now() }
+            });
+            window.dispatchEvent(event);
+            
+            return true;
+        }
+    });
+
+    return { state };
+})();
+
+export default RosettaCore;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Implementing Component Subscriptions</h2>
+        <p>
+            Once the core is active, components (like the Sidebar or Progress Bar) become <strong>Passive Observers</strong>. They no longer need to know <em>how</em> the state changes; they only care <em>when</em> it does.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS: ProgressBar.js</span>
+            <span class="file-name">reactive_component.js</span>
+        </div>
+        <pre><code class="language-javascript">// The Progress Bar component "reacts" to the core
+window.addEventListener('rosetta:progress', (e) => {
+    const newWidth = e.detail.value;
+    
+    // Applying the Ancient Gold transition
+    document.querySelector('.progress-fill').style.width = `${newWidth}%`;
+    console.log("UI Synchronized: Progress at " + newWidth + "%");
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Integrating Environmental Awareness</h2>
+        <p>
+            A true core also listens to the <strong>Environment</strong>. By integrating the Intersection Observer (9.1) into the core, we can update the state based on what the user is physically looking at.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Logic:</strong> When an Intersection Observer sees a user reach the end of a lesson, it updates <code>RosettaCore.state.progress = 100</code>. This automatically triggers the <code>rosetta:progress</code> event, which updates the UI. The loop is closed and fully automated.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Maintaining the 60fps Standard</h2>
+        <p>
+            In a high-fidelity system, multiple state changes might happen rapidly (e.g., during a scroll). To prevent the UI from flickering, the Core uses <strong>RequestAnimationFrame</strong> to batch UI updates.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">render_queue.js</span>
+            </div>
+            <pre><code class="language-javascript">let renderPending = false;
+
+window.addEventListener('rosetta:stateChange', () => {
+    if (renderPending) return;
+    renderPending = true;
+
+    // Wait for the next browser paint
+    requestAnimationFrame(() => {
+        performHeavyUIRender();
+        renderPending = false;
+    });
+});</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architecture Verdict:</strong> By building a Reactive Core, you eliminate "State Drift"—where the sidebar thinks the user is on Lesson A, but the URL says Lesson B. In ROSETTA, the state is the only source of truth; the UI is just a temporary visual projection of that data.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Final Module Review</h2>
+        <ol class="artifact-list">
+            <li><strong>Decoupling:</strong> Components talk to the core, not to each other.</li>
+            <li><strong>Automation:</strong> State updates drive the UI automatically.</li>
+            <li><strong>Performance:</strong> Throttling and Observers keep the Main Thread clear.</li>
+        </ol>
+    </div>
+
+</section>

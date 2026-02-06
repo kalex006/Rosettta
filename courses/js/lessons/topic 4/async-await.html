@@ -1,0 +1,124 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.4 Async / Await Patterns</h1>
+    <p class="artifact-subtitle">Linear Asynchrony: Orchestrating temporal logic through declarative pausing and sequential execution flow.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Semantic Shift</h2>
+        <p>
+            While Promise chains (<code>.then()</code>) are superior to callbacks, they can still become difficult to follow when multiple conditional branches or complex error handling are involved.
+        </p>
+        <p>
+            The <code>async/await</code> syntax allows the Architect to "pause" the execution of a function until a Promise settles, without blocking the main thread. This transforms our "Zero-Backend" logic into a clean, readable sequence of events.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Evolution</span>
+            <span class="file-name">syntax_comparison.js</span>
+        </div>
+        <pre><code class="language-javascript">// 1. The Promise Chain (Legacy Standard)
+function loadData() {
+    fetch('config.json')
+        .then(res => res.json())
+        .then(data => console.log(data));
+}
+
+// 2. The Async/Await (Modern Standard)
+async function loadData() {
+    const response = await fetch('config.json');
+    const data = await response.json();
+    console.log(data);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The async Keyword</h2>
+        <p>
+            By prefixing a function with <code>async</code>, you are declaring that the function will <strong>always return a Promise</strong>. If the function returns a value that isn't a Promise, the engine automatically wraps it in a resolved Promise.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The await Keyword</h2>
+        <p>
+            The <code>await</code> keyword can only be used inside an <code>async</code> function. It tells the engine: "Pause this function here, go do other work (like handling clicks or animations), and come back when this Promise is resolved."
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Insight:</strong> <code>await</code> does not block the browser. It only suspends the <em>internal</em> execution of that specific function. The rest of the ROSETTA UI remains interactive and fluid.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Error Handling: The try/catch Protocol</h2>
+        <p>
+            With Promises, we used <code>.catch()</code>. With Async/Await, we return to the standard <code>try...catch</code> block. This allows us to handle both synchronous errors and asynchronous rejections in the same location.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">secure_fetch.js</span>
+        </div>
+        <pre><code class="language-javascript">async function getArtifact(id) {
+    try {
+        const response = await fetch(`courses/js/lessons/${id}.json`);
+        
+        if (!response.ok) throw new Error("Artifact not found");
+        
+        const data = await response.json();
+        renderArtifact(data);
+    } catch (error) {
+        // Centralized Error Handling
+        console.error("Transmission Error:", error.message);
+        showErrorUI();
+    } finally {
+        hideLoadingSpinner();
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The "Waterfall" Bottleneck</h2>
+        <p>
+            A common architectural error is awaiting every promise sequentially when they don't depend on each other. This creates a "Waterfall" effect where the second request doesn't start until the first one finishes.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Performance Strategy:</strong> If you need to fetch three unrelated JSON files, do not <code>await</code> them one by one. Use <code>Promise.all()</code> to fetch them in <strong>Parallel</strong>.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Optimization</span>
+            <span class="file-name">parallel_execution.js</span>
+        </div>
+        <pre><code class="language-javascript">// ❌ SLOW: Sequential (Takes 2 seconds)
+const user = await fetchUser(); // 1s
+const course = await fetchCourse(); // 1s
+
+// ✅ FAST: Parallel (Takes 1 second)
+const [user, course] = await Promise.all([
+    fetchUser(), 
+    fetchCourse()
+]);</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Top-Level Await</h2>
+        <p>
+            In modern JavaScript Modules (Lesson 8.1), you can use the <code>await</code> keyword at the top level of a file without wrapping it in an <code>async</code> function. This is extremely useful for our <code>main.js</code>, allowing us to wait for the initial configuration to load before the rest of the application initializes.
+        </p>
+    </div>
+
+</section>

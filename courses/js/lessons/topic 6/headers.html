@@ -1,0 +1,124 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.4 Header & Auth Strategies</h1>
+    <p class="artifact-subtitle">Protocol Negotiation: Mastering metadata communication and secure identity verification in network requests.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Metadata Negotiation</h2>
+        <p>
+            An HTTP request is more than just a URL. It includes <strong>Headers</strong>—key-value pairs that act as the instructions for the transaction. Headers tell the server who is asking, what format of data is expected, and what credentials the user carries.
+        </p>
+        <p>
+            In the ROSETTA architecture, we use headers to ensure the browser and server are "speaking the same language" (usually JSON) and to handle secure access to restricted data fragments.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Headers Object</h2>
+        <p>
+            While you can pass headers as a simple object, modern JavaScript provides a dedicated <code>Headers</code> class. This class offers surgical methods like <code>.append()</code>, <code>.has()</code>, and <code>.get()</code>, making the management of metadata more robust.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">header_orchestration.js</span>
+        </div>
+        <pre><code class="language-javascript">// Constructing the metadata layer
+const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Accept", "application/json");
+
+// Applying headers to a fetch call
+fetch('courses/js/config.json', {
+    method: 'GET',
+    headers: myHeaders
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Essential Request Headers</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Header</th>
+                    <th>Purpose</th>
+                    <th>ROSETTA Standard</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>Content-Type</code></td>
+                    <td>Tells the server the format of the data being sent.</td>
+                    <td><code>application/json</code></td>
+                </tr>
+                <tr>
+                    <td><code>Accept</code></td>
+                    <td>Tells the server what format the client wants back.</td>
+                    <td><code>application/json</code> or <code>text/html</code></td>
+                </tr>
+                <tr>
+                    <td><code>Authorization</code></td>
+                    <td>Carries the security token (The "Key").</td>
+                    <td><code>Bearer &lt;TOKEN&gt;</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Authentication: The Bearer Protocol</h2>
+        <p>
+            For high-security artifacts, we use the <strong>Bearer Token</strong> strategy. The "Bearer" is simply the holder of the token. Including this header proves to the server that the ROSETTA instance has the authority to view the content.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Security</span>
+            <span class="file-name">auth_request.js</span>
+        </div>
+        <pre><code class="language-javascript">async function fetchPrivateArtifact(artifactID, token) {
+    const response = await fetch(`api/vault/${artifactID}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'X-Artifact-Source': 'ROSETTA-Engine' // Custom header
+        }
+    });
+    
+    if (response.status === 401) {
+        throw new Error("Security clearance failed: Unauthorized.");
+    }
+    
+    return await response.json();
+}</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Architect's Security Warning:</strong> Never hard-code API keys or Authorization tokens directly into your <code>main.js</code> if your project is public on GitHub. Anyone can inspect your source code. For public ROSETTA deployments, tokens should be gathered from user input or handled via GitHub's internal environment variables.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. CORS and Preflight Requests</h2>
+        <p>
+            When you add custom headers (like <code>Authorization</code>) to a request going to a different domain, the browser performs a <strong>Preflight Request</strong>. It sends an <code>OPTIONS</code> request first to ask the server: "Am I allowed to send these headers?".
+        </p>
+        <p>
+            As an architect, you must ensure your data sources (like the GitHub API) support the <code>Access-Control-Allow-Headers</code> response header, or the browser will block the fetch for security reasons.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The "Same-Origin" Benefit:</strong> Since ROSETTA's JSON and HTML files are hosted on the same server as the <code>index.html</code>, we generally avoid CORS issues. This "Same-Origin" relationship allows for much faster network performance as no preflight checks are required.
+        </div>
+    </div>
+
+</section>

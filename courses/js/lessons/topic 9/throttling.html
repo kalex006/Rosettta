@@ -1,0 +1,141 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.4 Debouncing & Throttling</h1>
+    <p class="artifact-subtitle">Rate Limitation: Orchestrating performance-optimized event handlers to mitigate logic storms.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Logic Storm</h2>
+        <p>
+            In the ROSETTA project, we prioritize a 60fps (frames per second) experience. However, a user typing fast in our search bar or resizing their browser window can trigger hundreds of events per second. 
+        </p>
+        <p>
+            If our logic—such as filtering a massive JSON course list—runs on every single event, the browser will "stutter" as the Main Thread becomes overwhelmed. As an architect, you must implement <strong>Timing Guards</strong> to control the frequency of execution.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Debouncing: The "Wait for Pause" Pattern</h2>
+        <p>
+            <strong>Debouncing</strong> ensures that a function is only executed after a specific period of "silence." If the event is triggered again before the time is up, the clock resets.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Use Case: The Search Bar.</strong> We don't want to search the database for every single letter the user types. We wait until they stop typing for 300ms, then we perform the search.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">debounce_utility.js</span>
+        </div>
+        <pre><code class="language-javascript">function debounce(func, delay) {
+    let timeoutId;
+    return (...args) => {
+        // Clear the previous timer
+        clearTimeout(timeoutId);
+        
+        // Start a new timer
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
+
+// Implementation for ROSETTA search
+const searchArtifacts = debounce((query) => {
+    console.log(`Searching vault for: ${query}`);
+    // Logic to filter the config.json
+}, 300);
+
+document.querySelector('#search-input').addEventListener('input', (e) => {
+    searchArtifacts(e.target.value);
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Throttling: The "Rate Limit" Pattern</h2>
+        <p>
+            <strong>Throttling</strong> ensures that a function is executed at most once every X milliseconds. It "bottlenecks" the flow of events to a steady rhythm, regardless of how many times the trigger occurs.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Use Case: Window Resizing.</strong> If we use the Resize Observer (Lesson 9.2) or a scroll listener, we use throttling to update the UI only once every 100ms to keep the browser responsive.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">throttle_utility.js</span>
+        </div>
+        <pre><code class="language-javascript">function throttle(func, limit) {
+    let inThrottle;
+    return (...args) => {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+
+// Implementation for ROSETTA UI update
+const updateCanvas = throttle(() => {
+    console.log("Re-calculating complex geometry...");
+}, 100);
+
+window.addEventListener('resize', updateCanvas);</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Choosing the Strategy</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Debounce</th>
+                    <th>Throttle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Execution</strong></td>
+                    <td>At the end of a burst.</td>
+                    <td>Regular intervals during a burst.</td>
+                </tr>
+                <tr>
+                    <td><strong>Best for...</strong></td>
+                    <td>Inputs, Auto-save, Validations.</td>
+                    <td>Scrolling, Resizing, Mouse movements.</td>
+                </tr>
+                <tr>
+                    <td><strong>User Feeling</strong></td>
+                    <td>"Wait for me to finish."</td>
+                    <td>"Give me steady updates."</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Closure Connection</h2>
+        <p>
+            Notice that both utilities use <strong>Closures</strong> (Topic 3.2). They return a new function that "remembers" the <code>timeoutId</code> or <code>inThrottle</code> state across multiple calls. This is the hallmark of functional architecture.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Architect's Limit:</strong> Modern browsers provide <code>requestAnimationFrame</code> for visual animations. If you are throttling a function that specifically <strong>paints to the screen</strong>, use <code>requestAnimationFrame</code> instead of a timer to align with the display's refresh rate.
+        </div>
+    </div>
+
+</section>

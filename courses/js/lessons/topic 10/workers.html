@@ -1,0 +1,143 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.3 Web Workers (Multi-threading)</h1>
+    <p class="artifact-subtitle">Parallel Orchestration: Moving heavy logic to background threads to protect the sanctity of the Main Thread.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Single-Threaded Trap</h2>
+        <p>
+            As established in Topic 4.1, JavaScript executes on a single <strong>Main Thread</strong>. This thread is responsible for everything: parsing HTML, calculating CSS layouts, running animations, and executing your JS logic.
+        </p>
+        <p>
+            In a high-end system like ROSETTA, if you perform a massive search across 500 chapters of JSON data synchronously, the Main Thread will "block." The user will be unable to scroll or click, and the "Ancient Gold" animations will stutter. <strong>Web Workers</strong> allow us to break this limitation by running scripts in the background.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Worker Architecture</h2>
+        <p>
+            A Web Worker is a separate JavaScript file that runs in its own environment, completely isolated from the main page. It has its own memory space and its own event loop. 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>The Isolation Boundary:</strong> Workers have <strong>Zero Access to the DOM</strong>. They cannot use <code>document</code>, <code>window</code>, or <code>localStorage</code>. They communicate with the Main Thread exclusively through <strong>Message Passing</strong>.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS: main.js</span>
+            <span class="file-name">spawning_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">// 1. Initialize the background worker
+const searchWorker = new Worker('search-engine.js');
+
+// 2. Send data to the worker (The "Order")
+searchWorker.postMessage({ query: "Closures", data: bigSyllabusJSON });
+
+// 3. Listen for the result (The "Delivery")
+searchWorker.onmessage = (event) => {
+    const results = event.data;
+    renderSearchResults(results);
+};</code></pre>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS: search-engine.js</span>
+            <span class="file-name">worker_thread.js</span>
+        </div>
+        <pre><code class="language-javascript">// The worker waits for instructions
+self.onmessage = (event) => {
+    const { query, data } = event.data;
+    
+    // Perform heavy CPU-intensive search here
+    const results = data.filter(item => item.content.includes(query));
+    
+    // Send the results back to the Main Thread
+    self.postMessage(results);
+};</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Data Transfer: Structured Clone vs. Transferables</h2>
+        <p>
+            When you send data via <code>postMessage</code>, the browser usually performs a <strong>Structured Clone</strong> (Lesson 2.2). For massive datasets, this cloning process can be slow. 
+        </p>
+        <p>
+            For ultra-high performance (like processing raw binary images in ROSETTA), an architect uses <strong>Transferable Objects</strong> (like <code>ArrayBuffer</code>). Transferring "moves" the memory from one thread to the other instantly with zero cloning cost, but the original thread loses access to the data.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Use Case: Cryptographic Operations</h2>
+        <p>
+            In your <strong>Cipher Case</strong> project, encrypting a very large file could take several seconds. By moving the encryption logic to a Web Worker, the ROSETTA UI can remain interactive, showing a smooth "Decrypting..." progress bar while the background thread does the heavy lifting.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Terminating the Thread</h2>
+        <p>
+            Workers are resource-intensive. Each one spawns a real OS-level thread. If a worker is no longer needed (e.g., the user closed the Search panel), you must terminate it to reclaim memory.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">termination_protocol.js</span>
+            </div>
+            <pre><code class="language-javascript">// From the Main Thread
+searchWorker.terminate();
+
+// Or from within the Worker itself
+self.close();</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Recommendation:</strong> Don't use Workers for simple tasks. The overhead of creating a thread and cloning data is only worth it for tasks that take longer than <strong>50ms</strong>. If it's faster than that, keep it on the Main Thread to avoid unnecessary complexity.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Threading Comparison</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Main Thread</th>
+                    <th>Web Worker</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>DOM Access</strong></td>
+                    <td>Full</td>
+                    <td>None</td>
+                </tr>
+                <tr>
+                    <td><strong>UI Impact</strong></td>
+                    <td>Direct (Blocks UI)</td>
+                    <td>None (Background)</td>
+                </tr>
+                <tr>
+                    <td><strong>Network (Fetch)</strong></td>
+                    <td>Available</td>
+                    <td>Available</td>
+                </tr>
+                <tr>
+                    <td><strong>Timers</strong></td>
+                    <td>Available</td>
+                    <td>Available</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>

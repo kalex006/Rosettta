@@ -1,0 +1,128 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">7.2 Cookies vs. Session</h1>
+    <p class="artifact-subtitle">The State Paradox: Balancing persistent identifiers with temporary session contexts through the legacy and modern layers.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Persistence Ancestry</h2>
+        <p>
+            Before the modern Web Storage API (Lesson 7.1) existed, <strong>Cookies</strong> were the only way to store data in the browser. Unlike LocalStorage, which is strictly for client-side use, Cookies were designed to be sent back and forth between the browser and the server with every single HTTP request.
+        </p>
+        <p>
+            In our <strong>Zero-Backend</strong> architecture, we primarily use Web Storage for performance. However, an architect must understand Cookies because they offer <strong>Security Flags</strong> that LocalStorage cannot replicate.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Anatomy of a Cookie</h2>
+        <p>
+            A cookie is a small string of data (max 4KB) with specific attributes that control its visibility and lifespan.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Expires / Max-Age:</strong> Determines if the cookie is persistent or a "Session Cookie" (deleted when the browser closes).</li>
+            <li><strong>Domain / Path:</strong> Restricts which URLs can access the cookie.</li>
+            <li><strong>Secure:</strong> Ensures the cookie is only transmitted over HTTPS.</li>
+            <li><strong>SameSite:</strong> Prevents CSRF (Cross-Site Request Forgery) attacks by controlling if cookies are sent with cross-site requests.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">cookie_management.js</span>
+        </div>
+        <pre><code class="language-javascript">// Setting a persistent cookie manually
+document.cookie = "rosetta_status=active; max-age=3600; path=/; SameSite=Strict; Secure";
+
+// Reading cookies (returns a single messy string of all cookies)
+console.log(document.cookie); 
+// Result: "user_id=123; rosetta_status=active"</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Security Divide: HttpOnly</h2>
+        <p>
+            The greatest weakness of <code>localStorage</code> is that it is accessible to any JavaScript on the page. If a malicious script (XSS) is injected, it can steal your data instantly.
+        </p>
+        <p>
+            <strong>HttpOnly Cookies</strong> solve this. They can only be set by a server and <strong>cannot be accessed by JavaScript</strong>. This makes them the only secure place to store sensitive session tokens or "Keys to the Vault."
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>Architect's Security Rule:</strong> Never store authentication tokens or PII (Personally Identifiable Information) in <code>localStorage</code>. Even in a Zero-Backend project, if you interact with an external API (like GitHub's API), use cookies with the <code>HttpOnly</code> and <code>Secure</code> flags for sensitive handshakes.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Architectural Comparison</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>LocalStorage</th>
+                    <th>Cookies</th>
+                    <th>SessionStorage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Capacity</strong></td>
+                    <td>5MB - 10MB</td>
+                    <td>4KB</td>
+                    <td>5MB</td>
+                </tr>
+                <tr>
+                    <td><strong>Lifespan</strong></td>
+                    <td>Permanent</td>
+                    <td>Configurable</td>
+                    <td>Tab-specific</td>
+                </tr>
+                <tr>
+                    <td><strong>Server Access</strong></td>
+                    <td>No (Client only)</td>
+                    <td>Yes (Every request)</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td><strong>JS Access</strong></td>
+                    <td>Always</td>
+                    <td>Optional (HttpOnly)</td>
+                    <td>Always</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Session Context</h2>
+        <p>
+            A <strong>Session</strong> represents a single period of user interaction. In ROSETTA, we use <code>sessionStorage</code> for "Stateful Navigation." 
+        </p>
+        <p>
+            For example: if the user searches for "Functions," we store the search results in the session. If they click a link and then press "Back," the results are still there. But if they close the ROSETTA tab and reopen it later, the search is cleared to provide a fresh start.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">session_logic.js</span>
+        </div>
+        <pre><code class="language-javascript">// Saving temporary search state
+sessionStorage.setItem('last_query', 'Arrow Functions');
+
+// This data is purged automatically when the tab is closed.</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Senior Architecture Hint:</strong> In 2026, many browsers are phasing out 3rd-party cookies (The "Privacy Sandbox"). As an architect, rely on <strong>1st-party storage</strong> (LocalStorage/IndexedDB) for your app's logic and <strong>SameSite Cookies</strong> for your security layer.
+        </div>
+    </div>
+
+</section>

@@ -1,0 +1,120 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">4.2 Callbacks & Callback Hell</h1>
+    <p class="artifact-subtitle">The Asynchronous Genesis: Analyzing the structural and psychological limitations of the callback pattern.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Functional Trigger</h2>
+        <p>
+            In the early days of the ROSETTA architecture, long before Promises existed, the only way to handle a time-consuming task (like fetching a JSON artifact) was through a <strong>Callback</strong>. 
+        </p>
+        <p>
+            A callback is simply a function passed as an argument to another function, with the expectation that the receiver will "call it back" once the background task is complete.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Logic</span>
+            <span class="file-name">classic_callback.js</span>
+        </div>
+        <pre><code class="language-javascript">function fetchArtifact(id, callback) {
+    console.log(`Searching for Artifact: ${id}...`);
+    
+    // Simulating a network delay
+    setTimeout(() => {
+        const data = { id: id, content: "Ancient Manuscript" };
+        callback(data); // The "Callback" moment
+    }, 2000);
+}
+
+fetchArtifact("ARV-201", (result) => {
+    console.log("Discovery successful:", result.content);
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Pyramid of Doom</h2>
+        <p>
+            The fundamental flaw of callbacks is <strong>Scalability</strong>. If you have a sequence of four asynchronous tasks that depend on each other (e.g., Get User → Get Course → Get Lesson → Load Content), your code begins to crawl horizontally across the screen.
+        </p>
+        <p>
+            This is known as <strong>Callback Hell</strong> or the <strong>Pyramid of Doom</strong>. It is an architectural failure because it makes the code nearly impossible to debug, test, or read.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Warning</span>
+            <span class="file-name">callback_hell.js</span>
+        </div>
+        <pre><code class="language-javascript">// ❌ ARCHITECTURAL ANTI-PATTERN
+getData(function(a) {
+    getMoreData(a, function(b) {
+        getEvenMoreData(b, function(c) {
+            getFinalData(c, function(d) {
+                console.log("Final Artifact Found:", d);
+            });
+        });
+    });
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Inversion of Control (Trust Issues)</h2>
+        <p>
+            Beyond readability, callbacks suffer from <strong>Inversion of Control</strong>. When you pass your callback to a third-party library, you are giving that library control over your program's execution.
+        </p>
+        <ul class="artifact-list">
+            <li>What if the library calls your callback <strong>zero times</strong>?</li>
+            <li>What if it calls it <strong>five times</strong> by accident?</li>
+            <li>What if it calls it <strong>too early</strong> (synchronously)?</li>
+        </ul>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚠</span>
+            <div class="alert-content">
+                <strong>The Trust Gap:</strong> This loss of control is why the Senior Architect rarely uses raw callbacks for critical data flow. We prefer structures that return control to the caller (Promises).
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Defensive Patterns</h2>
+        <p>
+            If you must use callbacks in a legacy module of the ROSETTA project, follow these two defensive protocols:
+        </p>
+        <ol class="artifact-list">
+            <li><strong>Error-First Pattern:</strong> Always reserve the first argument for an error object (Node.js standard).</li>
+            <li><strong>Modularization:</strong> Never use anonymous functions for nested callbacks. Define them separately and pass them by name to keep the "Pyramid" flat.</li>
+        </ol>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Safe</span>
+            <span class="file-name">error_first_callback.js</span>
+        </div>
+        <pre><code class="language-javascript">function loadConfig(id, callback) {
+    const error = null; // or new Error("Failed")
+    const data = { theme: "Ancient Gold" };
+    
+    // First argument is ALWAYS the error
+    callback(error, data);
+}
+
+loadConfig("HTML-1", (err, config) => {
+    if (err) return console.error(err);
+    console.log("Config loaded:", config.theme);
+});</code></pre>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Transition:</strong> Understanding the pain of Callback Hell is essential for appreciating the elegance of the <strong>Promise API</strong>. In the next chapter, we will learn how to turn this "Pyramid" into a clean, vertical chain.
+        </div>
+    </div>
+
+</section>

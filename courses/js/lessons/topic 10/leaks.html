@@ -1,0 +1,107 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">10.2 Memory Leaks & Debugging</h1>
+    <p class="artifact-subtitle">Hunting the Zombies: Identifying and neutralizing data fragments that evade the Garbage Collector.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Definition of a Leak</h2>
+        <p>
+            In a high-end JavaScript application, a <strong>Memory Leak</strong> occurs when an object is no longer required for the logic of the program, but the Garbage Collector cannot reclaim it because it is still "reachable" from a Root.
+        </p>
+        <p>
+            Over time, these leaks accumulate, increasing the <strong>Memory Footprint</strong> until the browser tab becomes sluggish or crashes entirely. As an architect, you must treat memory leaks as structural rot that must be surgically removed.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The "Four Horsemen" of Leaks</h2>
+        <p>Most memory leaks in ROSETTA can be traced back to four architectural errors:</p>
+        <ul class="artifact-list">
+            <li><strong>Accidental Globals:</strong> Declaring a variable without <code>const</code> or <code>let</code> attaches it to the <code>window</code> object, ensuring it never dies.</li>
+            <li><strong>Forgotten Timers:</strong> A <code>setInterval</code> that continues to run even after the component it updates has been destroyed.</li>
+            <li><strong>Dangling Event Listeners:</strong> Attaching a listener to the <code>window</code> or <code>body</code> inside a module but failing to remove it when the module is deactivated.</li>
+            <li><strong>Closures:</strong> Functions that capture large variables from their outer scope and live longer than necessary.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Danger</span>
+            <span class="file-name">the_dangling_listener.js</span>
+        </div>
+        <pre><code class="language-javascript">function initializeLessonScroll() {
+    const heavyData = new Array(1000000).fill("Artifact Data");
+
+    // This listener stays on 'window' even if the lesson changes
+    window.addEventListener('scroll', () => {
+        // Because of the closure, heavyData is NEVER garbage collected
+        console.log(heavyData.length); 
+    });
+}
+
+// FIX: Always use window.removeEventListener in your cleanup logic.</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Out-of-DOM References</h2>
+        <p>
+            This is a subtle leak common in Single Page Applications. You might remove an element from the HTML using <code>.remove()</code>, but if you still have a JavaScript variable pointing to that element, the <strong>entire element and its children</strong> stay in memory.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Solution:</strong> When you remove a large UI component from the screen, always set your references to it to <code>null</code>.
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Optimization</span>
+            <span class="file-name">dom_cleanup.js</span>
+        </div>
+        <pre><code class="language-javascript">let sidebarElement = document.querySelector('.sidebar');
+
+// Later, when switching courses:
+sidebarElement.remove(); 
+
+// Crucial: Clear the reference
+sidebarElement = null; </code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Debugging with Heap Snapshots</h2>
+        <p>
+            You cannot find leaks by reading code alone; you must use <strong>Forensic Tooling</strong>. The Chrome DevTools "Memory" tab is your primary laboratory.
+        </p>
+        <ol class="artifact-list">
+            <li><strong>Record a Snapshot:</strong> Captures exactly what is in memory at this moment.</li>
+            <li><strong>Perform Actions:</strong> Navigate through ROSETTA, open and close courses.</li>
+            <li><strong>Take Second Snapshot:</strong> Compare the two.</li>
+            <li><strong>Comparison View:</strong> Look for objects that were created but never deleted. These are your "Zombies."</li>
+        </ol>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The WeakMap/WeakSet Shield</h2>
+        <p>
+            Modern architecture provides <code>WeakMap</code> and <code>WeakSet</code>. Unlike their standard counterparts, they hold <strong>Weak References</strong> to their keys. If a key is an object and it has no other references, the GC is allowed to delete it even if it is still in the WeakMap.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Use Case:</strong> Use <code>WeakMap</code> to store metadata about DOM elements. When the element is removed from the DOM, the metadata will be automatically cleaned up without manual intervention.
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Performance Cliff:</strong> High memory usage triggers more frequent Garbage Collection cycles. These "GC Spikes" cause visible stuttering in animations. Keeping your memory usage flat is a requirement for the ROSETTA 60fps standard.
+        </div>
+    </div>
+
+</section>

@@ -1,0 +1,105 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">5.5 Mutation Observers</h1>
+    <p class="artifact-subtitle">The Silent Watcher: Engineering reactive systems through declarative DOM surveillance.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Need for Surveillance</h2>
+        <p>
+            In traditional DOM engineering, we use <strong>Event Listeners</strong> to respond to user input. But what happens if we need to respond to changes made by <em>other scripts</em>? For instance, if a search function highlights a keyword, or a data-fetcher updates an attribute.
+        </p>
+        <p>
+            The <code>MutationObserver</code> provides a way to watch for changes being made to the DOM tree. It is designed for high performance, batching multiple changes together into a single callback to prevent the "Jank" associated with legacy mutation events.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Surveillance Configuration</h2>
+        <p>
+            An observer does not watch everything by default. You must provide a <strong>Configuration Object</strong> that defines exactly which mutations to monitor.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>childList:</strong> Watch for additions or removals of child elements.</li>
+            <li><strong>attributes:</strong> Watch for changes to an element's attributes (e.g., <code>class</code>, <code>id</code>, or <code>data-*</code>).</li>
+            <li><strong>subtree:</strong> Extend surveillance to all descendants of the target node.</li>
+            <li><strong>characterData:</strong> Watch for changes to the text content inside a node.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">observer_setup.js</span>
+        </div>
+        <pre><code class="language-javascript">// 1. The Callback: Executed when a change is detected
+const callback = (mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            console.log('A new artifact has been injected.');
+        } else if (mutation.type === 'attributes') {
+            console.log(`The ${mutation.attributeName} attribute was modified.`);
+        }
+    }
+};
+
+// 2. Create the Observer instance
+const observer = new MutationObserver(callback);
+
+// 3. Start watching a specific artifact container
+const targetNode = document.querySelector('.artifact-vault');
+observer.observe(targetNode, { 
+    childList: true, 
+    attributes: true, 
+    subtree: true 
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Reactive UI Patterns</h2>
+        <p>
+            In the ROSETTA project, we use observers to trigger <strong>Entry Animations</strong>. When the <code>main.js</code> injects a new HTML lesson into the viewport, the MutationObserver detects the addition and automatically applies a "Fade-In" class, ensuring a consistent cinematic experience without hard-coding animation logic into every fetch call.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Lifecycle Management: Disconnecting</h2>
+        <p>
+            Surveillance is not free. An active observer consumes memory and CPU cycles. When a component is removed from the DOM or the user navigates away, you must <strong>Disconnect</strong> the observer to prevent memory leaks.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">cleanup_logic.js</span>
+            </div>
+            <pre><code class="language-javascript">// Terminate all surveillance
+observer.disconnect();
+
+// Optional: Take records that were pending
+const remainingMutations = observer.takeRecords();</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>Architect's Comparison:</strong> Unlike events, which are synchronous and happen <em>immediately</em>, MutationObservers are <strong>Asynchronous</strong>. They wait until the current task finishes and then deliver all detected changes in a single batch (via the Microtask Queue, Lesson 4.5). This is why they are so much more efficient for large-scale DOM updates.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Use Case: Attribute State Sync</h2>
+        <p>
+            You can use an observer to watch for changes to <code>data-status</code> attributes. This allows you to build a system where changing an attribute in the "Inspector" or via a script automatically triggers a complex UI update, creating a "Single Source of Truth" within the DOM itself.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Infinite Loop Warning:</strong> Be extremely careful when modifying the DOM <em>inside</em> the observer's callback. If your callback adds an element to the same container it is watching, it will trigger itself again, potentially crashing the browser tab. Always use conditional logic to prevent recursive triggers.
+        </div>
+    </div>
+
+</section>

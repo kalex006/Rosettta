@@ -1,0 +1,121 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.1 AJAX vs Fetch History</h1>
+    <p class="artifact-subtitle">Network Evolution: Deconstructing the transition from callback-heavy XHR to the streamlined Fetch API.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Request-Response Paradigm</h2>
+        <p>
+            In the early web, every piece of new data required a full page reload. <strong>AJAX</strong> (Asynchronous JavaScript and XML) changed this, allowing the browser to exchange data with a server in the background.
+        </p>
+        <p>
+            In the ROSETTA architecture, this is our lifeblood. We don't reload the site to see a new lesson; we perform a "Silent Fetch" to retrieve the specific content needed, keeping the "Artifact" atmosphere unbroken.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Legacy Layer: XMLHttpRequest (XHR)</h2>
+        <p>
+            For nearly two decades, <code>XMLHttpRequest</code> was the only tool available. It was powerful but architecturally cumbersome. It relied on complex event listeners and state-tracking codes (0 to 4), making it prone to "Callback Hell."
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS (Legacy)</span>
+            <span class="file-name">xhr_request.js</span>
+        </div>
+        <pre><code class="language-javascript">// The Ancient Way (Difficult to read and maintain)
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'courses/js/config.json', true);
+xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+        var data = JSON.parse(xhr.responseText);
+        console.log(data);
+    }
+};
+xhr.send();</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. The Modern Era: The Fetch API</h2>
+        <p>
+            The <code>fetch()</code> function was introduced to provide a more powerful and flexible feature set. Its primary architectural advantage is that it is <strong>Promise-based</strong> (as learned in Topic 4). 
+        </p>
+        <p>
+            Fetch provides a clean, global method that returns a Promise which resolves into a <code>Response</code> object. It allows for elegant chaining and integrates perfectly with <code>async/await</code>.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS (Modern)</span>
+            <span class="file-name">fetch_standard.js</span>
+        </div>
+        <pre><code class="language-javascript">// The Rosetta Standard (Clean and Predictable)
+async function loadCourse() {
+    const response = await fetch('courses/js/config.json');
+    const data = await response.json();
+    console.log(data.title);
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Architectural Comparisons</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>XHR (Legacy)</th>
+                    <th>Fetch (Modern)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Logic Model</strong></td>
+                    <td>Event-based / Callbacks</td>
+                    <td>Promise-based / Async-Await</td>
+                </tr>
+                <tr>
+                    <td><strong>Syntax</strong></td>
+                    <td>Verbose & Fragmented</td>
+                    <td>Clean & Streamlined</td>
+                </tr>
+                <tr>
+                    <td><strong>Streaming</strong></td>
+                    <td>Not supported</td>
+                    <td>Native Streams support</td>
+                </tr>
+                <tr>
+                    <td><strong>Global Scope</strong></td>
+                    <td>Requires instantiation</td>
+                    <td>Global native function</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-content">
+            <strong>The Architect's Pivot:</strong> While <code>fetch</code> is superior, it has one subtle behavior change. Unlike XHR, <code>fetch</code> will <strong>not</strong> reject the promise on HTTP error states (like 404 or 500). It only rejects on network failures. You must manually check the <code>response.ok</code> property.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Why it matters for Zero-Backend</h2>
+        <p>
+            In a traditional site, a server (PHP/Python/Node) builds the HTML. In ROSETTA, the <strong>Client is the Server</strong>. We use <code>fetch</code> to pull raw data (JSON) and templates (.html), effectively turning the user's browser into a real-time rendering engine.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Security Note:</strong> Because ROSETTA is hosted on GitHub Pages, we must ensure our fetches are <strong>Same-Origin</strong> or handle **CORS** (Cross-Origin Resource Sharing) correctly if we ever pull artifacts from other repositories.
+        </div>
+    </div>
+
+</section>

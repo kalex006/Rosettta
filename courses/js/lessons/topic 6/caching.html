@@ -1,0 +1,114 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">6.5 Caching & Performance</h1>
+    <p class="artifact-subtitle">Latency Neutralization: Mastering data persistence and retrieval strategies to achieve instantaneous UI responses.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Enemy of Immersion: Latency</h2>
+        <p>
+            In the ROSETTA project, the user experience depends on the speed of data delivery. Even a 200ms delay while switching lessons can break the "Atmospheric" immersion of the archive. 
+        </p>
+        <p>
+            As a Senior Architect, your goal is <strong>Zero Redundant Requests</strong>. If a user navigates to "Topic 1.1" and then back to "Topic 1.2," the browser should not reach out to GitHub's servers a second time. We must serve the data from the local <strong>Memory Cache</strong>.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The HTTP Cache (Disk Cache)</h2>
+        <p>
+            The browser automatically performs <strong>Disk Caching</strong> based on headers sent by the server (GitHub Pages). While useful, this still requires the browser to perform a "revalidation" check, which costs time.
+        </p>
+        <ul class="artifact-list">
+            <li><strong>Cache-Control:</strong> Dictates how long a file remains "fresh."</li>
+            <li><strong>ETag:</strong> A unique fingerprint of a file. The browser asks: "Has the fingerprint changed?" If not, it returns a <code>304 Not Modified</code>.</li>
+        </ul>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Application Caching (Memory Cache)</h2>
+        <p>
+            For PROJECT ROSETTA, we implement a <strong>Logic-Level Cache</strong>. We store the results of our <code>fetch()</code> calls inside a JavaScript <code>Map</code> object. This is the fastest possible way to retrieve data because it bypasses the entire network stack and the disk-reading process.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">cache_orchestrator.js</span>
+        </div>
+        <pre><code class="language-javascript">// The Central Vault for fetched artifacts
+const artifactCache = new Map();
+
+async function getLessonWithCache(url) {
+    // 1. Check if we already have the artifact in memory
+    if (artifactCache.has(url)) {
+        console.log("⚡ Retrieval from Memory Cache: " + url);
+        return artifactCache.get(url);
+    }
+
+    // 2. If not, perform the network fetch
+    const response = await fetch(url);
+    const data = await response.text();
+
+    // 3. Store the result for future use
+    artifactCache.set(url, data);
+    
+    return data;
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. The Cache-Aside Pattern</h2>
+        <p>
+            In the pattern above (Cache-Aside), the application first looks at the cache. If the data is missing (a "Cache Miss"), it fetches it from the source and updates the cache. This ensures the <strong>First Load</strong> is standard speed, and every <strong>Subsequent Load</strong> is instantaneous.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Performance Metric:</strong> Accessing data from a JS <code>Map</code> takes roughly <strong>0.01ms</strong>. Accessing it from a local network fetch takes roughly <strong>50ms - 300ms</strong>. By using memory caching, you are making the ROSETTA engine 5,000 times faster for returning users.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Cache Invalidation: The "Stale Data" Problem</h2>
+        <p>
+            The danger of caching is <strong>Stale Content</strong>. If you update a lesson on GitHub, a user who has been on your site for an hour might still be seeing the old cached version from their memory.
+        </p>
+        <p>
+            <strong>The Architect's Fix:</strong> For a static site like ROSETTA, we usually clear the memory cache on a <strong>Page Refresh</strong>. Since our "Zero-Backend" logic is lightweight, a full refresh is a small price to pay for a fresh state.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Advanced Strategy: The Cache API</h2>
+        <p>
+            For even higher performance, the <strong>Cache API</strong> (used in Service Workers) allows you to store entire request/response pairs in the browser's persistent storage. This allows ROSETTA to work even when the user is <strong>Offline</strong>.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">offline_capability.js</span>
+            </div>
+            <pre><code class="language-javascript">// Opening a persistent named cache
+const cache = await caches.open('rosetta-v1');
+
+// Adding multiple artifacts to the offline vault at once
+await cache.addAll([
+    '/index.html',
+    '/style.css',
+    '/courses/js/config.json'
+]);</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Memory Management:</strong> Be mindful of the size of your cache. While JSON and Text are small, if you cache hundreds of high-resolution "Artifact Images" in memory, you may cause the browser tab to crash on mobile devices. Only cache what is essential for the interface logic.
+        </div>
+    </div>
+
+</section>

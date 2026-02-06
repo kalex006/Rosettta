@@ -1,0 +1,126 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.3 Dynamic Imports</h1>
+    <p class="artifact-subtitle">Runtime Fragmentation: Loading logic artifacts on-demand to achieve extreme initial performance.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Dynamic Shift</h2>
+        <p>
+            Static <code>import</code> statements are <strong>Declarative</strong> and <strong>Immutable</strong>. They must sit at the very top of your file, and the browser must download all of them before your code can begin to run. 
+        </p>
+        <p>
+            In a massive project like ROSETTA, if we statically import the logic for all 10 programming languages on the home page, the user will download 2MB of JavaScript they might never use. <strong>Dynamic Imports</strong> allow us to load fragments of logic asynchronously, at runtime, using a function-like syntax.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The import() Function</h2>
+        <p>
+            The dynamic import is a function that returns a <strong>Promise</strong>. This Promise resolves into the module object containing all its exports. Because it returns a promise, it integrates perfectly with the <code>async/await</code> patterns we mastered in Topic 4.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">lazy_loader.js</span>
+        </div>
+        <pre><code class="language-javascript">// Loading a specialized module only when requested
+async function loadCourseLogic(courseName) {
+    try {
+        const modulePath = `./engines/${courseName}-engine.js`;
+        
+        // Dynamic execution
+        const courseModule = await import(modulePath);
+        
+        // Accessing the exported artifacts
+        courseModule.initializeVault();
+        
+    } catch (err) {
+        console.error("Module failed to materialize:", err);
+    }
+}</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Code Splitting: The Performance Lever</h2>
+        <p>
+            By using dynamic imports, you are performing <strong>Code Splitting</strong>. You are breaking your application into "Chunks."
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Efficiency:</strong> In ROSETTA, we keep <code>main.js</code> tiny (just enough to render the landing page). We move heavy logic—like the search engine or the code highlighter—into separate files and load them only when the user enters a specific course. This is how we maintain a "High-End" feel on mobile devices.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Static vs. Dynamic Decision Matrix</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Requirement</th>
+                    <th>Strategy</th>
+                    <th>Syntax</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Core App Infrastructure</td>
+                    <td><strong>Static</strong></td>
+                    <td><code>import { x } from 'y'</code></td>
+                </tr>
+                <tr>
+                    <td>User-Triggered Logic</td>
+                    <td><strong>Dynamic</strong></td>
+                    <td><code>await import('y')</code></td>
+                </tr>
+                <tr>
+                    <td>Conditional Logic</td>
+                    <td><strong>Dynamic</strong></td>
+                    <td><code>if (cond) import('y')</code></td>
+                </tr>
+                <tr>
+                    <td>Initial Load Critical</td>
+                    <td><strong>Static</strong></td>
+                    <td><code>import { x } from 'y'</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Destructuring Dynamic Payloads</h2>
+        <p>
+            Since the dynamic import resolves into an object, you can destructure specific exports immediately upon resolution.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS</span>
+                <span class="file-name">inline_destructure.js</span>
+            </div>
+            <pre><code class="language-javascript">// Loading just the encryption tool from a library
+const { encryptData } = await import('./security-utils.js');
+
+const cipher = encryptData("My Secret");</code></pre>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. The Template Literal Advantage</h2>
+        <p>
+            Unlike static imports, which require a hard-coded string, dynamic imports can take a <strong>Template Literal</strong> (Lesson 2.4). This allows the ROSETTA engine to calculate the file path based on the current URL or user selection.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Pathing Constraint:</strong> Paths in dynamic imports are relative to the <strong>current module</strong> where the call is made, not the HTML file. Always ensure your folder structure is strictly organized to avoid "Module Not Found" errors during runtime.
+        </div>
+    </div>
+
+</section>

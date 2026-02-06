@@ -1,0 +1,157 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">8.2 Export & Import Patterns</h1>
+    <p class="artifact-subtitle">Interface Engineering: Mastering the communication protocols between isolated logic fragments.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>Bridging the Void</h2>
+        <p>
+            In a modular architecture, every file is an island. To build a cohesive system like <strong>ROSETTA</strong>, we must build "Bridges" between these islands. We do this by <strong>Exporting</strong> logic from one file and <strong>Importing</strong> it into another.
+        </p>
+        <p>
+            An Architect views exports as the <strong>Public API</strong> of a component. Only the logic that is explicitly exported is visible to the rest of the application; everything else remains private, encapsulated within the module.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. Named Exports (The Multi-Tool)</h2>
+        <p>
+            Named exports allow you to export multiple values from a single file. Each value must be imported using its exact name (enclosed in curly braces). 
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>Architect's Preference:</strong> Named exports are preferred for internal utility libraries. They provide better <strong>Autocomplete</strong> in code editors and allow for <strong>Tree Shaking</strong> (removing unused code during the production build).
+            </div>
+        </div>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS: utils.js</span>
+        </div>
+        <pre><code class="language-javascript">// Exporting multiple artifacts
+export const theme = "ancient-gold";
+export const fetchJSON = async (url) => { ... };
+export function logSecurity(msg) { ... }</code></pre>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS: main.js</span>
+        </div>
+        <pre><code class="language-javascript">// Importing specific artifacts
+import { theme, fetchJSON } from './utils.js';
+
+console.log(theme); // "ancient-gold"</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Default Exports (The Core Artifact)</h2>
+        <p>
+            Each module can have exactly <strong>one</strong> default export. This is typically used for the primary component or class that the file represents.
+        </p>
+        <p>
+            <strong>Note:</strong> When importing a default, you do not use curly braces, and you can name the import whatever you like.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS: UI-Engine.js</span>
+        </div>
+        <pre><code class="language-javascript">const UIEngine = {
+    render: () => { ... },
+    clear: () => { ... }
+};
+
+export default UIEngine;</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Aliasing (The 'as' Keyword)</h2>
+        <p>
+            In a large system, you might encounter a <strong>Namespace Collision</strong>—where two different modules export an item with the same name (e.g., both <code>auth.js</code> and <code>database.js</code> export a function called <code>init</code>). 
+        </p>
+        <p>
+            The <code>as</code> keyword allows you to rename an import locally to maintain clarity.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Aliasing</span>
+        </div>
+        <pre><code class="language-javascript">import { init as initAuth } from './auth.js';
+import { init as initDB } from './database.js';
+
+initAuth();
+initDB();</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. The Barrel Pattern (Aggregation)</h2>
+        <p>
+            As ROSETTA grows, importing from 20 different files in your <code>main.js</code> becomes messy. A "Barrel File" (usually <code>index.js</code> inside a folder) imports and then immediately re-exports all items from a directory.
+        </p>
+        <div class="code-artifact">
+            <div class="code-header">
+                <span class="lang-tag">JS: projects/index.js</span>
+            </div>
+            <pre><code class="language-javascript">// Aggregating multiple files into one entry point
+export * from './cipher-case.js';
+export * from './rosetta-core.js';
+export * from './oasis-ui.js';</code></pre>
+        </div>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>The Browser Constraint:</strong> Unlike environments like Node.js or React, native browser modules <strong>require the file extension</strong>. You must write <code>import { x } from './file.js';</code>. Omitting the <code>.js</code> will result in a 404 error on GitHub Pages.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>Summary Table</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Syntax</th>
+                    <th>Type</th>
+                    <th>Count per file</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>export const X...</code></td>
+                    <td>Named</td>
+                    <td>Infinite</td>
+                </tr>
+                <tr>
+                    <td><code>export default X...</code></td>
+                    <td>Default</td>
+                    <td>Exactly 1</td>
+                </tr>
+                <tr>
+                    <td><code>import { X } from...</code></td>
+                    <td>Named Import</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td><code>import X from...</code></td>
+                    <td>Default Import</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td><code>import * as Utils from...</code></td>
+                    <td>Namespace Import</td>
+                    <td>N/A</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>

@@ -1,0 +1,134 @@
+<header class="lesson-header">
+    <h1 class="artifact-title">9.2 Resize Observer API</h1>
+    <p class="artifact-subtitle">Dimensional Reactivity: Engineering components that sense and respond to their own geometric transitions.</p>
+</header>
+
+<section class="lesson-content">
+    
+    <div class="content-block">
+        <h2>The Death of window.onresize</h2>
+        <p>
+            In the past, if we needed to adjust a UI element when its size changed, we relied on the <code>window.resize</code> event. This was an architectural flaw: the window might resize without an element changing (e.g., a fixed-width container), or an element might change size without the window moving (e.g., a sidebar collapsing).
+        </p>
+        <p>
+            The <strong>Resize Observer API</strong> provides a surgical way to watch a <em>specific</em> artifact. It triggers a callback whenever the dimensions of the observed element change, regardless of what caused the shift.
+        </p>
+    </div>
+
+    <div class="content-block">
+        <h2>1. The Resize Observer Anatomy</h2>
+        <p>
+            Unlike the Intersection Observer (which watches visibility), the Resize Observer watches the <strong>Box Model</strong>. It provides precise measurements for the content box, border box, and device pixels.
+        </p>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS Architecture</span>
+            <span class="file-name">resize_orchestrator.js</span>
+        </div>
+        <pre><code class="language-javascript">// 1. The Observer Logic
+const resizeHandler = new ResizeObserver(entries => {
+    for (let entry of entries) {
+        // Accessing the new width and height
+        const { width, height } = entry.contentRect;
+        
+        console.log(`Artifact dimensions shifted: ${width}x${height}`);
+        
+        // Example: Adjust a complex SVG diagram based on space
+        if (width < 400) {
+            entry.target.classList.add('artifact--compact');
+        } else {
+            entry.target.classList.remove('artifact--compact');
+        }
+    }
+});
+
+// 2. Start watching the main artifact container
+const vault = document.querySelector('.artifact-vault');
+resizeHandler.observe(vault);</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>2. Use Case: Fluid Diagrams & Canvas</h2>
+        <p>
+            In ROSETTA, we use high-end SVGs and HTML5 Canvases to visualize programming concepts. If the user toggles the sidebar, the available space for a diagram changes instantly.
+        </p>
+        <div class="alert-box gold">
+            <span class="alert-icon">⚡</span>
+            <div class="alert-content">
+                <strong>The Architect's Pivot:</strong> Use the Resize Observer to re-calculate coordinates or re-draw canvas elements. This ensures that a "Memory Map" in the C++ course never looks blurry or distorted when the container expands.
+            </div>
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>3. Observations of the Box</h2>
+        <p>
+            You can specify which "Box" you want to watch by passing an options object to the <code>observe()</code> method:
+        </p>
+        <ul class="artifact-list">
+            <li><strong>content-box (Default):</strong> The area where text and images live.</li>
+            <li><strong>border-box:</strong> Includes padding and borders (Lesson 2.1).</li>
+            <li><strong>device-pixel-content-box:</strong> The size in physical pixels of the display—critical for high-density "Retina" rendering.</li>
+        </ul>
+    </div>
+
+    <div class="code-artifact">
+        <div class="code-header">
+            <span class="lang-tag">JS</span>
+            <span class="file-name">high_density_obs.js</span>
+        </div>
+        <pre><code class="language-javascript">observer.observe(canvasElement, { 
+    box: 'device-pixel-content-box' 
+});</code></pre>
+    </div>
+
+    <div class="content-block">
+        <h2>4. Handling Circular Dependencies</h2>
+        <p>
+            A common danger in Resize Observation is the <strong>Infinite Loop</strong>. If your callback changes the size of the element it is watching (e.g., changing its font size based on its width), the observer will trigger again.
+        </p>
+        <p>
+            The browser engine has a built-in safety mechanism: it will only process resize events that are "further down the tree" in a single frame. However, you should still use <code>Math.round()</code> or "Threshold Logic" to prevent flickering.
+        </p>
+    </div>
+
+    <div class="alert-box gold">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+            <strong>Memory Management:</strong> Just like the Intersection Observer, you must <code>disconnect()</code> the observer when the ROSETTA engine switches courses or removes elements to prevent memory leaks.
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>5. Comparison Table</h2>
+        <table class="artifact-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>window.onresize</th>
+                    <th>ResizeObserver</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Scope</strong></td>
+                    <td>Global Viewport</td>
+                    <td>Individual Element</td>
+                </tr>
+                <tr>
+                    <td><strong>Precision</strong></td>
+                    <td>Pixels only</td>
+                    <td>Content/Border/Device Boxes</td>
+                </tr>
+                <tr>
+                    <td><strong>Performance</strong></td>
+                    <td>Heavy (Main Thread)</td>
+                    <td>Optimized (Async Batching)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
