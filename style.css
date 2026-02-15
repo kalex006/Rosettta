@@ -1,254 +1,140 @@
-/* ============================================================
-   PROJECT ROSETTA: CORE ARCHITECTURAL STYLES (v2.0)
-   Theme: Absolute Black & Ancient Gold
-   Physics: Device-Agnostic / Fluid Geometry
-   ============================================================ */
+/* --- CORE RESET --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* 1. DESIGN TOKENS */
 :root {
-    --bg-black: #050505;
     --gold: #d4af37;
+    --bg: #050505;
     --border: #222;
-    --text: #e0e0e0;
-    --sidebar-w: 280px;
-    --ease: cubic-bezier(0.7, 0, 0.3, 1);
-}
-
-/* 2. CORE RESET */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 html, body {
-    height: 100%;
-    width: 100%;
-    background-color: var(--bg-black);
-    color: var(--text);
+    height: 100dvh; /* Dynamic Viewport Height for mobile */
+    width: 100vw;
+    background-color: var(--bg);
+    color: #e0e0e0;
     font-family: 'Inter', sans-serif;
-    overflow: hidden; /* Vital: Keeps the app shell fixed */
+    overflow: hidden;
 }
 
-/* 3. SCREEN SYSTEM */
+/* --- VIEW SYSTEM --- */
 .full-screen {
     position: fixed;
-    top: 0; 
-    left: 0;
-    width: 100%; 
-    height: 100%;
+    inset: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--bg-black);
-    transition: opacity 0.6s var(--ease);
+    background: var(--bg);
+    z-index: 10;
 }
 
-.hidden-view { 
-    display: none !important; 
-    opacity: 0; 
-}
-.active-view { 
-    display: flex !important; 
-    opacity: 1; 
-}
+.hidden-view { display: none !important; }
+.active-view { display: flex !important; }
 
-/* 4. COMPONENT ARCHITECTURE (BLACK BUTTONS) */
-.rosetta-btn, .category-btn, .lang-card, .lesson-btn {
+/* --- BUTTON ARCHITECTURE (SOLID BLACK) --- */
+.rosetta-btn, .category-btn, .lang-card, .lesson-btn, #mobile-menu-btn {
     background-color: #000 !important;
-    color: var(--text);
-    border: 1px solid var(--border);
+    color: #fff;
+    border: 1px solid #333;
     cursor: pointer;
     font-family: 'Cinzel', serif;
-    transition: all 0.4s var(--ease);
+    transition: all 0.3s ease;
 }
 
 .rosetta-btn:hover, .category-btn:hover, .lang-card:hover {
     color: var(--gold);
     border-color: var(--gold);
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
-.rosetta-btn { 
-    font-size: clamp(2.5rem, 10vw, 4.5rem); 
-    letter-spacing: 12px; 
-    border: none !important; 
-}
-.category-btn { 
-    font-size: 1.5rem; 
-    padding: 20px 60px; 
-    letter-spacing: 4px; 
+/* --- SCREEN 3: FIXED 5-COLUMN GRID --- */
+.select-title {
+    font-family: 'Cinzel', serif;
+    margin-bottom: 40px;
+    letter-spacing: 5px;
+    color: #666;
+    text-transform: uppercase;
 }
 
-/* 5. FLUID ARTIFACT GRID (SCREEN 3) */
 .grid-container {
     display: grid;
-    /* This automatically picks 5 columns on desktop, 2 on tablet, 1 on mobile */
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: clamp(10px, 2vw, 25px);
+    grid-template-columns: repeat(5, 1fr); /* Forced 5 columns */
+    gap: 20px;
     width: 90%;
-    max-width: 1100px;
+    max-width: 1000px;
 }
 
 .lang-card {
-    height: 110px;
+    height: 100px;
+    font-size: 0.9rem;
     letter-spacing: 2px;
-    position: relative;
-    overflow: hidden;
 }
 
-.lang-card::before {
-    content: '';
-    position: absolute;
-    top: 0; 
-    left: -100%;
-    width: 100%; 
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-    transition: 0.5s;
-}
-.lang-card:hover::before { left: 100%; }
-
-/* 6. MAIN CONTENT ENGINE (SCREEN 4) */
-.main-layout { 
-    height: 100vh; 
-    display: flex; 
-    flex-direction: column; 
-}
+/* --- SCREEN 4: ENGINE LAYOUT --- */
+.main-layout { height: 100dvh; width: 100vw; display: flex; flex-direction: column; }
 
 .navbar {
-    height: 65px;
-    background: #000;
+    height: 60px;
+    background: #0a0a0a;
     border-bottom: 1px solid var(--border);
-    padding: 0 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 100;
+    padding: 0 20px;
 }
 
-.nav-logo { 
-    font-family: 'Cinzel', serif; 
-    color: var(--gold); 
-    cursor: pointer; 
-    letter-spacing: 2px; 
-}
+.container { display: flex; flex: 1; overflow: hidden; position: relative; }
 
-.container { 
-    display: flex; 
-    flex: 1; 
-    overflow: hidden; 
-    position: relative; 
-}
-
-/* Sidebar Logic */
 #sidebar {
-    width: var(--sidebar-w);
+    width: 260px;
     background: #080808;
     border-right: 1px solid var(--border);
-    padding: 20px;
     overflow-y: auto;
-    transition: transform 0.4s var(--ease);
+    padding: 20px;
 }
 
 #content-area {
     flex: 1;
     background: #0c0c0c;
-    padding: clamp(20px, 5vw, 60px);
     overflow-y: auto;
-    padding-bottom: 80px; /* Space for footer */
+    padding: 40px 20px 80px 20px;
 }
 
-/* Lesson Buttons */
-summary { 
-    color: #888; 
-    font-family: 'Cinzel', serif; 
-    padding: 10px 0; 
-    cursor: pointer; 
-}
-.lesson-btn { 
-    width: 100%; 
-    text-align: left; 
-    padding: 12px; 
-    margin: 5px 0;
-    font-size: 0.9rem; 
-    font-family: 'Inter', sans-serif;
-}
-.lesson-btn:hover { 
-    border-left: 3px solid var(--gold); 
-    background: #111 !important; 
-    color: var(--gold); 
+/* Mobile Toggle */
+#mobile-menu-btn { display: none; padding: 5px 10px; font-size: 0.7rem; border-color: var(--gold); color: var(--gold); }
+
+/* --- MOBILE "FIXES" --- */
+@media (max-width: 900px) {
+    #mobile-menu-btn { display: block; margin-right: 15px; }
+
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on phone */
+    }
+
+    #sidebar {
+        position: fixed;
+        left: 0; top: 60px; bottom: 40px;
+        width: 85%;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.4s ease;
+    }
+
+    #sidebar.mobile-open { transform: translateX(0); border-right: 1px solid var(--gold); }
+
+    .rosetta-btn { font-size: 2.5rem; }
 }
 
-/* 7. ASSET STYLING */
-pre { 
-    background: #000; 
-    padding: 20px; 
-    border: 1px solid var(--border); 
-    color: #ccc; 
-    border-radius: 4px; 
-    overflow-x: auto; 
-    margin: 25px 0;
-}
-
-/* 8. UNIVERSAL FOOTER (FIXED) */
+/* --- FOOTER (LOCKED) --- */
 #kalex-footer {
     position: fixed;
-    bottom: 0; 
-    left: 0; 
-    width: 100%;
-    height: 40px;
+    bottom: 0; left: 0; width: 100%; height: 40px;
     background: #000;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid #222;
+    z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    z-index: 9999;
+    gap: 10px;
 }
 
-.copyright { 
-    font-size: 0.7rem; 
-    color: #555; 
-    text-transform: uppercase; 
-    letter-spacing: 1px; 
-}
-.project-name { 
-    font-family: 'Cinzel', serif; 
-    font-size: 0.8rem; 
-    color: var(--gold); 
-}
-
-/* 9. DEVICE COMPATIBILITY MEDIA */
-@media (max-width: 900px) {
-    #sidebar {
-        position: absolute;
-        left: 0; 
-        top: 0; 
-        bottom: 0;
-        z-index: 90;
-        transform: translateX(-100%); /* Hides sidebar on mobile */
-    }
-    /* JavaScript adds this class to open menu */
-    #sidebar.mobile-open { transform: translateX(0); }
-    
-    .grid-container { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 500px) {
-    .grid-container { grid-template-columns: 1fr; }
-    .navbar { padding: 0 15px; }
-    .category-btn { width: 80%; padding: 15px; }
-}
-
-/* Mobile Toggle UI */
-#mobile-menu-btn {
-    background: none; 
-    border: none; 
-    color: var(--gold); 
-    font-size: 1.5rem;
-    cursor: pointer; 
-    display: none;
-}
-@media (max-width: 900px) { #mobile-menu-btn { display: block; margin-right: 15px; } }
+.project-name { font-family: 'Cinzel'; color: var(--gold); font-size: 0.8rem; }
