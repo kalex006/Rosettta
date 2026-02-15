@@ -1,112 +1,136 @@
-// --- NAVIGATION LOGIC ---
-function goToCategory() { switchView('view-landing', 'view-category'); }
-function goToLanguages() { switchView('view-category', 'view-languages'); }
+/**
+ * ROSETTA ENGINE v2.0
+ * Pure Vanilla Logic | Zero-Backend Architecture
+ */
 
-function enterCourse(langId) {
-    console.log("Entering course:", langId);
-    document.getElementById('current-lang-display').innerText = langId.toUpperCase();
-    loadSelectedCourse(langId);
-    switchView('view-languages', 'view-content');
-}
+const Rosetta = {
+    // --- UI REGISTRY ---
+    views: {
+        landing: document.getElementById('view-landing'),
+        category: document.getElementById('view-category'),
+        languages: document.getElementById('view-languages'),
+        content: document.getElementById('view-content')
+    },
+    sidebar: document.getElementById('sidebar'),
+    contentArea: document.getElementById('content-area'),
+    langDisplay: document.getElementById('current-lang-display'),
 
-function switchView(hideId, showId) {
-    const hideEl = document.getElementById(hideId);
-    const showEl = document.getElementById(showId);
-
-    hideEl.style.opacity = '0';
-    setTimeout(() => {
-        hideEl.classList.remove('active-view');
-        hideEl.classList.add('hidden-view');
-        hideEl.style.display = 'none';
-
-        showEl.style.display = 'flex';
-        showEl.classList.remove('hidden-view');
-        showEl.classList.add('active-view');
-        setTimeout(() => { showEl.style.opacity = '1'; }, 50);
-    }, 800);
-}
-
-// --- COURSE LOADER LOGIC ---
-async function loadSelectedCourse(courseId) {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.innerHTML = "<p style='color:#666'>Deciphering...</p>";
-
-    // FIX: Added timestamp to bypass browser cache for config.json
-    const configPath = `courses/${courseId}/config.json?v=${new Date().getTime()}`;
-
-    try {
-        const response = await fetch(configPath);
-        if(!response.ok) throw new Error(`Config not found at ${configPath}`);
-        
-        const data = await response.json();
-        renderSidebar(data);
-    } catch (error) {
-        console.error("Course Load Error:", error);
-        sidebar.innerHTML = `<p style="color:#d4af37;">Artifact ${courseId} missing.</p>`;
-    }
-}
-
-function renderSidebar(data) {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.innerHTML = ""; 
-
-    data.topics.forEach(topic => {
-        const details = document.createElement('details');
-        details.open = true;
-        const summary = document.createElement('summary');
-        summary.innerText = topic.title;
-        details.appendChild(summary);
-
-        topic.files.forEach(file => {
-            const btn = document.createElement('button');
-            btn.className = 'lesson-btn';
-            btn.innerText = file.title;
-
-            // FIX: Robust path construction
-            const fullPath = `${data.base_path}/${topic.folder}/${file.filename}`;
-            btn.onclick = () => loadLesson(fullPath);
-            details.appendChild(btn);
+    // --- VIEW CONTROLLER ---
+    switchView(targetKey) {
+        // Hide all views
+        Object.values(this.views).forEach(view => {
+            view.classList.remove('active-view');
+            view.classList.add('hidden-view');
         });
-        sidebar.appendChild(details);
-    });
-}
 
-async function loadLesson(path) {
-    const content = document.getElementById('content-area');
-    content.innerHTML = "<h3 style='color:#666'>Unrolling Scroll...</h3>";
-
-    // 1. CLEAN THE PATH: Remove any accidental double slashes
-    // This ensures 'lessons//topic-1' becomes 'lessons/topic-1'
-    const cleanPath = path.replace(/\/+/g, '/');
-
-    try {
-        // 2. FETCH with Cache Buster
-        const fetchUrl = `${cleanPath}?v=${new Date().getTime()}`;
-        console.log("Fetching from:", fetchUrl); // Check this in F12 Console!
-
-        const resp = await fetch(fetchUrl);
+        // Show target view
+        const target = this.views[targetKey];
+        target.classList.remove('hidden-view');
+        target.classList.add('active-view');
         
-        if (!resp.ok) {
-            throw new Error(`Server responded with ${resp.status}: ${resp.statusText}`);
+        // Ensure sidebar closes on view change (Mobile)
+        this.sidebar.classList.remove('mobile-open');
+    },
+
+    // --- MOBILE INTERFACE ---
+    toggleSidebar() {
+        this.sidebar.classList.toggle('mobile-open');
+    },
+
+    // --- DATA PIPELINE ---
+    async loadCourse(courseId) {
+        this.sidebar.innerHTML = `<div class="loader-text">Decrypting ${courseId}...</div>`;
+        this.langDisplay.innerText = courseId.toUpperCase();
+
+        const configPath = `courses/${courseId}/config.json?t=${Date.now()}`;
+
+        try {
+            const response = await fetch(configPath);
+            if (!response.ok) throw new Error("Artifact Configuration Missing");
+            
+            const data = await response.json();
+            this.renderSidebar(data);
+        } catch (error) {
+            this.sidebar.innerHTML = `<div class="error-msg">Failed to load ${courseId}</div>`;
+            console.error("Architectural Error:", error);
         }
+    },
+
+    renderSidebar(data) {
+        this.sidebar.innerHTML = ""; // Clear loader
         
-        const html = await resp.text();
+        const fragment = document.createDocumentFragment();
 
-        // 3. VALIDATION: Ensure we didn't just get a 404 page text
-        if (html.includes("<!DOCTYPE html>") && html.includes("404")) {
-             throw new Error("File not found (GitHub 404 page returned)");
+        data.topics.forEach(topic => {
+            const details = document.createElement('details');
+            details.open = true;
+            
+            const summary = document.createElement('summary');
+            summary.innerText = topic.title;
+            
+            details.appendChild(summary);
+
+            topic.files.forEach(file => {
+                const btn = document.createElement('button');
+                btn.className = 'lesson-btn';
+                btn.innerText = file.title;
+
+                // Build path: base/folder/file
+                const path = `${data.base_path}/${topic.folder}/${file.filename}`.replace(/\/+/g, '/');
+                
+                btn.onclick = () => {
+                    this.loadLesson(path);
+                    // Close sidebar on click for mobile users
+                    if (window.innerWidth < 900) this.toggleSidebar();
+                };
+                
+                details.appendChild(btn);
+            });
+
+            fragment.appendChild(details);
+        });
+
+        this.sidebar.appendChild(fragment);
+    },
+
+    async loadLesson(path) {
+        this.contentArea.innerHTML = `<div class="loader-text">Unrolling Scroll...</div>`;
+
+        try {
+            const response = await fetch(`${path}?t=${Date.now()}`);
+            if (!response.ok) throw new Error("Lesson Fragment Not Found");
+
+            const html = await response.text();
+            
+            // Security Check: Block raw HTML 404 responses from GitHub
+            if (html.includes("<!DOCTYPE html>") && html.includes("404")) {
+                throw new Error("Target artifact does not exist on server.");
+            }
+
+            this.contentArea.innerHTML = html;
+            this.contentArea.scrollTo(0, 0); // Reset scroll position
+
+        } catch (error) {
+            this.contentArea.innerHTML = `
+                <div class="error-box">
+                    <h2 class="artifact-title">Fragment Missing</h2>
+                    <p>The neural link to this artifact is broken.</p>
+                    <code>Path: ${path}</code>
+                </div>`;
         }
-
-        content.innerHTML = html;
-
-    } catch (error) {
-        console.error("Critical Load Error:", error);
-        content.innerHTML = `
-            <div style="padding: 20px; border: 1px dashed #d4af37; color: #ff4d4d;">
-                <h3 style="font-family: 'Cinzel'">Fragment Missing</h3>
-                <p style="font-size: 0.8rem; color: #888;">The path provided was invalid or the file does not exist on the server.</p>
-                <code style="background: #1a1a1a; padding: 5px; display: block;">${cleanPath}</code>
-            </div>
-        `;
     }
+};
+
+// --- GLOBAL BRIDGE (Direct HTML Callbacks) ---
+function goToCategory() { Rosetta.switchView('category'); }
+function goToLanguages() { Rosetta.switchView('languages'); }
+function toggleSidebar() { Rosetta.toggleSidebar(); }
+function enterCourse(id) { 
+    Rosetta.loadCourse(id); 
+    Rosetta.switchView('content'); 
 }
+
+// Initializing event listeners for better device support
+window.addEventListener('load', () => {
+    console.log("ROSETTA CORE INITIALIZED");
+});

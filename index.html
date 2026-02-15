@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ROSETTA | The Language of Machines</title>
+    
+    <!-- CSS & Fonts -->
     <link rel="stylesheet" href="style.css">
-    <!-- Importing Aesthetic Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -22,10 +24,11 @@
         <button class="category-btn" onclick="goToLanguages()">PROGRAMMING</button>
     </section>
 
-    <!-- SCREEN 3: LANGUAGE SELECTION (The Grid) -->
+    <!-- SCREEN 3: LANGUAGE SELECTION -->
     <section id="view-languages" class="full-screen hidden-view">
         <h2 class="select-title">Choose your Path</h2>
         <div class="grid-container">
+            <!-- Data-course attribute allows for cleaner JS logic -->
             <button class="lang-card" onclick="enterCourse('html')">HTML</button>
             <button class="lang-card" onclick="enterCourse('css')">CSS</button>
             <button class="lang-card" onclick="enterCourse('js')">JS</button>
@@ -39,15 +42,23 @@
         </div>
     </section>
 
-    <!-- SCREEN 4: MAIN CONTENT (The Course) -->
+    <!-- SCREEN 4: MAIN CONTENT ENGINE -->
     <div id="view-content" class="main-layout hidden-view">
         <nav class="navbar">
-            <h1 class="nav-logo" onclick="location.reload()">ROSETTA</h1>
+            <div class="nav-left">
+                <button id="mobile-menu-btn" class="icon-btn" onclick="toggleSidebar()">◈</button>
+                <h1 class="nav-logo" onclick="location.reload()">ROSETTA</h1>
+            </div>
             <span id="current-lang-display">HTML</span>
         </nav>
 
         <div class="container">
-            <aside id="sidebar">Loading...</aside>
+            <!-- Sidebar Navigation -->
+            <aside id="sidebar" class="sidebar-nav">
+                <div class="loader-text">Initializing Archive...</div>
+            </aside>
+            
+            <!-- Main Content Area -->
             <main id="content-area">
                 <div class="welcome-box">
                     <h2>Select a topic to decrypt.</h2>
@@ -56,16 +67,14 @@
         </div>
     </div>
 
-    <script src="main.js"></script>
-<!-- ... previous sections ... -->
-
-     <!-- FOOTER IS HERE, OUTSIDE EVERYTHING ELSE -->
+    <!-- UNIVERSAL FIXED FOOTER -->
     <footer id="kalex-footer">
         <span class="copyright">© 2026 Kalex | All rights reserved</span>
         <span class="separator">|</span>
         <span class="project-name">PROJECT ROSETTA</span>
     </footer>
 
+    <!-- Logic Engine - Single Entry Point -->
     <script src="main.js"></script>
 </body>
 </html>
