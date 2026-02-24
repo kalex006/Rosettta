@@ -2,77 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>ROSETTA | Digital Archive</title>
-    <!-- Fonts: High-status Cinzel for headers, Technical Inter for data -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@300;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ROSETTA | The Language of Machines</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body class="kalex-protocol">
+<body>
 
-    <div class="glass-overlay"></div>
+    <!-- SCREEN 1: LANDING -->
+    <section id="view-landing" class="full-screen active-view">
+        <p class="subtitle fade-in">Welcome to</p>
+        <button class="rosetta-btn fade-in-delay" onclick="goToCategory()">ROSETTA</button>
+    </section>
 
-    <!-- VIEW 1: LANDING (The Entry) -->
-    <section id="view-landing" class="view active">
-        <div class="hero-content">
-            <p class="reveal-text">PROJECT</p>
-            <h1 class="logo-main" onclick="goToCategory()">ROSETTA</h1>
-            <div class="status-bar">
-                <span class="pulse"></span> SYSTEM: ONLINE | AUTH: KALEX
+    <!-- SCREEN 2: CATEGORY -->
+    <section id="view-category" class="full-screen hidden-view">
+        <button class="category-btn" onclick="goToLanguages()">PROGRAMMING</button>
+    </section>
+
+    <!-- SCREEN 3: LANGUAGE GRID -->
+    <section id="view-languages" class="full-screen hidden-view">
+        <h2 class="select-title">Choose your Path</h2>
+        <div class="grid-container">
+            <button class="lang-card" onclick="enterCourse('html')">HTML</button>
+            <button class="lang-card" onclick="enterCourse('css')">CSS</button>
+            <button class="lang-card" onclick="enterCourse('js')">JS</button>
+            <button class="lang-card" onclick="enterCourse('python')">PY</button>
+            <button class="lang-card" onclick="enterCourse('lua')">LUA</button>
+            <button class="lang-card" onclick="enterCourse('java')">JAVA</button>
+            <button class="lang-card" onclick="enterCourse('c')">C</button>
+            <button class="lang-card" onclick="enterCourse('cpp')">C++</button>
+            <button class="lang-card" onclick="enterCourse('bash')">BASH</button>
+            <button class="lang-card" onclick="enterCourse('rust')">RUST</button>
+        </div>
+    </section>
+
+    <!-- SCREEN 4: MAIN CONTENT (Mobile Optimized) -->
+    <div id="view-content" class="main-layout hidden-view">
+        <nav class="navbar">
+            <div class="nav-left">
+                <!-- Mobile Menu Button -->
+                <button id="menu-btn" onclick="toggleSidebar()">☰</button>
+                <h1 class="nav-logo" onclick="location.reload()">ROSETTA</h1>
             </div>
-        </div>
-    </section>
-
-    <!-- VIEW 2: CATEGORY (The Selection) -->
-    <section id="view-category" class="view hidden">
-        <div class="glass-card clickable" onclick="goToLanguages()">
-            <h2>DECRYPT LANGUAGES</h2>
-            <p>Access the core archives.</p>
-        </div>
-    </section>
-
-    <!-- VIEW 3: LANGUAGES (The Grid) -->
-    <section id="view-languages" class="view hidden">
-        <header class="section-header">
-            <button class="back-btn" onclick="goBack('view-category')">←</button>
-            <h2>PATHWAY</h2>
-        </header>
-        <div class="lang-grid">
-            <button class="node" onclick="enterCourse('python')"><span>PY</span>PYTHON</button>
-            <button class="node" onclick="enterCourse('java')"><span>JV</span>JAVA</button>
-            <button class="node" onclick="enterCourse('lua')"><span>LU</span>LUA</button>
-            <button class="node" onclick="enterCourse('rust')"><span>RS</span>RUST</button>
-            <button class="node" onclick="enterCourse('bash')"><span>BS</span>BASH</button>
-            <button class="node" onclick="enterCourse('cpp')"><span>C+</span>C++</button>
-        </div>
-    </section>
-
-    <!-- VIEW 4: CONTENT (The Terminal) -->
-    <div id="view-content" class="main-shell hidden">
-        <nav class="top-nav">
-            <button class="menu-trigger" onclick="toggleSidebar()">☰</button>
-            <span id="current-lang">PYTHON</span>
-            <div class="nav-right">V.2.0</div>
+            <span id="current-lang-display">HTML</span>
         </nav>
 
-        <div class="shell-body">
-            <aside id="sidebar" class="glass-sidebar">
-                <!-- Links injected here -->
-            </aside>
-            <main class="terminal-area">
-                <article id="content-area" class="glass-content">
-                    <div class="placeholder">Select a module to begin decryption...</div>
-                </article>
+        <div class="container">
+            <!-- Sidebar with overlay for mobile -->
+            <aside id="sidebar">Loading...</aside>
+            <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+            
+            <main id="content-area">
+                <div class="welcome-box">
+                    <h2>Select a topic to decrypt.</h2>
+                </div>
             </main>
         </div>
     </div>
 
-    <footer class="kalex-footer">
-        <div class="footer-line"></div>
-        <p>© 2026 KALEX | <span>INTERNAL ARCHIVE</span></p>
+    <!-- KALEX FOOTER -->
+    <footer id="kalex-footer">
+        <span class="copyright">© 2026 Kalex</span>
+        <span class="separator">|</span>
+        <span class="project-name">ROSETTA</span>
     </footer>
 
     <script src="main.js"></script>
 </body>
 </html>
-
