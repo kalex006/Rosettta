@@ -1,10 +1,5 @@
 /* RESET & BASE */
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
-    -webkit-tap-highlight-color: transparent; 
-}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 body {
     background-color: #050505;
@@ -17,117 +12,45 @@ body {
 
 /* UTILS & ANIMATION */
 .full-screen {
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center;
-    background: #050505; 
-    transition: opacity 0.8s ease-in-out;
-    padding: 20px; 
-    text-align: center;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    background: #050505; transition: opacity 0.8s ease-in-out;
+    padding: 20px; text-align: center;
 }
-.hidden-view { 
-    opacity: 0; 
-    pointer-events: none; 
-    z-index: -1; 
-    display: none; 
-}
-.active-view { 
-    opacity: 1; 
-    pointer-events: all; 
-    z-index: 10; 
-    display: flex; 
-}
-.fade-in { 
-    animation: fadeIn 1.5s ease forwards; 
-    opacity: 0; 
-}
-.fade-in-delay { 
-    animation: fadeIn 1.5s ease forwards 0.8s; 
-    opacity: 0; 
-}
+.hidden-view { opacity: 0; pointer-events: none; z-index: -1; display: none; }
+.active-view { opacity: 1; pointer-events: all; z-index: 10; display: flex; }
+.fade-in { animation: fadeIn 1.5s ease forwards; opacity: 0; }
+.fade-in-delay { animation: fadeIn 1.5s ease forwards 0.8s; opacity: 0; }
 @keyframes fadeIn { to { opacity: 1; } }
 
 /* SCREEN 1 & 2 BUTTONS */
-.subtitle { 
-    font-size: 1rem; 
-    letter-spacing: 3px; 
-    color: #666; 
-    margin-bottom: 20px; 
-    text-transform: uppercase; 
-}
+.subtitle { font-size: 1rem; letter-spacing: 3px; color: #666; margin-bottom: 20px; text-transform: uppercase; }
 .rosetta-btn {
-    font-family: 'Cinzel', serif; 
-    font-size: 3rem; 
-    background: transparent; 
-    color: #e0e0e0;
-    border: none; 
-    cursor: pointer; 
-    letter-spacing: 5px; 
-    transition: 0.5s;
+    font-family: 'Cinzel', serif; font-size: 3rem; background: transparent; color: #e0e0e0;
+    border: none; cursor: pointer; letter-spacing: 5px; transition: 0.5s;
 }
 .category-btn {
-    font-family: 'Cinzel', serif; 
-    font-size: 1.8rem; 
-    background: transparent; 
-    color: #fff;
-    border: 1px solid #333; 
-    padding: 15px 40px; 
-    cursor: pointer; 
-    transition: 0.3s;
+    font-family: 'Cinzel', serif; font-size: 1.8rem; background: transparent; color: #fff;
+    border: 1px solid #333; padding: 15px 40px; cursor: pointer; transition: 0.3s;
 }
 
 /* SCREEN 3: GRID (Mobile Responsive) */
-.select-title { 
-    font-family: 'Cinzel', serif; 
-    font-size: 1.2rem; 
-    margin-bottom: 30px; 
-    color: #666; 
-    letter-spacing: 3px; 
-}
+.select-title { font-family: 'Cinzel', serif; font-size: 1.2rem; margin-bottom: 30px; color: #666; letter-spacing: 3px; }
 .grid-container {
-    display: grid; 
-    grid-template-columns: repeat(5, 1fr); 
-    gap: 15px; 
-    max-width: 1000px; 
-    width: 100%;
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; max-width: 1000px; width: 100%;
 }
 .lang-card {
-    height: 100px; 
-    background: linear-gradient(145deg, #111, #0a0a0a); 
-    border: 1px solid #333;
-    color: #888; 
-    font-family: 'Cinzel', serif; 
-    font-weight: 700; 
-    cursor: pointer;
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    transition: 0.3s;
+    height: 100px; background: linear-gradient(145deg, #111, #0a0a0a); border: 1px solid #333;
+    color: #888; font-family: 'Cinzel', serif; font-weight: 700; cursor: pointer;
+    display: flex; justify-content: center; align-items: center; transition: 0.3s;
 }
-.lang-card:hover, .lang-card:active { 
-    border-color: #d4af37; 
-    color: #d4af37; 
-    background: #1a1a1a; 
-}
+.lang-card:hover, .lang-card:active { border-color: #d4af37; color: #d4af37; background: #1a1a1a; }
 
 /* SCREEN 4: MAIN LAYOUT */
-.main-layout { 
-    height: 100vh; 
-    height: 100dvh; 
-    flex-direction: column; 
-    width: 100%; 
-}
+.main-layout { height: 100vh; height: 100dvh; flex-direction: column; width: 100%; }
 
 .navbar {
-    background: #0a0a0a; 
-    border-bottom: 1px solid #222; 
-    height: 60px;
+    background: #0a0a0a; border-bottom: 1px solid #222; height: 60px;
     padding: 0 20px; display: flex; justify-content: space-between; align-items: center;
 }
 .nav-left { display: flex; align-items: center; gap: 15px; }
