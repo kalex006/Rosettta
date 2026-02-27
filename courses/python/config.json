@@ -1,0 +1,117 @@
+{
+  "course_id": "python",
+  "title": "Python: The Serpent's Script",
+  "base_path": "courses/python/lessons",
+  "topics": [
+    {
+      "title": "Module 01: The Basics",
+      "folder": "module-01",
+      "files": [
+        { "title": "1.1 Setup & Hello World", "filename": "setup.html" },
+        { "title": "1.2 Variables & Assignment", "filename": "variables.html" },
+        { "title": "1.3 Data Types (Int/Float/Str)", "filename": "datatypes.html" },
+        { "title": "1.4 Input & Output", "filename": "io.html" },
+        { "title": "1.5 Comments & Docstrings", "filename": "comments.html" }
+      ]
+    },
+    {
+      "title": "Module 02: Control Flow",
+      "folder": "module-02",
+      "files": [
+        { "title": "2.1 Booleans & Comparison", "filename": "booleans.html" },
+        { "title": "2.2 If, Elif, Else", "filename": "conditionals.html" },
+        { "title": "2.3 Logical Operators (And/Or)", "filename": "operators.html" },
+        { "title": "2.4 Match Case (Switch)", "filename": "match.html" },
+        { "title": "2.5 Truthy & Falsy Values", "filename": "truthy.html" }
+      ]
+    },
+    {
+      "title": "Module 03: Loops",
+      "folder": "module-03",
+      "files": [
+        { "title": "3.1 While Loops", "filename": "while.html" },
+        { "title": "3.2 For Loops & Range", "filename": "for.html" },
+        { "title": "3.3 Break & Continue", "filename": "control.html" },
+        { "title": "3.4 Nested Loops", "filename": "nested.html" },
+        { "title": "3.5 Loop Else Clause", "filename": "else.html" }
+      ]
+    },
+    {
+      "title": "Module 04: Lists & Tuples",
+      "folder": "module-04",
+      "files": [
+        { "title": "4.1 Creating Lists", "filename": "lists.html" },
+        { "title": "4.2 Indexing & Slicing", "filename": "slicing.html" },
+        { "title": "4.3 List Methods (Append/Pop)", "filename": "methods.html" },
+        { "title": "4.4 Tuples (Immutable)", "filename": "tuples.html" },
+        { "title": "4.5 Unpacking Sequences", "filename": "unpacking.html" }
+      ]
+    },
+    {
+      "title": "Module 05: Dicts & Sets",
+      "folder": "module-05",
+      "files": [
+        { "title": "5.1 Dictionaries (Key-Value)", "filename": "dicts.html" },
+        { "title": "5.2 Dict Methods (Get/Keys)", "filename": "methods.html" },
+        { "title": "5.3 Sets (Unique Items)", "filename": "sets.html" },
+        { "title": "5.4 Set Operations (Union)", "filename": "operations.html" },
+        { "title": "5.5 List Comprehensions", "filename": "comprehension.html" }
+      ]
+    },
+    {
+      "title": "Module 06: Functions",
+      "folder": "module-06",
+      "files": [
+        { "title": "6.1 Defining Functions (def)", "filename": "def.html" },
+        { "title": "6.2 Arguments & Parameters", "filename": "args.html" },
+        { "title": "6.3 Return Values", "filename": "return.html" },
+        { "title": "6.4 *args and **kwargs", "filename": "star-args.html" },
+        { "title": "6.5 Lambda Functions", "filename": "lambda.html" }
+      ]
+    },
+    {
+      "title": "Module 07: Modules",
+      "folder": "module-07",
+      "files": [
+        { "title": "7.1 Import System", "filename": "import.html" },
+        { "title": "7.2 Standard Library (Math/Random)", "filename": "stdlib.html" },
+        { "title": "7.3 Creating Modules", "filename": "create.html" },
+        { "title": "7.4 Pip & PyPI", "filename": "pip.html" },
+        { "title": "7.5 Virtual Environments", "filename": "venv.html" }
+      ]
+    },
+    {
+      "title": "Module 08: Files & Errors",
+      "folder": "module-08",
+      "files": [
+        { "title": "8.1 Reading Files", "filename": "read.html" },
+        { "title": "8.2 Writing Files", "filename": "write.html" },
+        { "title": "8.3 Context Managers (with)", "filename": "with.html" },
+        { "title": "8.4 Try / Except Blocks", "filename": "try.html" },
+        { "title": "8.5 Raising Exceptions", "filename": "raise.html" }
+      ]
+    },
+    {
+      "title": "Module 09: OOP Basics",
+      "folder": "module-09",
+      "files": [
+        { "title": "9.1 Classes & Objects", "filename": "classes.html" },
+        { "title": "9.2 The __init__ Method", "filename": "init.html" },
+        { "title": "9.3 Methods vs Functions", "filename": "methods.html" },
+        { "title": "9.4 Inheritance", "filename": "inheritance.html" },
+        { "title": "9.5 Polymorphism", "filename": "polymorphism.html" }
+      ]
+    },
+    {
+      "title": "Module 10: Advanced Python",
+      "folder": "module-10",
+      "files": [
+        { "title": "10.1 Decorators (@wrapper)", "filename": "decorators.html" },
+        { "title": "10.2 Generators (yield)", "filename": "generators.html" },
+        { "title": "10.3 Type Hinting", "filename": "typing.html" },
+        { "title": "10.4 Intro to AsyncIO", "filename": "async.html" },
+        { "title": "10.5 The Zen of Python", "filename": "zen.html" }
+      ]
+    }
+  ]
+}
