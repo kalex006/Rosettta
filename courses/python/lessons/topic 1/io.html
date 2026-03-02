@@ -1,0 +1,21 @@
+<h2 class="lesson-title">1.4 Input & Output</h2>
+<p>Software is useless if it cannot interact with the user. We need ways to get data IN and send data OUT.</p>
+
+<h3 class="sub-title">Output: The Print Function</h3>
+<p>We already know <code>print()</code>. But it can do more.</p>
+<pre>
+print("Hello", "World", sep="-") 
+# Output: Hello-World
+</pre>
+
+<h3 class="sub-title">Input: The Input Function</h3>
+<p>The <code>input()</code> function pauses your program and waits for the user to type something.</p>
+<pre>
+name = input("Enter your name: ")
+print("Hello, " + name)
+</pre>
+
+<div class="tip-box">
+    <strong>Crucial Note:</strong> The <code>input()</code> function ALWAYS returns a string. If you want a number, you must convert it:
+    <br><code>age = int(input("Enter age: "))</code>
+</div>
