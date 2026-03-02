@@ -1,0 +1,26 @@
+<h2 class="lesson-title">5.5 List Comprehensions</h2>
+<p>List comprehension offers a shorter syntax when you want to create a new list based on the values of an existing list.</p>
+
+<h3 class="sub-title">The Syntax</h3>
+<pre>
+# [expression for item in iterable if condition]
+</pre>
+
+<h3 class="sub-title">Example: Squares</h3>
+<p>Without comprehension:</p>
+<pre>
+nums = [1, 2, 3, 4]
+squares = []
+for n in nums:
+    squares.append(n * n)
+</pre>
+
+<p>With comprehension (The Pythonic Way):</p>
+<pre>
+squares = [n * n for n in nums]
+print(squares) # [1, 4, 9, 16]
+</pre>
+
+<div class="tip-box">
+    <strong>Why use this?</strong> It makes your code cleaner and is significantly faster than a standard <code>for</code> loop in Python.
+</div>

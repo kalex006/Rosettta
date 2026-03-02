@@ -1,0 +1,23 @@
+<h2 class="lesson-title">4.5 Unpacking Sequences</h2>
+<p>Unpacking allows you to extract values from a list or tuple and assign them to variables in a single line.</p>
+
+<h3 class="sub-title">Basic Unpacking</h3>
+<pre>
+point = (4, 5)
+x, y = point
+
+print(x) # 4
+print(y) # 5
+</pre>
+
+<h3 class="sub-title">Extended Unpacking (The * Asterisk)</h3>
+<p>If you have more values than variables, you can use <code>*</code> to collect the remaining items into a list.</p>
+<pre>
+fruits = ["apple", "banana", "cherry", "strawberry", "raspberry"]
+
+green, yellow, *red = fruits
+
+print(green)  # "apple"
+print(yellow) # "banana"
+print(red)    # ["cherry", "strawberry", "raspberry"]
+</pre>

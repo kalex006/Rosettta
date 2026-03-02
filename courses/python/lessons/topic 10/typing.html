@@ -1,0 +1,20 @@
+<h2 class="lesson-title">10.3 Type Hinting</h2>
+<p>Python is dynamically typed, but modern Python uses <strong>Type Hints</strong> to make code more readable and to help catch bugs before they happen.</p>
+
+<h3 class="sub-title">Adding Types</h3>
+<pre>
+# Variable: type = value
+age: int = 25
+name: str = "Kalex"
+
+# Function(param: type) -> return_type
+def greeting(name: str) -> str:
+    return f"Hello {name}"
+</pre>
+
+<h3 class="sub-title">Benefits</h3>
+<ul class="lesson-list">
+    <li><strong>Documentation:</strong> You immediately know what kind of data a function expects.</li>
+    <li><strong>IDE Support:</strong> VS Code can provide better autocomplete suggestions.</li>
+    <li><strong>Static Analysis:</strong> Tools like <code>mypy</code> can check your code for type errors.</li>
+</ul>

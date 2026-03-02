@@ -1,0 +1,23 @@
+<h2 class="lesson-title">6.2 Arguments & Parameters</h2>
+<p>Information can be passed into functions as arguments. Arguments are specified after the function name, inside the parentheses.</p>
+
+<h3 class="sub-title">Parameters vs Arguments</h3>
+<p>A <strong>Parameter</strong> is the variable listed inside the parentheses in the function definition. An <strong>Argument</strong> is the value that is sent to the function when it is called.</p>
+
+<pre>
+def greet(fname): # fname is the parameter
+  print("Hello " + fname)
+
+greet("Kalex")   # "Kalex" is the argument
+greet("Rosetta")
+</pre>
+
+<h3 class="sub-title">Default Parameter Value</h3>
+<p>You can assign a default value to a parameter. If the function is called without an argument, it uses the default.</p>
+<pre>
+def my_country(country = "India"):
+  print("I am from " + country)
+
+my_country("Sweden")
+my_country() # Output: I am from India
+</pre>

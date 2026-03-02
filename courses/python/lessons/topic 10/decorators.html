@@ -1,0 +1,27 @@
+<h2 class="lesson-title">10.1 Decorators (@wrapper)</h2>
+<p>A <strong>Decorator</strong> is a function that takes another function and extends its behavior without explicitly modifying it.</p>
+
+<h3 class="sub-title">The Syntax</h3>
+<p>Decorators use the <code>@</code> symbol followed by the decorator name above a function definition.</p>
+
+<pre>
+def my_decorator(func):
+    def wrapper():
+        print("Something is happening before the function is called.")
+        func()
+        print("Something is happening after the function is called.")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+</pre>
+
+<h3 class="sub-title">Why use them?</h3>
+<ul class="lesson-list">
+    <li><strong>Logging:</strong> Track when a function is called.</li>
+    <li><strong>Timing:</strong> Measure how long a function takes to run.</li>
+    <li><strong>Authorization:</strong> Check if a user is logged in before running a function.</li>
+</ul>

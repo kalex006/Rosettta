@@ -1,0 +1,18 @@
+<h2 class="lesson-title">8.4 Handling Errors (Try / Except)</h2>
+<p>When an error occurs, Python will normally stop and generate an error message (an Exception). You can "catch" these errors to prevent your app from crashing.</p>
+
+<h3 class="sub-title">Basic Structure</h3>
+<pre>
+try:
+    # Code that might cause an error
+    number = int(input("Enter a number: "))
+    print(10 / number)
+except ValueError:
+    print("That was not a valid number!")
+except ZeroDivisionError:
+    print("You cannot divide by zero!")
+except Exception as e:
+    print(f"Something else went wrong: {e}")
+</pre>
+
+<p>By catching specific errors, you can give the user helpful feedback instead of a scary red error screen.</p>

@@ -1,0 +1,26 @@
+<h2 class="lesson-title">4.3 List Methods</h2>
+<p>Python has a set of built-in methods that you can use on lists to modify them dynamically.</p>
+
+<h3 class="sub-title">Adding Items</h3>
+<pre>
+names = ["Alice", "Bob"]
+
+names.append("Charlie") # Adds to the end
+names.insert(1, "Dave") # Inserts "Dave" at index 1
+print(names) # ["Alice", "Dave", "Bob", "Charlie"]
+</pre>
+
+<h3 class="sub-title">Removing Items</h3>
+<pre>
+names.remove("Bob") # Removes specific item
+names.pop()         # Removes the last item
+names.pop(0)        # Removes item at index 0
+names.clear()       # Empties the list
+</pre>
+
+<h3 class="sub-title">Sorting</h3>
+<pre>
+vals = [5, 2, 9, 1]
+vals.sort()    # [1, 2, 5, 9]
+vals.reverse() # [9, 5, 2, 1]
+</pre>

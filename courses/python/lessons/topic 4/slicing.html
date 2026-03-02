@@ -1,0 +1,21 @@
+<h2 class="lesson-title">4.2 Indexing & Slicing</h2>
+<p>Python allows you to access specific items or "slices" of a list using their index position.</p>
+
+<h3 class="sub-title">Positive & Negative Indexing</h3>
+<p>Indexing starts at <code>0</code>. Negative indexing starts from the end (<code>-1</code>).</p>
+<pre>
+colors = ["red", "green", "blue", "yellow"]
+
+print(colors[0])  # "red"
+print(colors[-1]) # "yellow" (the last item)
+</pre>
+
+<h3 class="sub-title">Slicing Syntax</h3>
+<p>You can specify a range of indexes by specifying where to start and where to end the range: <code>[start:stop]</code>.</p>
+<pre>
+nums = [10, 20, 30, 40, 50]
+
+print(nums[1:4]) # [20, 30, 40] (index 4 is excluded)
+print(nums[:3])  # [10, 20, 30] (start to index 3)
+print(nums[2:])  # [30, 40, 50] (index 2 to end)
+</pre>

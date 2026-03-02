@@ -1,0 +1,27 @@
+<h2 class="lesson-title">8.5 Raising & Finally</h2>
+<p>Sometimes you want to <strong>create</strong> your own error if a specific condition is met. We use the <code>raise</code> keyword for this.</p>
+
+<h3 class="sub-title">Raising an Error</h3>
+<pre>
+age = -5
+if age < 0:
+    raise Exception("Age cannot be negative!")
+</pre>
+
+<h3 class="sub-title">The Finally Block</h3>
+<p>The <code>finally</code> block, if specified, will be executed regardless if the try block raises an error or not.</p>
+
+<pre>
+try:
+    f = open("data.txt")
+    # do something
+except:
+    print("Error!")
+finally:
+    print("Closing resources...")
+    # This always runs
+</pre>
+
+<div class="tip-box">
+    <strong>Pro Tip:</strong> Use <code>finally</code> for "Cleanup" tasks, like closing a database connection or a network socket.
+</div>

@@ -1,0 +1,21 @@
+<h2 class="lesson-title">6.5 Lambda Functions</h2>
+<p>A <strong>Lambda function</strong> is a small anonymous function. It can take any number of arguments, but can only have <strong>one expression</strong>.</p>
+
+<h3 class="sub-title">Syntax</h3>
+<pre>
+# lambda arguments : expression
+</pre>
+
+<h3 class="sub-title">Example</h3>
+<pre>
+# A standard function
+def square(n):
+    return n * n
+
+# The same as a Lambda
+square_lambda = lambda n : n * n
+
+print(square_lambda(5)) # Output: 25
+</pre>
+
+<p>Lambda functions are often used when you need a simple function for a short period of time, especially inside functions like <code>filter()</code> or <code>map()</code>.</p>

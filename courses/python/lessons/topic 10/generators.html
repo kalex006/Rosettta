@@ -1,0 +1,19 @@
+<h2 class="lesson-title">10.2 Generators (yield)</h2>
+<p>Generators allow you to declare a function that behaves like an iterator. They are incredibly <strong>Memory Efficient</strong>.</p>
+
+<h3 class="sub-title">The "yield" Keyword</h3>
+<p>Unlike <code>return</code>, which sends back a value and stops, <code>yield</code> pauses the function, saves its state, and can be resumed later.</p>
+
+<pre>
+def count_to_three():
+    yield 1
+    yield 2
+    yield 3
+
+gen = count_to_three()
+print(next(gen)) # 1
+print(next(gen)) # 2
+</pre>
+
+<h3 class="sub-title">List vs Generator</h3>
+<p>A List stores all items in memory (RAM). A Generator produces items <strong>one by one</strong> on demand. Use Generators when working with massive datasets (millions of lines) to avoid crashing your computer.</p>

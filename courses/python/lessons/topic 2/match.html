@@ -1,0 +1,19 @@
+<h2 class="lesson-title">2.4 Match Case (Switch)</h2>
+<p>Introduced in Python 3.10, <code>match</code> is similar to the <code>switch</code> statement found in other languages like C or Java. It is cleaner than writing many <code>if-elif</code> blocks.</p>
+
+<h3 class="sub-title">Basic Syntax</h3>
+<pre>
+status = 404
+
+match status:
+    case 400:
+        print("Bad Request")
+    case 404:
+        print("Not Found")
+    case 418:
+        print("I'm a teapot")
+    case _:
+        print("Something's wrong with the internet")
+</pre>
+
+<p>The <code>_</code> acts as a wildcard (like <code>else</code> or <code>default</code>), catching anything not matched above.</p>

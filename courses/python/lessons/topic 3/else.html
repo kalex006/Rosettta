@@ -1,0 +1,24 @@
+<h2 class="lesson-title">3.5 Loop Else Clause</h2>
+<p>Python has a unique feature: you can use an <code>else</code> block with a loop. The <code>else</code> block runs <strong>only if the loop finished naturally</strong> (not by a break).</p>
+
+<h3 class="sub-title">Example: Searching</h3>
+<pre>
+for n in range(5):
+    print(n)
+else:
+    print("Loop finished successfully!")
+</pre>
+
+<h3 class="sub-title">When it does NOT run:</h3>
+<pre>
+for n in range(5):
+    if n == 3:
+        break
+    print(n)
+else:
+    print("This will NOT print because of the break.")
+</pre>
+
+<div class="tip-box">
+    <strong>Pro Tip:</strong> Use the loop-else clause when searching for something. If the item isn't found (no break), you can use the <code>else</code> block to show a "Not Found" message.
+</div>

@@ -1,0 +1,20 @@
+<h2 class="lesson-title">9.2 The __init__ Method (Constructors)</h2>
+<p>All classes have a function called <code>__init__()</code>, which is always executed when the class is being initiated.</p>
+
+<h3 class="sub-title">Assigning Values</h3>
+<p>Use the <code>__init__()</code> function to assign values to object properties, or other operations that are necessary to do when the object is being created.</p>
+
+<pre>
+class Person:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+p1 = Person("Kalex", 2026)
+
+print(p1.name)
+print(p1.age)
+</pre>
+
+<h3 class="sub-title">What is "self"?</h3>
+<p>The <code>self</code> parameter is a reference to the current instance of the class. It is used to access variables that belong to the class. It does not have to be named <code>self</code>, but it is the universal standard in Python.</p>

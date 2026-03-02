@@ -1,0 +1,25 @@
+<h2 class="lesson-title">5.1 Dictionaries (Key-Value)</h2>
+<p>A <strong>Dictionary</strong> is a collection which is ordered, changeable, and does not allow duplicates. They store data in <code>key:value</code> pairs.</p>
+
+<h3 class="sub-title">Basic Syntax</h3>
+<p>Dictionaries are written with curly brackets <code>{}</code>.</p>
+<pre>
+user = {
+  "name": "Kalex",
+  "year": 2026,
+  "is_admin": True
+}
+
+print(user["name"]) # Output: Kalex
+</pre>
+
+<h3 class="sub-title">Accessing & Changing</h3>
+<p>You can access items by referring to their key name inside square brackets.</p>
+<pre>
+user["year"] = 2027 # Changing a value
+user["email"] = "kalex@rosetta.com" # Adding a new key
+</pre>
+
+<div class="tip-box">
+    <strong>Note:</strong> As of Python 3.7, dictionaries are <strong>ordered</strong>. Before that, they were unordered.
+</div>

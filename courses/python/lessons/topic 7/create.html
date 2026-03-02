@@ -1,0 +1,24 @@
+<h2 class="lesson-title">7.3 Creating Your Own Modules</h2>
+<p>You can turn any Python file into a module simply by saving it with a <code>.py</code> extension and importing it in another file.</p>
+
+<h3 class="sub-title">Step 1: Create `tools.py`</h3>
+<pre>
+# tools.py
+def say_hi(name):
+    print(f"Hello, {name}!")
+
+version = "1.0.0"
+</pre>
+
+<h3 class="sub-title">Step 2: Use it in `main.py`</h3>
+<pre>
+# main.py
+import tools
+
+tools.say_hi("Kalex")
+print(tools.version)
+</pre>
+
+<div class="tip-box">
+    <strong>Pro Tip:</strong> When you import a module, Python creates a folder named <code>__pycache__</code>. Don't worry about it; it contains compiled code to make your imports faster next time.
+</div>

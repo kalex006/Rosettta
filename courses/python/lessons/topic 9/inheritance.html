@@ -1,0 +1,22 @@
+<h2 class="lesson-title">9.4 Inheritance</h2>
+<p>Inheritance allows us to define a class that inherits all the methods and properties from another class.</p>
+
+<h3 class="sub-title">Parent vs Child Class</h3>
+<ul class="lesson-list">
+    <li><strong>Parent Class:</strong> The class being inherited from (Base Class).</li>
+    <li><strong>Child Class:</strong> The class that inherits from another class (Derived Class).</li>
+</ul>
+
+<pre>
+class Animal: # Parent
+    def speak(self):
+        print("Animal makes a sound")
+
+class Cat(Animal): # Child inherits from Animal
+    def meow(self):
+        print("Meow!")
+
+my_cat = Cat()
+my_cat.speak() # Inherited method
+my_cat.meow()  # Own method
+</pre>

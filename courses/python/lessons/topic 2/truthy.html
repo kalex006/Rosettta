@@ -1,0 +1,24 @@
+<h2 class="lesson-title">2.5 Truthy & Falsy Values</h2>
+<p>In Python, every value evaluates to either True or False when used in a boolean context (like an <code>if</code> statement).</p>
+
+<h3 class="sub-title">Falsy Values</h3>
+<p>These values are considered False:</p>
+<ul class="lesson-list">
+    <li><code>False</code></li>
+    <li><code>None</code></li>
+    <li><code>0</code> (Zero of any numeric type)</li>
+    <li><code>""</code> (Empty string)</li>
+    <li><code>[]</code>, <code>()</code>, <code>{}</code> (Empty sequences/collections)</li>
+</ul>
+
+<h3 class="sub-title">Truthy Values</h3>
+<p>Almost everything else is considered True.</p>
+
+<pre>
+name = ""
+if name:
+    print("Name is present")
+else:
+    print("Name is missing") 
+    # Output: Name is missing because empty string is Falsy
+</pre>

@@ -1,0 +1,24 @@
+<h2 class="lesson-title">9.5 Polymorphism</h2>
+<p>The word "Polymorphism" means "many forms". In programming, it refers to methods or functions that can do different things based on the object they are acting upon.</p>
+
+<h3 class="sub-title">Same Method, Different Class</h3>
+<p>Imagine different animals. They all have a <code>move()</code> method, but they move differently.</p>
+
+<pre>
+class Car:
+  def move(self): print("Drive!")
+
+class Boat:
+  def move(self): print("Sail!")
+
+class Plane:
+  def move(self): print("Fly!")
+
+# Iterate through different objects
+for x in (Car(), Boat(), Plane()):
+  x.move() # Same call, different results
+</pre>
+
+<div class="tip-box">
+    <strong>Advanced:</strong> Polymorphism allows you to write code that can handle many types of objects without knowing their exact class beforehand.
+</div>

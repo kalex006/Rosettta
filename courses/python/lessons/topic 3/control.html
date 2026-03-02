@@ -1,0 +1,20 @@
+<h2 class="lesson-title">3.3 Loop Control: Break & Continue</h2>
+<p>Sometimes you need to stop a loop early or skip certain parts of it. We use <code>break</code> and <code>continue</code> for this.</p>
+
+<h3 class="sub-title">The Break Statement</h3>
+<p>Used to exit the loop immediately, even if the condition is still True.</p>
+<pre>
+for x in range(10):
+    if x == 5:
+        break # Stops the loop when x reaches 5
+    print(x)
+</pre>
+
+<h3 class="sub-title">The Continue Statement</h3>
+<p>Used to skip the rest of the current iteration and move to the next one.</p>
+<pre>
+for x in range(5):
+    if x == 3:
+        continue # Skips printing 3
+    print(x)
+</pre>

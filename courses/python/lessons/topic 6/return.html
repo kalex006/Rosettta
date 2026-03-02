@@ -1,0 +1,17 @@
+<h2 class="lesson-title">6.3 Return Values</h2>
+<p>To let a function return a value back to the caller, use the <code>return</code> statement.</p>
+
+<h3 class="sub-title">The Return Statement</h3>
+<p>Unlike <code>print()</code>, which just shows text on the screen, <code>return</code> sends data back so it can be stored in a variable.</p>
+
+<pre>
+def add_numbers(x, y):
+  return x + y
+
+result = add_numbers(5, 3)
+print(result) # Output: 8
+</pre>
+
+<div class="tip-box">
+    <strong>Crucial Note:</strong> Once a function hits a <code>return</code> statement, it exits immediately. Any code written after the return inside that function will never run.
+</div>

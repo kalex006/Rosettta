@@ -1,0 +1,28 @@
+<h2 class="lesson-title">2.2 If, Elif, Else Statements</h2>
+<p>Conditionals allow your program to take different paths depending on whether a condition is True or False.</p>
+
+<h3 class="sub-title">The Structure</h3>
+<pre>
+if condition:
+    # Execute this block if condition is True
+elif another_condition:
+    # Execute this block if the first condition was False
+else:
+    # Execute this block if nothing above was True
+</pre>
+
+<h3 class="sub-title">Example:</h3>
+<pre>
+age = 18
+
+if age >= 18:
+    print("You can vote!")
+elif age == 17:
+    print("Almost there.")
+else:
+    print("Sorry, too young.")
+</pre>
+
+<div class="tip-box">
+    <strong>Python Note:</strong> Indentation (whitespace) is crucial. Without correct indentation, Python will raise an <code>IndentationError</code>.
+</div>

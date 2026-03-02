@@ -1,0 +1,26 @@
+<h2 class="lesson-title">8.1 Reading Files</h2>
+<p>Python has a built-in <code>open()</code> function to open a file. It takes two parameters: **Filename** and **Mode**.</p>
+
+<h3 class="sub-title">The "r" Mode (Read)</h3>
+<p>By default, <code>open()</code> uses the "r" mode, which stands for Read.</p>
+<pre>
+# Opening a file named "data.txt"
+f = open("data.txt", "r")
+
+# Read the entire content
+print(f.read())
+
+# Read only the first 5 characters
+# print(f.read(5))
+
+# Always close the file when done!
+f.close()
+</pre>
+
+<h3 class="sub-title">Reading Line by Line</h3>
+<pre>
+f = open("data.txt", "r")
+for line in f:
+    print(line)
+f.close()
+</pre>

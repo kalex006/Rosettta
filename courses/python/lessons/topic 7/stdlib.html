@@ -1,0 +1,21 @@
+<h2 class="lesson-title">7.2 Standard Library Essentials</h2>
+<p>Python comes with a "Batteries Included" philosophy. This means it has a massive <strong>Standard Library</strong> already installed with the language.</p>
+
+<h3 class="sub-title">The math Module</h3>
+<pre>
+import math
+print(math.ceil(4.2))  # 5 (Rounds up)
+print(math.floor(4.8)) # 4 (Rounds down)
+print(math.pow(2, 3))  # 8.0
+</pre>
+
+<h3 class="sub-title">The random Module</h3>
+<p>Used for generating pseudo-random numbers.</p>
+<pre>
+import random
+
+print(random.random())      # Random float between 0.0 and 1.0
+print(random.randint(1, 10)) # Random integer between 1 and 10
+items = ["A", "B", "C"]
+print(random.choice(items)) # Picks a random item
+</pre>

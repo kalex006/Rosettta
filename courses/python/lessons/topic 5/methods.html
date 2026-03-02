@@ -1,0 +1,23 @@
+<h2 class="lesson-title">5.2 Dictionary Methods</h2>
+<p>Python provides several methods to interact with dictionaries safely and efficiently.</p>
+
+<h3 class="sub-title">Safe Access with .get()</h3>
+<p>Using <code>dict["key"]</code> will crash if the key doesn't exist. Using <code>.get()</code> returns <code>None</code> instead.</p>
+<pre>
+print(user.get("phone")) # None (No error!)
+print(user.get("phone", "Not Provided")) # Default value
+</pre>
+
+<h3 class="sub-title">Extracting Data</h3>
+<pre>
+print(user.keys())   # Get all keys
+print(user.values()) # Get all values
+print(user.items())  # Get all key-value pairs as tuples
+</pre>
+
+<h3 class="sub-title">Removing Items</h3>
+<pre>
+user.pop("year") # Removes specific key
+del user["name"] # Another way to delete
+user.clear()     # Empties the dictionary
+</pre>

@@ -1,0 +1,26 @@
+<h2 class="lesson-title">7.1 The Import System</h2>
+<p>In Python, a <strong>Module</strong> is simply a file containing Python code. The <code>import</code> statement allows you to use code from one module in another.</p>
+
+<h3 class="sub-title">Basic Import</h3>
+<pre>
+import math
+print(math.sqrt(16)) # Output: 4.0
+</pre>
+
+<h3 class="sub-title">Aliasing (as)</h3>
+<p>You can create an alias when you import a module by using the <code>as</code> keyword. This is common for long module names.</p>
+<pre>
+import math as m
+print(m.pi)
+</pre>
+
+<h3 class="sub-title">Importing Specific Parts</h3>
+<p>If you only need one function from a big module, use <code>from</code>.</p>
+<pre>
+from math import pi, sqrt
+print(pi) # No need to write math.pi anymore
+</pre>
+
+<div class="tip-box">
+    <strong>Warning:</strong> Avoid <code>from module import *</code>. It imports everything and can cause "Naming Collisions" (where two different modules have a function with the same name).
+</div>

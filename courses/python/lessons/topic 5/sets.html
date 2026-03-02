@@ -1,0 +1,21 @@
+<h2 class="lesson-title">5.3 Sets (Unique Items)</h2>
+<p>A <strong>Set</strong> is a collection which is unordered, unindexed, and <strong>does not allow duplicate values</strong>.</p>
+
+<h3 class="sub-title">Syntax</h3>
+<p>Sets are also written with curly brackets <code>{}</code>, but they only have values, no keys.</p>
+<pre>
+ids = {101, 102, 103, 101}
+print(ids) # Output: {101, 102, 103} (Duplicate 101 is gone!)
+</pre>
+
+<h3 class="sub-title">Characteristics</h3>
+<ul class="lesson-list">
+    <li><strong>Unordered:</strong> You cannot be sure in which order the items will appear.</li>
+    <li><strong>Unchangeable:</strong> You cannot change items, but you can add/remove them.</li>
+    <li><strong>No Duplicates:</strong> Perfect for filtering out repetitive data.</li>
+</ul>
+
+<pre>
+ids.add(104)    # Add one item
+ids.remove(101) # Remove an item
+</pre>

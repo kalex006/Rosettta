@@ -1,0 +1,20 @@
+<h2 class="lesson-title">6.4 *args and **kwargs</h2>
+<p>Sometimes you do not know how many arguments will be passed into your function. Python provides two special symbols for this.</p>
+
+<h3 class="sub-title">Arbitrary Arguments (*args)</h3>
+<p>If you add <code>*</code> before the parameter name, the function will receive a <strong>tuple</strong> of arguments.</p>
+<pre>
+def sum_all(*nums):
+    return sum(nums)
+
+print(sum_all(1, 2, 3, 4, 5)) # Output: 15
+</pre>
+
+<h3 class="sub-title">Keyword Arguments (**kwargs)</h3>
+<p>If you add <code>**</code> before the parameter name, the function will receive a <strong>dictionary</strong> of arguments.</p>
+<pre>
+def user_profile(**data):
+    print(data["name"])
+
+user_profile(name="Kalex", age=20)
+</pre>

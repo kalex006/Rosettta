@@ -1,0 +1,15 @@
+<h2 class="lesson-title">7.5 Virtual Environments (venv)</h2>
+<p>In the professional world, you never install libraries globally. You use <strong>Virtual Environments</strong> to keep project dependencies isolated.</p>
+
+<h3 class="sub-title">Why use venv?</h3>
+<p>Project A might need <code>Django 3.0</code>, while Project B needs <code>Django 4.0</code>. Installing globally would break one of them. venv solves this.</p>
+
+<h3 class="sub-title">The Workflow</h3>
+<ol class="lesson-list">
+    <li><strong>Create:</strong> <code>python -m venv myenv</code></li>
+    <li><strong>Activate (Windows):</strong> <code>myenv\Scripts\activate</code></li>
+    <li><strong>Activate (Mac/Linux):</strong> <code>source myenv/bin/activate</code></li>
+    <li><strong>Deactivate:</strong> Simply type <code>deactivate</code></li>
+</ol>
+
+<p>Once activated, any <code>pip install</code> you do stays inside that specific folder.</p>

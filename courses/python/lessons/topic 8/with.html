@@ -1,0 +1,20 @@
+<h2 class="lesson-title">8.3 Context Managers (with)</h2>
+<p>In the professional world, we rarely use <code>f.close()</code> manually. Instead, we use the <code>with</code> statement.</p>
+
+<h3 class="sub-title">The "with" Keyword</h3>
+<p>The <code>with</code> statement creates a <strong>Context Manager</strong>. It automatically closes the file for you, even if an error occurs inside the block.</p>
+
+<pre>
+with open("test.txt", "r") as f:
+    data = f.read()
+    print(data)
+
+# No need for f.close() here!
+</pre>
+
+<h3 class="sub-title">Why use this?</h3>
+<ul class="lesson-list">
+    <li><strong>Safety:</strong> Prevents "Memory Leaks" (where a file stays open in the background).</li>
+    <li><strong>Clean Code:</strong> It’s shorter and easier to read.</li>
+    <li><strong>Standard:</strong> This is the "Pythonic" way to handle files.</li>
+</ul>

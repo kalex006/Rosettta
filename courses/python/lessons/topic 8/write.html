@@ -1,0 +1,24 @@
+<h2 class="lesson-title">8.2 Writing & Appending Files</h2>
+<p>To write to an existing file, you must add a parameter to the <code>open()</code> function: <strong>"a"</strong> or <strong>"w"</strong>.</p>
+
+<h3 class="sub-title">The Difference</h3>
+<ul class="lesson-list">
+    <li><code>"a"</code> - <strong>Append:</strong> Adds text to the end of the file.</li>
+    <li><code>"w"</code> - <strong>Write:</strong> Overwrites the entire file. Be careful!</li>
+</ul>
+
+<pre>
+# Appending
+f = open("log.txt", "a")
+f.write("New entry added!\n")
+f.close()
+
+# Overwriting
+f = open("log.txt", "w")
+f.write("Everything else is gone now.")
+f.close()
+</pre>
+
+<div class="tip-box">
+    <strong>Note:</strong> If the file does not exist, both "a" and "w" will create a new empty file for you.
+</div>

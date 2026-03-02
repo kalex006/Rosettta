@@ -1,0 +1,21 @@
+<h2 class="lesson-title">7.4 Pip & PyPI (The World of Packages)</h2>
+<p><strong>PyPI</strong> (Python Package Index) is a repository of software for the Python programming language. <strong>pip</strong> is the package manager used to install them.</p>
+
+<h3 class="sub-title">Installing a Library</h3>
+<p>To install a library like <code>requests</code> (for web API calls), you run this in your terminal:</p>
+<pre>pip install requests</pre>
+
+<h3 class="sub-title">Using an Installed Library</h3>
+<pre>
+import requests
+
+response = requests.get("https://api.github.com")
+print(response.status_code) # 200
+</pre>
+
+<h3 class="sub-title">Useful Commands</h3>
+<ul class="lesson-list">
+    <li><code>pip list</code>: See all installed packages.</li>
+    <li><code>pip uninstall name</code>: Remove a package.</li>
+    <li><code>pip install -U name</code>: Upgrade a package.</li>
+</ul>

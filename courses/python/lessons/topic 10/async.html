@@ -1,0 +1,22 @@
+<h2 class="lesson-title">10.4 Introduction to AsyncIO</h2>
+<p><strong>AsyncIO</strong> is a library to write concurrent code using the <code>async/await</code> syntax. It allows your program to handle multiple tasks at once without waiting.</p>
+
+<h3 class="sub-title">Async & Await</h3>
+<pre>
+import asyncio
+
+async def fetch_data():
+    print("Start fetching...")
+    await asyncio.sleep(2) # Simulates a network delay
+    print("Data fetched!")
+
+asyncio.run(fetch_data())
+</pre>
+
+<h3 class="sub-title">When to use it?</h3>
+<p>Use AsyncIO for <strong>I/O-bound tasks</strong> (tasks that wait for something else):</p>
+<ul class="lesson-list">
+    <li>Making Web API calls.</li>
+    <li>Reading large files from a disk.</li>
+    <li>Database queries.</li>
+</ul>

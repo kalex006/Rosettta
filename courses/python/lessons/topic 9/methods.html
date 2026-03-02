@@ -1,0 +1,24 @@
+<h2 class="lesson-title">9.3 Methods (Object Behavior)</h2>
+<p>Objects can also contain methods. <strong>Methods</strong> in objects are functions that belong to the object.</p>
+
+<h3 class="sub-title">Defining Methods</h3>
+<p>Methods are defined inside the class and always take <code>self</code> as the first argument.</p>
+
+<pre>
+class Dog:
+    def __init__(self, name):
+        self.name = name
+
+    def bark(self):
+        print(f"{self.name} says Woof!")
+
+my_dog = Dog("Buddy")
+my_dog.bark() # Buddy says Woof!
+</pre>
+
+<h3 class="sub-title">Modifying Object Properties</h3>
+<p>You can change properties on objects like this:</p>
+<pre>
+my_dog.name = "Max"
+# Now my_dog.bark() will say "Max says Woof!"
+</pre>

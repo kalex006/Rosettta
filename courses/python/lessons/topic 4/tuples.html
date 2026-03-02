@@ -1,0 +1,20 @@
+<h2 class="lesson-title">4.4 Tuples (Immutable)</h2>
+<p>A <strong>Tuple</strong> is like a list, but with one major difference: it is <strong>Immutable</strong> (cannot be changed after creation).</p>
+
+<h3 class="sub-title">Syntax</h3>
+<p>Tuples are written with round brackets <code>()</code>.</p>
+<pre>
+coordinates = (10, 20)
+dimensions = (1920, 1080)
+</pre>
+
+<h3 class="sub-title">Why use Tuples?</h3>
+<ul class="lesson-list">
+    <li><strong>Safety:</strong> Data cannot be accidentally modified.</li>
+    <li><strong>Performance:</strong> Tuples are slightly faster than lists in Python.</li>
+    <li><strong>Constant Data:</strong> Perfect for things like days of the week or fixed settings.</li>
+</ul>
+
+<div class="tip-box">
+    <strong>Warning:</strong> <code>coordinates[0] = 5</code> will raise a <strong>TypeError</strong>. You cannot reassign tuple values.
+</div>
