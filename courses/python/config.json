@@ -4,8 +4,8 @@
   "base_path": "courses/python/lessons",
   "topics": [
     {
-      "title": "Module 01: The Basics",
-      "folder": "module-01",
+      "title": "topic 1: The Basics",
+      "folder": "topic 1",
       "files": [
         { "title": "1.1 Setup & Hello World", "filename": "setup.html" },
         { "title": "1.2 Variables & Assignment", "filename": "variables.html" },
@@ -15,8 +15,8 @@
       ]
     },
     {
-      "title": "Module 02: Control Flow",
-      "folder": "module-02",
+      "title": "topic 2: Control Flow",
+      "folder": "topic 2",
       "files": [
         { "title": "2.1 Booleans & Comparison", "filename": "booleans.html" },
         { "title": "2.2 If, Elif, Else", "filename": "conditionals.html" },
@@ -26,8 +26,8 @@
       ]
     },
     {
-      "title": "Module 03: Loops",
-      "folder": "module-03",
+      "title": "topic 3: Loops",
+      "folder": "topic 3",
       "files": [
         { "title": "3.1 While Loops", "filename": "while.html" },
         { "title": "3.2 For Loops & Range", "filename": "for.html" },
@@ -37,8 +37,8 @@
       ]
     },
     {
-      "title": "Module 04: Lists & Tuples",
-      "folder": "module-04",
+      "title": "topic 4: Lists & Tuples",
+      "folder": "topic 4",
       "files": [
         { "title": "4.1 Creating Lists", "filename": "lists.html" },
         { "title": "4.2 Indexing & Slicing", "filename": "slicing.html" },
@@ -48,8 +48,8 @@
       ]
     },
     {
-      "title": "Module 05: Dicts & Sets",
-      "folder": "module-05",
+      "title": "topic 5: Dicts & Sets",
+      "folder": "topic 5",
       "files": [
         { "title": "5.1 Dictionaries (Key-Value)", "filename": "dicts.html" },
         { "title": "5.2 Dict Methods (Get/Keys)", "filename": "methods.html" },
@@ -59,8 +59,8 @@
       ]
     },
     {
-      "title": "Module 06: Functions",
-      "folder": "module-06",
+      "title": "topic 6: Functions",
+      "folder": "topic 6",
       "files": [
         { "title": "6.1 Defining Functions (def)", "filename": "def.html" },
         { "title": "6.2 Arguments & Parameters", "filename": "args.html" },
@@ -70,8 +70,8 @@
       ]
     },
     {
-      "title": "Module 07: Modules",
-      "folder": "module-07",
+      "title": "topic 7: Modules",
+      "folder": "topic 7",
       "files": [
         { "title": "7.1 Import System", "filename": "import.html" },
         { "title": "7.2 Standard Library (Math/Random)", "filename": "stdlib.html" },
@@ -81,8 +81,8 @@
       ]
     },
     {
-      "title": "Module 08: Files & Errors",
-      "folder": "module-08",
+      "title": "topic 8: Files & Errors",
+      "folder": "topic 8",
       "files": [
         { "title": "8.1 Reading Files", "filename": "read.html" },
         { "title": "8.2 Writing Files", "filename": "write.html" },
@@ -92,8 +92,8 @@
       ]
     },
     {
-      "title": "Module 09: OOP Basics",
-      "folder": "module-09",
+      "title": "topic 9: OOP Basics",
+      "folder": "topic 9",
       "files": [
         { "title": "9.1 Classes & Objects", "filename": "classes.html" },
         { "title": "9.2 The __init__ Method", "filename": "init.html" },
@@ -103,8 +103,8 @@
       ]
     },
     {
-      "title": "Module 10: Advanced Python",
-      "folder": "module-10",
+      "title": "topic 10: Advanced Python",
+      "folder": "topic 10",
       "files": [
         { "title": "10.1 Decorators (@wrapper)", "filename": "decorators.html" },
         { "title": "10.2 Generators (yield)", "filename": "generators.html" },
