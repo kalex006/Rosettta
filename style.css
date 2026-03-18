@@ -1,5 +1,6 @@
 /* RESET & BASE */
-* { box-sizing: border-box; 
+* { 
+    box-sizing: border-box; 
     margin: 0; 
     padding: 0; 
     -webkit-tap-highlight-color: transparent; 
@@ -10,8 +11,8 @@ body {
     color: #e0e0e0;
     font-family: 'Inter', sans-serif;
     height: 100vh;
-    height: 100dvh; /* Better mobile height support */
-    overflow: hidden;
+    height: 100dvh; 
+    overflow: hidden; /* Keeps the app-like feel */
 }
 
 /* UTILS & ANIMATION */
@@ -23,13 +24,23 @@ body {
     height: 100%;
     display: flex; 
     flex-direction: column; 
-    justify-content: center; 
+    justify-content: center; /* Default centering */
     align-items: center;
     background: #050505; 
     transition: opacity 0.8s ease-in-out;
     padding: 20px; 
     text-align: center;
 }
+
+/* FIX: Specific Scroll for Language Screen */
+#view-languages {
+    justify-content: flex-start; /* Starts content from top so it doesn't get cut off */
+    overflow-y: auto !important; /* Forces scroll to work */
+    padding-top: 80px;
+    padding-bottom: 80px;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+}
+
 .hidden-view { 
     opacity: 0; 
     pointer-events: none; 
@@ -81,7 +92,7 @@ body {
     transition: 0.3s;
 }
 
-/* SCREEN 3: GRID (Mobile Responsive) */
+/* SCREEN 3: GRID (The Artifacts) */
 .select-title { 
     font-family: 'Cinzel', serif; 
     font-size: 1.2rem; 
@@ -144,7 +155,7 @@ body {
     font-size: 1.5rem; 
     cursor: pointer; 
     display: none; 
-} /* Hidden on Desktop */
+} 
 .nav-logo { 
     font-family: 'Cinzel', serif; 
     font-size: 1.2rem; 
@@ -165,28 +176,28 @@ body {
     position: relative; 
 }
 
-/* Sidebar */
+/* Sidebar Scroll Fix */
 #sidebar {
     width: 260px; 
     background: #0a0a0a; 
     border-right: 1px solid #222;
     padding: 20px; 
-    overflow-y: auto; 
-    padding-bottom: 60px; 
+    overflow-y: auto !important; /* Enable Scroll */
+    padding-bottom: 80px; 
     transition: transform 0.3s ease;
+    -webkit-overflow-scrolling: touch;
 }
 #content-area {
     flex: 1; 
     padding: 30px; 
-    overflow-y: auto; 
+    overflow-y: auto !important; /* Enable Scroll */
     background: #0e0e0e; 
-    padding-bottom: 80px;
+    padding-bottom: 100px;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Sidebar Elements */
-details { 
-    margin-bottom: 10px; 
-}
+details { margin-bottom: 10px; }
 summary { 
     color: #888; 
     cursor: pointer; 
@@ -200,7 +211,7 @@ summary {
     background: none; 
     border: none;
     color: #666; 
-    padding: 10px 15px; 
+    padding: 12px 15px; 
     cursor: pointer; 
     font-size: 0.9rem;
 }
@@ -210,16 +221,8 @@ summary {
 }
 
 /* Content Elements */
-h2 { 
-    color: #d4af37; 
-    margin-bottom: 15px; 
-    font-family: 'Cinzel', serif; 
-}
-p { 
-    line-height: 1.6; 
-    margin-bottom: 15px; 
-    color: #ccc; 
-}
+h2 { color: #d4af37; margin-bottom: 15px; font-family: 'Cinzel', serif; }
+p { line-height: 1.6; margin-bottom: 15px; color: #ccc; }
 pre { 
     background: #000; 
     padding: 15px; 
@@ -228,13 +231,9 @@ pre {
     border-radius: 4px; 
     margin-bottom: 20px; 
 }
-code { 
-    font-family: monospace; 
-    color: #a5d6ff; 
-    font-size: 0.9rem; 
-}
+code { font-family: monospace; color: #a5d6ff; font-size: 0.9rem; }
 
-/* FOOTER */
+/* FOOTER FIX */
 #kalex-footer {
     position: fixed !important; 
     bottom: 0; 
@@ -249,29 +248,19 @@ code {
     align-items: center; 
     gap: 10px;
 }
-.copyright { 
-    font-size: 0.7rem; 
-    color: #666; 
-    text-transform: uppercase; 
-}
-.project-name { 
-    font-family: 'Cinzel', serif; 
-    font-size: 0.7rem; 
-    color: #d4af37; 
-}
+.copyright { font-size: 0.7rem; color: #666; text-transform: uppercase; }
+.project-name { font-family: 'Cinzel', serif; font-size: 0.7rem; color: #d4af37; }
 
 /* --- MOBILE OPTIMIZATION --- */
 @media (max-width: 768px) {
-    .rosetta-btn { 
-        font-size: 2.5rem; 
-    }
+    .rosetta-btn { font-size: 2.5rem; }
+    
     .grid-container { 
         grid-template-columns: repeat(2, 1fr); 
-    } /* 2 cols on phone */
+        padding-bottom: 40px;
+    } 
     
-    #menu-btn { 
-        display: block; 
-    } /* Show Hamburger */
+    #menu-btn { display: block; } 
     
     #sidebar {
         position: absolute; 
@@ -279,14 +268,11 @@ code {
         left: 0; 
         height: 100%; 
         z-index: 100;
-        transform: translateX(-100%); /* Hide by default */
+        transform: translateX(-100%); 
         border-right: 1px solid #d4af37;
     }
-    #sidebar.open { 
-        transform: translateX(0); 
-    } /* Slide in */
+    #sidebar.open { transform: translateX(0); } 
     
-    /* Dark Overlay when sidebar is open */
     #sidebar-overlay {
         position: absolute; 
         top: 0; 
@@ -297,11 +283,7 @@ code {
         z-index: 90; 
         display: none;
     }
-    #sidebar-overlay.active { 
-        display: block; 
-    }
+    #sidebar-overlay.active { display: block; }
 
-    #content-area { 
-        padding: 20px; 
-    }
+    #content-area { padding: 20px; }
 }
